@@ -94,10 +94,11 @@ export default function LoginForm() {
       remember: true
     },
     validationSchema: LoginSchema,
-    onSubmit: (e) => handleSubmits(e)
-    //  {
-    //   navigate('/dashboard', { replace: true });
-    // }
+    onSubmit: (e) =>
+      // handleSubmits(e)
+      {
+        navigate('/dashboard', { replace: true });
+      }
   });
   console.log(formik);
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
