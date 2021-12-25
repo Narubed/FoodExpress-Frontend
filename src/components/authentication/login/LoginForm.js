@@ -62,8 +62,8 @@ export default function LoginForm() {
         sessionStorage.setItem('user', response.data.userId);
         sessionStorage.setItem('role', response.data.role);
         sessionStorage.setItem('level', response.data.level);
-        // navigate('/dashboard', { replace: true });
-        window.location.href = '/';
+        navigate('/dashboard', { replace: true });
+        // window.location.href = '/';
       });
     } else {
       response = await loginRider({
@@ -79,8 +79,8 @@ export default function LoginForm() {
           sessionStorage.setItem('user', response.data.rider_id);
           sessionStorage.setItem('role', 'Rider');
           sessionStorage.setItem('level', 'Rider');
-          // navigate('/dashboard', { replace: true });
-          window.location.href = '/';
+          navigate('/dashboard', { replace: true });
+          // window.location.href = '/';
         });
       } else {
         swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error');
