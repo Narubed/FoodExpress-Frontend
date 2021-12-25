@@ -58,10 +58,10 @@ export default function LoginForm() {
         buttons: false,
         timer: 2000
       }).then((value) => {
-        sessionStorage.setItem('accessToken', response.accessToken);
-        sessionStorage.setItem('user', response.data.userId);
-        sessionStorage.setItem('role', response.data.role);
-        sessionStorage.setItem('level', response.data.level);
+        // sessionStorage.setItem('accessToken', response.accessToken);
+        // sessionStorage.setItem('user', response.data.userId);
+        // sessionStorage.setItem('role', response.data.role);
+        // sessionStorage.setItem('level', response.data.level);
         navigate('/dashboard', { replace: true });
         // window.location.href = '/';
       });
@@ -75,10 +75,10 @@ export default function LoginForm() {
           buttons: false,
           timer: 2000
         }).then((value) => {
-          sessionStorage.setItem('accessToken', response.accessToken);
-          sessionStorage.setItem('user', response.data.rider_id);
-          sessionStorage.setItem('role', 'Rider');
-          sessionStorage.setItem('level', 'Rider');
+          // sessionStorage.setItem('accessToken', response.accessToken);
+          // sessionStorage.setItem('user', response.data.rider_id);
+          // sessionStorage.setItem('role', 'Rider');
+          // sessionStorage.setItem('level', 'Rider');
           navigate('/dashboard', { replace: true });
           // window.location.href = '/';
         });
