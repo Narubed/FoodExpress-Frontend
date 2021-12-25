@@ -5,6 +5,7 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
+import swal from 'sweetalert';
 // material
 import {
   Link,
@@ -18,28 +19,87 @@ import {
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
-
+async function loginUser(credentials) {
+  return fetch('http://localhost:8000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  }).then((data) => data.json());
+}
+async function loginRider(credentials) {
+  return fetch('http://localhost:8000/loginRider', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  }).then((data) => data.json());
+}
 export default function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    username: Yup.string().required('id is reqired'),
     password: Yup.string().required('Password is required')
   });
-
+  const handleSubmits = async (e) => {
+    const setUserNames = e.username;
+    const setPasswords = e.password;
+    console.log(setUserNames);
+    let response = await loginUser({
+      setUserNames,
+      setPasswords
+    });
+    if ('accessToken' in response) {
+      swal('Success', response.message, 'success', {
+        buttons: false,
+        timer: 2000
+      }).then((value) => {
+        sessionStorage.setItem('accessToken', response.accessToken);
+        sessionStorage.setItem('user', response.data.userId);
+        sessionStorage.setItem('role', response.data.role);
+        sessionStorage.setItem('level', response.data.level);
+        // navigate('/dashboard', { replace: true });
+        window.location.href = '/';
+      });
+    } else {
+      response = await loginRider({
+        setUserNames,
+        setPasswords
+      });
+      if ('accessToken' in response) {
+        swal('Success', response.message, 'success', {
+          buttons: false,
+          timer: 2000
+        }).then((value) => {
+          sessionStorage.setItem('accessToken', response.accessToken);
+          sessionStorage.setItem('user', response.data.rider_id);
+          sessionStorage.setItem('role', 'Rider');
+          sessionStorage.setItem('level', 'Rider');
+          // navigate('/dashboard', { replace: true });
+          window.location.href = '/';
+        });
+      } else {
+        swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error');
+      }
+    }
+  };
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
       remember: true
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
-    }
+    onSubmit: (e) => handleSubmits(e)
+    //  {
+    //   navigate('/dashboard', { replace: true });
+    // }
   });
-
+  console.log(formik);
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
@@ -53,11 +113,11 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="text"
+            label="รหัสบัตรประจำตัวประชาชน"
+            {...getFieldProps('username')}
+            error={Boolean(touched.username && errors.username)}
+            helperText={touched.username && errors.username}
           />
 
           <TextField

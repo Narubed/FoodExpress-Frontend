@@ -100,22 +100,22 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             sx={{ width: 100, position: 'absolute', top: -50 }}
           />
 
-          <Box sx={{ textAlign: 'center' }}>
+          {/* <Box sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h6">
               Get more?
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               From only $69
             </Typography>
-          </Box>
+          </Box> */}
 
           <Button
             fullWidth
-            href="https://material-ui.com/store/items/minimal-dashboard/"
+            href="https://nbadigitalworlds.com/2021/"
             target="_blank"
             variant="contained"
           >
-            Upgrade to Pro
+            ติดต่อได้ที่ NBA Digital
           </Button>
         </Stack>
       </Box>
