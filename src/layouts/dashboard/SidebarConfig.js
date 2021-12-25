@@ -14,36 +14,43 @@ const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 const sidebarConfig = [
   {
     title: 'dashboard',
+    titleth: 'หน้าหลัก',
     path: '/dashboard/app',
     icon: getIcon(pieChart2Fill)
   },
   {
     title: 'user',
+    titleth: 'ผู้ใช้',
     path: '/dashboard/user',
     icon: getIcon(peopleFill)
   },
   {
     title: 'product',
+    titleth: 'สินค้า',
     path: '/dashboard/products',
     icon: getIcon(shoppingBagFill)
   },
   {
     title: 'blog',
+    titleth: 'บล๊อคข่าวสาร',
     path: '/dashboard/blog',
     icon: getIcon(fileTextFill)
   },
   {
     title: 'login',
+    titleth: 'เข้าสู่ระบบ',
     path: '/login',
     icon: getIcon(lockFill)
   },
   {
     title: 'register',
+    titleth: 'สมัครสมาชิก',
     path: '/register',
     icon: getIcon(personAddFill)
   },
   {
     title: 'Not found',
+    titleth: 'หาหน้าไม่เจอ',
     path: '/404',
     icon: getIcon(alertTriangleFill)
   }

@@ -52,7 +52,7 @@ NavItem.propTypes = {
 function NavItem({ item, active }) {
   const theme = useTheme();
   const isActiveRoot = active(item.path);
-  const { title, path, icon, info, children } = item;
+  const { titleth, path, icon, info, children } = item;
   const [open, setOpen] = useState(isActiveRoot);
 
   const handleOpen = () => {
@@ -81,7 +81,7 @@ function NavItem({ item, active }) {
           }}
         >
           <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
-          <ListItemText disableTypography primary={title} />
+          <ListItemText disableTypography primary={titleth} />
           {info && info}
           <Box
             component={Icon}
@@ -93,12 +93,12 @@ function NavItem({ item, active }) {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {children.map((item) => {
-              const { title, path } = item;
+              const { titleth, path } = item;
               const isActiveSub = active(path);
 
               return (
                 <ListItemStyle
-                  key={title}
+                  key={titleth}
                   component={RouterLink}
                   to={path}
                   sx={{
@@ -124,7 +124,7 @@ function NavItem({ item, active }) {
                       }}
                     />
                   </ListItemIconStyle>
-                  <ListItemText disableTypography primary={title} />
+                  <ListItemText disableTypography primary={titleth} />
                 </ListItemStyle>
               );
             })}
@@ -143,7 +143,7 @@ function NavItem({ item, active }) {
       }}
     >
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
-      <ListItemText disableTypography primary={title} />
+      <ListItemText disableTypography primary={titleth} />
       {info && info}
     </ListItemStyle>
   );
@@ -156,7 +156,6 @@ NavSection.propTypes = {
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
-
   return (
     <Box {...other}>
       <List disablePadding>
