@@ -62,7 +62,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Box>
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      {/* <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
             <Avatar src={account.photoURL} alt="photoURL" />
@@ -76,7 +76,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             </Box>
           </AccountStyle>
         </Link>
-      </Box>
+      </Box> */}
 
       <NavSection navConfig={sidebarConfig} />
 
@@ -86,19 +86,19 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         <Stack
           alignItems="center"
           spacing={3}
-          sx={{
-            p: 2.5,
-            pt: 5,
-            borderRadius: 2,
-            position: 'relative',
-            bgcolor: 'grey.200'
-          }}
+          // sx={{
+          //   p: 2.5,
+          //   pt: 5,
+          //   borderRadius: 2,
+          //   position: 'relative',
+          //   bgcolor: 'grey.200'
+          // }}
         >
-          <Box
+          {/* <Box
             component="img"
             src="/static/illustrations/illustration_avatar.png"
             sx={{ width: 100, position: 'absolute', top: -50 }}
-          />
+          /> */}
 
           {/* <Box sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h6">
@@ -109,14 +109,14 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             </Typography>
           </Box> */}
 
-          <Button
+          {/* <Button
             fullWidth
             href="https://nbadigitalworlds.com/2021/"
             target="_blank"
             variant="contained"
           >
             ติดต่อได้ที่ NBA Digital
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
     </Scrollbar>

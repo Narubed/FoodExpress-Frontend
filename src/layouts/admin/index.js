@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 //
 import AdminNavbar from './AdminNavbar';
-import DashboardSidebar from './AdminSidebar';
+import AdminSidebar from './AdminSidebar';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ export default function DashboardLayout() {
   return (
     <RootStyle>
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
-      <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
       <MainStyle>
         <Outlet />
       </MainStyle>
