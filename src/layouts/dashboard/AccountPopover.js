@@ -44,7 +44,12 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const logout = () => {
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('role');
+    window.location.href = '/';
+  };
   return (
     <>
       <IconButton
@@ -110,7 +115,7 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" variant="outlined" onClick={logout}>
             Logout
           </Button>
         </Box>

@@ -65,7 +65,7 @@ export default function Register() {
               สามารถติดต่อสมัครสมาชิกผ่าน
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
-              https://new-nba-frontend-express-46dtbmlo8-narubed.vercel.app/
+              <a href="https://nbadigitalworlds.com/2021/">https://nbadigitalworlds.com/2021/</a>
             </Typography>
           </Box>
 
