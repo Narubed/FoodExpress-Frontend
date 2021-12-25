@@ -6,6 +6,7 @@ import axios from 'axios';
 import Page from '../../components/Page';
 import AppWaitingforDelivery from '../../components/_admin/app/AppWaitingforDelivery';
 import AppSuccessfulDelivery from '../../components/_admin/app/AppSuccessfulDelivery';
+import AppLastMonthIncome from '../../components/_admin/app/AppLastMonthIncome';
 
 // ----------------------------------------------------------------------
 function DashboardApp() {
@@ -27,6 +28,9 @@ function DashboardApp() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppSuccessfulDelivery props={Total} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <AppLastMonthIncome props={Total} />
           </Grid>
         </Grid>
       </Container>
