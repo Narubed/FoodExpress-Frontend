@@ -7,6 +7,8 @@ import Page from '../../components/Page';
 import AppWaitingforDelivery from '../../components/_admin/app/AppWaitingforDelivery';
 import AppSuccessfulDelivery from '../../components/_admin/app/AppSuccessfulDelivery';
 import AppLastMonthIncome from '../../components/_admin/app/AppLastMonthIncome';
+import AppTotalIncome from '../../components/_admin/app/AppTotalIncome';
+import AppWebsiteVisits from '../../components/_admin/app/AppWebsiteVisits';
 
 // ----------------------------------------------------------------------
 function DashboardApp() {
@@ -31,6 +33,12 @@ function DashboardApp() {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppLastMonthIncome props={Total} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <AppTotalIncome props={Total} />
+          </Grid>
+          <Grid item xs={12} md={6} lg={8}>
+            <AppWebsiteVisits />
           </Grid>
         </Grid>
       </Container>

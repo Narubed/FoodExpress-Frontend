@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import PropTypes from 'prop-types';
 import androidFilled from '@iconify/icons-ant-design/android-filled';
-import { HourglassOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
@@ -38,14 +38,13 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // eslint-disable-next-line react/prop-types
 export default function AppSuccessfulDelivery(props) {
-  console.log(props.props.map((m) => m.order_status));
   // eslint-disable-next-line react/prop-types
   const filterStatus = props.props.filter((f) => f.order_status === 'จัดส่งสำเร็จ');
   return (
     <RootStyle>
       <IconWrapperStyle>
         {/* <Icon icon={androidFilled} width={24} height={24} /> */}
-        <HourglassOutlined style={{ fontSize: '28px' }} />
+        <CheckCircleOutlined style={{ fontSize: '28px' }} />
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(filterStatus.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
