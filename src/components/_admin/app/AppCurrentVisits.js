@@ -7,8 +7,6 @@ import { Card, CardHeader } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 // material-tailwind
 import '@material-tailwind/react/tailwind.css';
-import Button from '@material-tailwind/react/Button';
-
 // utils
 import axios from 'axios';
 import { fNumber } from '../../../utils/formatNumber';
@@ -131,10 +129,6 @@ export default function AppCurrentVisits() {
       />
 
       <ChartWrapperStyle dir="ltr">
-        {' '}
-        <Button color="lightBlue" ripple="light">
-          Button
-        </Button>
         <ReactApexChart type="pie" series={CHART_DATA} options={chartOptions} height={280} />
       </ChartWrapperStyle>
     </Card>

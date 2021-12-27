@@ -75,7 +75,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
-            <Icon icon={trash2Fill} />
+            <Icon icon={trash2Fill} onClick={() => console.log('ลบเเม่งให้หมด')} />
           </IconButton>
         </Tooltip>
       ) : (

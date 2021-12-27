@@ -80,12 +80,14 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
+    console.log(orderBy);
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event) => {
+    console.log(event.target.checked);
     if (event.target.checked) {
       const newSelecteds = USERLIST.map((n) => n.name);
       setSelected(newSelecteds);
@@ -94,7 +96,7 @@ export default function User() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClick = (event, name, id) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
@@ -110,6 +112,7 @@ export default function User() {
       );
     }
     setSelected(newSelected);
+    console.log(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -117,11 +120,13 @@ export default function User() {
   };
 
   const handleChangeRowsPerPage = (event) => {
+    console.log(event.target.value);
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   const handleFilterByName = (event) => {
+    console.log(event.target.value);
     setFilterName(event.target.value);
   };
 
@@ -186,7 +191,7 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, name, id)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
@@ -210,7 +215,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu id={id} />
                           </TableCell>
                         </TableRow>
                       );

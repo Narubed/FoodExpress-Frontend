@@ -18,12 +18,12 @@ const sidebarConfig = [
     path: '/admin/app',
     icon: getIcon(pieChart2Fill)
   },
-  // {
-  //   title: 'user',
-  //   titleth: 'ผู้ใช้',
-  //   path: '/dashboard/user',
-  //   icon: getIcon(peopleFill)
-  // },
+  {
+    title: 'rider',
+    titleth: 'จัดการข้อมูลไรเดอร์',
+    path: '/admin/AdminRiderApp',
+    icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
+  },
   // {
   //   title: 'product',
   //   titleth: 'สินค้า',

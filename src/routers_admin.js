@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/Page404';
 import AdminApp from './pages/Admin/AdminApp';
+import AdminRiderApp from './pages/Admin/Menagement/Rider/AdminRiderApp';
 
 // ----------------------------------------------------------------------
 
@@ -17,8 +18,8 @@ export default function Router() {
       element: <AdminLayout />,
       children: [
         { element: <Navigate to="/admin/app" replace /> },
-        { path: 'app', element: <AdminApp /> }
-        // { path: 'user', element: <User /> },
+        { path: 'app', element: <AdminApp /> },
+        { path: 'AdminRiderApp', element: <AdminRiderApp /> }
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]
