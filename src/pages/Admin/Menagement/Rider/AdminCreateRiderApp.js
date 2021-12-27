@@ -6,6 +6,7 @@ import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 // material
 import { LoadingButton } from '@mui/lab';
 import {
@@ -56,7 +57,6 @@ export default function RegisterForm() {
       rider_last_name: e.lastName,
       rider_tel: e.tel
     };
-
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการเพิ่มไรเดอร์คนใหม่หรือไม่ !',
@@ -65,10 +65,14 @@ export default function RegisterForm() {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, need it!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         console.log(data);
+        await axios.post('http://localhost:8000/postRider', data);
         Swal.fire('Success!', 'คุณได้เพิ่มไรเดอร์คนใหม่เรียบร้อยเเล้ว.', 'success');
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
       }
     });
   };
