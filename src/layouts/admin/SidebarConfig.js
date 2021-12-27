@@ -25,6 +25,12 @@ const sidebarConfig = [
     icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
   },
   // {
+  //   title: 'rider',
+  //   titleth: 'จัดการข้อมูลไรเดอร์',
+  //   path: '/admin/AdminCreateRiderApp',
+  //   icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
+  // },
+  // {
   //   title: 'product',
   //   titleth: 'สินค้า',
   //   path: '/dashboard/products',

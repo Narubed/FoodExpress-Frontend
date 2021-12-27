@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import NotFound from './pages/Page404';
 import AdminApp from './pages/Admin/AdminApp';
 import AdminRiderApp from './pages/Admin/Menagement/Rider/AdminRiderApp';
+import AdminCreateRiderApp from './pages/Admin/Menagement/Rider/AdminCreateRiderApp';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,8 @@ export default function Router() {
       children: [
         { element: <Navigate to="/admin/app" replace /> },
         { path: 'app', element: <AdminApp /> },
-        { path: 'AdminRiderApp', element: <AdminRiderApp /> }
+        { path: 'AdminRiderApp', element: <AdminRiderApp /> },
+        { path: 'AdminRiderApp/AdminCreateRiderApp', element: <AdminCreateRiderApp /> }
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]
