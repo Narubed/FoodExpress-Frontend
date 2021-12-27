@@ -9,7 +9,7 @@ import AppSuccessfulDelivery from '../../components/_admin/app/AppSuccessfulDeli
 import AppLastMonthIncome from '../../components/_admin/app/AppLastMonthIncome';
 import AppTotalIncome from '../../components/_admin/app/AppTotalIncome';
 import AppWebsiteVisits from '../../components/_admin/app/AppWebsiteVisits';
-
+import AppCurrentVisits from '../../components/_admin/app/AppCurrentVisits';
 // ----------------------------------------------------------------------
 function DashboardApp() {
   const [Total, setTotal] = useState([]);
@@ -39,6 +39,9 @@ function DashboardApp() {
           </Grid>
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits />
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <AppCurrentVisits />
           </Grid>
         </Grid>
       </Container>

@@ -15,7 +15,6 @@ class App extends Component {
   render() {
     const token = sessionStorage.getItem('accessToken');
     const role = sessionStorage.getItem('role');
-    console.log(role);
     if (!token || token !== 'NBA') {
       return (
         <ThemeConfig>
