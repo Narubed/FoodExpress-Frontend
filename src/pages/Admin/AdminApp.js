@@ -15,7 +15,7 @@ function DashboardApp() {
   const [Total, setTotal] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getAllOrder = await axios.get('http://localhost:8000/getAllOrder');
+    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     setTotal(getAllOrder.data.data);
   }, []);
   return (

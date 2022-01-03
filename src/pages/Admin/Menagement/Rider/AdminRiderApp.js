@@ -149,7 +149,7 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getRider = await axios.get('http://localhost:8000/getAllRider');
+    const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRider`);
     console.log(process.env);
     setRiderlist(getRider.data.data);
   }, []);

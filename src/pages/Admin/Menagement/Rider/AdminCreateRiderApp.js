@@ -68,7 +68,7 @@ export default function RegisterForm() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         console.log(data);
-        await axios.post('http://localhost:8000/postRider', data);
+        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRider`, data);
         Swal.fire('Success!', 'คุณได้เพิ่มไรเดอร์คนใหม่เรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
           window.location.reload(false);
