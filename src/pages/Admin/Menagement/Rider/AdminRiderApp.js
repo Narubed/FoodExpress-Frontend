@@ -150,6 +150,7 @@ export default function User() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getRider = await axios.get('http://localhost:8000/getAllRider');
+    console.log(process.env);
     setRiderlist(getRider.data.data);
   }, []);
   const handleRequestSort = (event, property) => {
