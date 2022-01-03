@@ -150,7 +150,6 @@ export default function User() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRider`);
-    console.log(process.env);
     setRiderlist(getRider.data.data);
   }, []);
   const handleRequestSort = (event, property) => {
@@ -305,7 +304,14 @@ export default function User() {
                           <TableCell align="left">{rider_tel}</TableCell>
 
                           <TableCell align="right">
-                            <RiderMoreMenu id={rider_id} />
+                            <RiderMoreMenu
+                              id={rider_id}
+                              rider_first_name={rider_first_name}
+                              rider_last_name={rider_last_name}
+                              rider_id_login={rider_id_login}
+                              rider_pw_login={rider_pw_login}
+                              rider_tel={rider_tel}
+                            />
                           </TableCell>
                         </TableRow>
                       );

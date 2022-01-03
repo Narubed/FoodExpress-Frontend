@@ -49,7 +49,6 @@ export default function RegisterForm() {
     tel: Yup.number().required('tel is required')
   });
   const handleSubmits = async (e) => {
-    console.log(e);
     const data = {
       rider_id_login: e.riderid,
       rider_pw_login: e.password,
@@ -67,7 +66,6 @@ export default function RegisterForm() {
       confirmButtonText: 'Yes, need it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(data);
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRider`, data);
         Swal.fire('Success!', 'คุณได้เพิ่มไรเดอร์คนใหม่เรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
