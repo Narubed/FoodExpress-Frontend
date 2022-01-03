@@ -70,7 +70,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.rider_first_name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.company_name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -309,11 +309,6 @@ function AdminCompanyApp() {
                                 book_name={book_name}
                                 book_number={book_number}
                                 company_address={company_address}
-                                // rider_first_name={rider_first_name}
-                                // rider_last_name={rider_last_name}
-                                // rider_id_login={rider_id_login}
-                                // rider_pw_login={rider_pw_login}
-                                // rider_tel={rider_tel}
                               />
                             </TableCell>
                           </TableRow>
