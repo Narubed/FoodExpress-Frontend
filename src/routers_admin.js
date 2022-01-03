@@ -9,6 +9,7 @@ import NotFound from './pages/Page404';
 import AdminApp from './pages/Admin/AdminApp';
 import AdminRiderApp from './pages/Admin/Menagement/Rider/AdminRiderApp';
 import AdminCreateRiderApp from './pages/Admin/Menagement/Rider/AdminCreateRiderApp';
+import AdminCompanyApp from './pages/Admin/Menagement/Company/AdminApp';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +22,9 @@ export default function Router() {
         { element: <Navigate to="/admin/app" replace /> },
         { path: 'app', element: <AdminApp /> },
         { path: 'AdminRiderApp', element: <AdminRiderApp /> },
-        { path: 'AdminRiderApp/AdminCreateRiderApp', element: <AdminCreateRiderApp /> }
+        { path: 'AdminRiderApp/AdminCreateRiderApp', element: <AdminCreateRiderApp /> },
+        { path: 'AdminCompanyApp', element: <AdminCompanyApp /> }
+
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]

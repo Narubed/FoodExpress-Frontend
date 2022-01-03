@@ -24,6 +24,12 @@ const sidebarConfig = [
     path: '/admin/AdminRiderApp',
     icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
   },
+  {
+    title: 'company',
+    titleth: 'จัดการข้อมูลบริษัท',
+    path: '/admin/AdminCompanyApp',
+    icon: <Icon icon="mdi:office-building-cog-outline" width={22} height={22} />
+  },
   // {
   //   title: 'rider',
   //   titleth: 'จัดการข้อมูลไรเดอร์',
