@@ -230,7 +230,7 @@ function AdminCompanyApp() {
             <Button
               variant="contained"
               component={RouterLink}
-              to="/admin/AdminRiderApp/AdminCreateRiderApp"
+              to="/admin/AdminCompanyApp/AdminCreateCompanyApp"
               startIcon={<Icon icon={plusFill} />}
             >
               New Company

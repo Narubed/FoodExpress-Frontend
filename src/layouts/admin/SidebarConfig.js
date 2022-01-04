@@ -32,9 +32,9 @@ const sidebarConfig = [
   },
   {
     title: 'company',
-    titleth: 'จัดการข้อมูลบริษัท',
+    titleth: 'จัดการข้อมูลสินค้า',
     path: '/admin/AdminProductApp',
-    icon: <Icon icon="mdi:office-building-cog-outline" width={22} height={22} />
+    icon: <Icon icon="ri:shopping-basket-2-fill" width={22} height={22} />
   },
   // {
   //   title: 'rider',

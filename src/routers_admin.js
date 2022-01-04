@@ -11,6 +11,7 @@ import AdminRiderApp from './pages/Admin/Menagement/Rider/AdminRiderApp';
 import AdminCreateRiderApp from './pages/Admin/Menagement/Rider/AdminCreateRiderApp';
 import AdminCompanyApp from './pages/Admin/Menagement/Company/AdminCompanyApp';
 import AdminProductApp from './pages/Admin/Menagement/Product/AdminProductApp';
+import AdminCreateCompanyApp from './pages/Admin/Menagement/Company/AdminCreateCompanyApp';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ export default function Router() {
         { path: 'AdminRiderApp', element: <AdminRiderApp /> },
         { path: 'AdminRiderApp/AdminCreateRiderApp', element: <AdminCreateRiderApp /> },
         { path: 'AdminCompanyApp', element: <AdminCompanyApp /> },
+        { path: 'AdminCompanyApp/AdminCreateCompanyApp', element: <AdminCreateCompanyApp /> },
         { path: 'AdminProductApp', element: <AdminProductApp /> }
 
         // { path: 'products', element: <Products /> },
