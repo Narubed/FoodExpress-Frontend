@@ -25,7 +25,6 @@ export default function RiderMoreMenu(props) {
   // eslint-disable-next-line camelcase
   const { id, rider_first_name, rider_last_name, rider_id_login, rider_pw_login, rider_tel } =
     props;
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [onChangeFirstname, setonChangeFirstname] = useState('');
   const [onChangeLastName, setonChangeLastName] = useState();
   const [onChangeIDLogin, setonChangeIDLogin] = useState();
