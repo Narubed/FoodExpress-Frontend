@@ -193,7 +193,7 @@ export default function RiderMoreMenu(props) {
             </Button>
 
             <Button color="green" onClick={(e) => handleOk(e)} ripple="light">
-              Save Changes
+              Save
             </Button>
           </ModalFooter>
         </Modal>

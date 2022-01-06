@@ -23,73 +23,71 @@ RiderMoreMenu.propTypes = {
 };
 export default function RiderMoreMenu(props) {
   // eslint-disable-next-line camelcase
-  const { id, rider_first_name, rider_last_name, rider_id_login, rider_pw_login, rider_tel } =
-    props;
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [onChangeFirstname, setonChangeFirstname] = useState('');
-  // const [onChangeLastName, setonChangeLastName] = useState();
-  // const [onChangeIDLogin, setonChangeIDLogin] = useState();
-  // const [onChangePWLogin, setonChangePWLogin] = useState();
-  // const [onChangeTel, setonChangeTel] = useState();
-  // const [showModal, setShowModalCode] = useState(false);
+  const { id, company_name, company_tel, book_name, book_number, company_address } = props;
+  const [onChangeCompanyName, setonChangeCompanyName] = useState('');
+  const [onChangeTel, setonChangeTel] = useState();
+  const [onChangeBookName, setonChangeBookName] = useState();
+  const [onChangeBookNumber, setonChangeBookNumber] = useState();
+  const [onChangeAddress, setonChangeAddress] = useState();
+  const [showModal, setShowModalCode] = useState(false);
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  // const deleteRider = (id) => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: 'คุณต้องการลบไรเดอร์คนใหม่หรือไม่ !',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, Delete it!'
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-  //       Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
-  //       setTimeout(() => {
-  //         window.location.reload(false);
-  //       }, 1500);
-  //     }
-  //   });
-  // };
-  // const setDataEditRider = async () => {
-  //   setonChangeFirstname(rider_first_name);
-  //   setonChangeLastName(rider_last_name);
-  //   setonChangeIDLogin(rider_id_login);
-  //   setonChangePWLogin(rider_pw_login);
-  //   setonChangeTel(rider_tel);
-  //   setShowModalCode(true);
-  // };
-  // const handleOk = async () => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: 'คุณยืนยันที่จะเเก้ไขหรือไม่!',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes !'
-  //   }).then(async (result) => {
-  //     const data = {
-  //       rider_id: id,
-  //       rider_id_login: onChangeIDLogin,
-  //       rider_pw_login: onChangePWLogin,
-  //       rider_tel: onChangeTel,
-  //       rider_first_name: onChangeFirstname,
-  //       rider_last_name: onChangeLastName
-  //     };
-  //     if (result.isConfirmed) {
-  //       Swal.fire('ยืนยันการเเก้ไข!', 'คุณได้ทำการเเก้ไขสำเร็จ', 'success');
-  //       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putRider`, data);
-  //       setShowModalCode(false);
-  //       setTimeout(() => {
-  //         window.location.reload(false);
-  //       }, 2000);
-  //     }
-  //   });
-  // };
+  const deleteRider = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการลบบริษัทหรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteCompany/${id}`);
+        Swal.fire('Success!', 'คุณได้ลบบริษัทเรียบร้อยเเล้ว.', 'success');
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      }
+    });
+  };
+  const setDataEditCompany = async () => {
+    setonChangeCompanyName(company_name);
+    setonChangeTel(company_tel);
+    setonChangeBookName(book_name);
+    setonChangeBookNumber(book_number);
+    setonChangeAddress(company_address);
+    setShowModalCode(true);
+  };
+  const handleOk = async () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณยืนยันที่จะเเก้ไขหรือไม่!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes !'
+    }).then(async (result) => {
+      const data = {
+        company_id: id,
+        company_name: onChangeCompanyName,
+        company_tel: onChangeTel,
+        book_name: onChangeBookName,
+        book_number: onChangeBookNumber,
+        company_address: onChangeAddress
+      };
+      if (result.isConfirmed) {
+        Swal.fire('ยืนยันการเเก้ไข!', 'คุณได้ทำการเเก้ไขสำเร็จ', 'success');
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putCompany`, data);
+        setShowModalCode(false);
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 2000);
+      }
+    });
+  };
 
   return (
     <>
@@ -115,7 +113,7 @@ export default function RiderMoreMenu(props) {
             <ListItemText
               primary="Delete"
               primaryTypographyProps={{ variant: 'body2' }}
-              // onClick={() => deleteRider(id)}
+              onClick={() => deleteRider(id)}
             />
           </MenuItem>
 
@@ -126,10 +124,81 @@ export default function RiderMoreMenu(props) {
             <ListItemText
               primary="Edit"
               primaryTypographyProps={{ variant: 'body2' }}
-              // onClick={() => setDataEditRider()}
+              onClick={() => setDataEditCompany()}
             />
           </MenuItem>
         </Menu>
+        <Modal size="lg" active={showModal} toggler={() => setShowModalCode(false)}>
+          <ModalHeader toggler={() => setShowModalCode(false)}>{onChangeCompanyName}</ModalHeader>
+          <ModalBody>
+            <Input
+              type="text"
+              color="lightBlue"
+              size="regular"
+              outline
+              placeholder="ชื่อบริษัท"
+              defaultValue={onChangeCompanyName}
+              onChange={(e) => setonChangeCompanyName(e.target.value)}
+            />
+            <br />
+            <div>
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="เบอร์โทรศัพท์"
+                defaultValue={onChangeTel}
+                onChange={(e) => setonChangeTel(e.target.value)}
+              />
+            </div>
+
+            <br />
+            <Input
+              type="text"
+              color="lightBlue"
+              size="regular"
+              outline
+              placeholder="ชื่อธนาคาร"
+              defaultValue={onChangeBookName}
+              onChange={(e) => setonChangeBookName(e.target.value)}
+            />
+            <br />
+            <Input
+              type="text"
+              color="lightBlue"
+              size="regular"
+              outline
+              placeholder="เลขบัญญชีธนาคาร"
+              defaultValue={onChangeBookNumber}
+              onChange={(e) => setonChangeBookNumber(e.target.value)}
+            />
+            <br />
+            <Input
+              type="text"
+              color="lightBlue"
+              size="regular"
+              outline
+              placeholder="ที่อยู่บริษัท"
+              defaultValue={onChangeAddress}
+              onChange={(e) => setonChangeAddress(e.target.value)}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="red"
+              buttonType="link"
+              onClick={(e) => setShowModalCode(false)}
+              ripple="dark"
+            >
+              Close
+            </Button>
+
+            <Button color="green" onClick={(e) => handleOk(e)} ripple="light">
+              Save
+            </Button>
+          </ModalFooter>
+        </Modal>
       </>
     </>
   );

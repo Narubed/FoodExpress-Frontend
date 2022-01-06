@@ -49,30 +49,30 @@ CompanyListToolbar.propTypes = {
 
 // eslint-disable-next-line camelcase
 export default function CompanyListToolbar({ numSelected, filterName, onFilterName, selected_id }) {
-  // const deleteRider = () => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: 'คุณต้องการลบไรเดอร์หรือไม่ !',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, Delete it!'
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       selected_id.map(
-  //         async (value) =>
-  //           // eslint-disable-next-line no-return-await
-  //           await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${value}`)
-  //       );
-  //       // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-  //       Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
-  //       setTimeout(() => {
-  //         window.location.reload(false);
-  //       }, 1500);
-  //     }
-  //   });
-  // };
+  const deleteRider = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการลบบริษัทหรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        selected_id.map(
+          async (value) =>
+            // eslint-disable-next-line no-return-await
+            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteCompany/${value}`)
+        );
+        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
+        Swal.fire('Success!', 'คุณได้ลบบริษัทเรียบร้อยเเล้ว.', 'success');
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      }
+    });
+  };
   return (
     <RootStyle
       sx={{
@@ -102,7 +102,7 @@ export default function CompanyListToolbar({ numSelected, filterName, onFilterNa
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
-            <Icon icon={trash2Fill} onClick={() => console.log('deleteRider()')} />
+            <Icon icon={trash2Fill} onClick={() => deleteRider()} />
           </IconButton>
         </Tooltip>
       ) : (

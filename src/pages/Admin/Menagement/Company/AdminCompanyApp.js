@@ -71,10 +71,10 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       (_user) =>
-        _user.company_name.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.company_tel.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.book_name.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.book_number.toLowerCase().indexOf(query.toLowerCase()) &&
+        _user.company_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.company_tel.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.book_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.book_number.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.company_address.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
