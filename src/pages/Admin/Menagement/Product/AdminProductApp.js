@@ -43,6 +43,7 @@ import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 // utils
 import { fNumber } from '../../../../utils/formatNumber';
+import AddProductType from './AddProductType';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'productName', label: 'ชื่อสินค้า', alignRight: false },
@@ -227,6 +228,7 @@ function AdminCompanyApp() {
               New Product
             </Button>
           </Stack>
+          <AddProductType />
           <Card>
             <ProductListToolbar
               numSelected={selected.length}
