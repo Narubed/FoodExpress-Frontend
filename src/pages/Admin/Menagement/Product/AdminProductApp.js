@@ -130,7 +130,6 @@ function AdminCompanyApp() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getProduct = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
-    console.log(getProduct.data.data);
     setProductlist(getProduct.data.data);
   }, []);
   const handleRequestSort = (event, property) => {
@@ -162,19 +161,15 @@ function AdminCompanyApp() {
       newSelected = newSelected.concat(selected, name);
       newSelectedid = newSelectedid.concat(selected_id, id);
       newselectedproductImg = newselectedproductImg.concat(selected_productImg, productImg);
-      console.log('if1');
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
       newSelectedid = newSelectedid.concat(selected_id.slice(1));
       newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(1));
-      console.log('if2');
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
       newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
       newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(0, -1));
-      console.log('if3');
     } else if (selectedIndex > 0) {
-      console.log('if4 ');
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
@@ -190,7 +185,6 @@ function AdminCompanyApp() {
     }
     setSelected(newSelected);
     setSelected_id(newSelectedid);
-    console.log(newselectedproductImg);
     setSelected_productImg(newselectedproductImg);
   };
 

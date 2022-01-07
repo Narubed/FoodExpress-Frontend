@@ -81,17 +81,15 @@ export default function AdminCreateProductApp() {
     formdata.append('typeid', e.Typeid);
     formdata.append('unitkg', e.unitkg);
     formdata.append('currency', e.currency);
-    console.log(formdata);
     Swal.fire({
       title: 'Are you sure?',
-      text: 'คุณต้องการเพิ่มบริษัทหรือไม่ !',
+      text: 'คุณต้องการเพิ่มสินค้าหรือไม่ !',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, need it!'
     }).then(async (result) => {
-      console.log(file);
       if (file.length === 0) {
         Swal.fire(
           'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
@@ -99,9 +97,8 @@ export default function AdminCreateProductApp() {
           'question'
         );
       } else if (result.isConfirmed) {
-        console.log(data);
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
-        Swal.fire('Success!', 'คุณได้เพิ่มบริษัทเรียบร้อยเเล้ว.', 'success');
+        Swal.fire('Success!', 'คุณได้เพิ่มสินค้ารียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
           window.location.reload(false);
         }, 1500);
@@ -121,7 +118,6 @@ export default function AdminCreateProductApp() {
       currency: ''
     },
     validationSchema: RegisterSchema,
-    // onSubmit: (e) => console.log(e)
     onSubmit: (e) => handleSubmits(e)
   });
   const handleInputChange = async (event) => {
@@ -212,10 +208,10 @@ export default function AdminCreateProductApp() {
                 <MenuItem key={1} value="สินค้าพร้อมจำหน่าย">
                   สินค้าพร้อมจำหน่าย
                 </MenuItem>
-                <MenuItem key={2} value="สินค้าพร้อมจำหน่าย">
+                <MenuItem key={2} value="สินค้ายังไม่พร้อมจำหน่าย">
                   สินค้ายังไม่พร้อมจำหน่าย
                 </MenuItem>
-                <MenuItem key={3} value="สินค้าพร้อมจำหน่าย" disabled>
+                <MenuItem key={3} value="สินค้ามีไม่พอจำหน่าย" disabled>
                   สินค้ามีไม่พอจำหน่าย
                 </MenuItem>
               </TextField>

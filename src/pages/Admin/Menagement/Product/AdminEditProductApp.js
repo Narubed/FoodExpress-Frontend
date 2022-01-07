@@ -81,8 +81,6 @@ export default function AdminEditProductApp() {
     formdata.append('typeid', e.Typeid);
     formdata.append('unitkg', e.unitkg);
     formdata.append('currency', e.currency);
-    console.log(formdata);
-    console.log(data);
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการเพิ่มบริษัทหรือไม่ !',
@@ -92,10 +90,8 @@ export default function AdminEditProductApp() {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, need it!'
     }).then(async (result) => {
-      console.log(file);
       if (result.isConfirmed) {
         if (file.length === 0) {
-          console.log(data);
           const a = await axios
             .put(`${process.env.REACT_APP_WEB_BACKEND}/product`, data)
             .then((response) => {
@@ -105,7 +101,6 @@ export default function AdminEditProductApp() {
             .catch((err) => {
               console.error(err);
             });
-          console.log(a);
           Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
           setTimeout(() => {
             window.localStorage.clear();
@@ -120,10 +115,10 @@ export default function AdminEditProductApp() {
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
           );
           Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
-          // setTimeout(() => {
-          //   window.localStorage.clear();
-          //   window.history.back();
-          // }, 1500);
+          setTimeout(() => {
+            window.localStorage.clear();
+            window.history.back();
+          }, 1500);
         }
       }
     });
@@ -142,7 +137,6 @@ export default function AdminEditProductApp() {
       currency: localStorage.getItem('currency')
     },
     validationSchema: RegisterSchema,
-    // onSubmit: (e) => console.log(e)
     onSubmit: (e) => handleSubmits(e)
   });
   const handleInputChange = async (event) => {
@@ -167,7 +161,7 @@ export default function AdminEditProductApp() {
                 id="outlined-select-currency"
                 select
                 label="ประเภทของสินค้า"
-                defaultValue="cdcd"
+                // defaultValue="cdcd"
                 // onChange={handleChange}
                 {...getFieldProps('Typeid')}
                 error={Boolean(touched.Typeid && errors.Typeid)}
@@ -234,10 +228,10 @@ export default function AdminEditProductApp() {
                 <MenuItem key={1} value="สินค้าพร้อมจำหน่าย">
                   สินค้าพร้อมจำหน่าย
                 </MenuItem>
-                <MenuItem key={2} value="สินค้าพร้อมจำหน่าย">
+                <MenuItem key={2} value="สินค้ายังไม่พร้อมจำหน่าย">
                   สินค้ายังไม่พร้อมจำหน่าย
                 </MenuItem>
-                <MenuItem key={3} value="สินค้าพร้อมจำหน่าย" disabled>
+                <MenuItem key={3} value="สินค้ามีไม่พอจำหน่าย" disabled>
                   สินค้ามีไม่พอจำหน่าย
                 </MenuItem>
               </TextField>
