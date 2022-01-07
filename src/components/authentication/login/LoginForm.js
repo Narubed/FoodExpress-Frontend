@@ -48,7 +48,7 @@ export default function LoginForm() {
   const handleSubmits = async (e) => {
     const setUserNames = e.username;
     const setPasswords = e.password;
-    console.log(setUserNames);
+    // console.log(setUserNames);
     let response = await loginUser({
       setUserNames,
       setPasswords
@@ -99,7 +99,7 @@ export default function LoginForm() {
     //   navigate('/dashboard', { replace: true });
     // }
   });
-  console.log(formik);
+  // console.log(formik);
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
