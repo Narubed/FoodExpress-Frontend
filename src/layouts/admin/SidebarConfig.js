@@ -31,10 +31,16 @@ const sidebarConfig = [
     icon: <Icon icon="mdi:office-building-cog-outline" width={22} height={22} />
   },
   {
-    title: 'company',
+    title: 'product',
     titleth: 'จัดการข้อมูลสินค้า',
     path: '/admin/AdminProductApp',
     icon: <Icon icon="ri:shopping-basket-2-fill" width={22} height={22} />
+  },
+  {
+    title: 'member',
+    titleth: 'จัดการข้อมูลผู้ใช้',
+    path: '/admin/AdminMemberApp',
+    icon: <Icon icon="ic:baseline-supervised-user-circle" width={22} height={22} />
   },
   // {
   //   title: 'rider',
