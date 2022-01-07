@@ -120,7 +120,6 @@ export default function RegisterForm() {
               <TextField
                 fullWidth
                 autoComplete="username"
-                type="riderid"
                 label="ID"
                 {...getFieldProps('riderid')}
                 error={Boolean(touched.riderid && errors.riderid)}

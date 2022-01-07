@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
 import { filter } from 'lodash';
@@ -6,6 +7,11 @@ import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
+import Image from '@material-tailwind/react/Image';
+import Modal from '@material-tailwind/react/Modal';
+import ModalHeader from '@material-tailwind/react/ModalHeader';
+import ModalBody from '@material-tailwind/react/ModalBody';
+import ModalFooter from '@material-tailwind/react/ModalFooter';
 // material
 import {
   Card,
@@ -25,21 +31,22 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {
-  CompanyListHead,
-  CompanyListToolbar,
-  CompanyMoreMenu
-} from '../../../../components/_admin/company';
+  ProductListHead,
+  ProductListToolbar,
+  ProductMoreMenu,
+  ProductImage
+} from '../../../../components/_admin/product';
 import Page from '../../../../components/Page';
 import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'company_name', label: 'ชื่อ', alignRight: false },
-  { id: 'company_tel', label: 'เบอร์โทรศัพท์', alignRight: false },
-  { id: 'book_name', label: 'ชื่อบัญชีธนาคาร', alignRight: false },
-  { id: 'book_number', label: 'เลขบัญชีธนาคาร', alignRight: false },
-  { id: 'company_address', label: 'ที่อยู่บริษัท', alignRight: false },
+  { id: 'productName', label: 'ชื่อสินค้า', alignRight: false },
+  { id: 'productPrice', label: 'ราคาสินค้า', alignRight: false },
+  { id: 'productCost', label: 'ราคาต้นทุนสินค้า', alignRight: false },
+  { id: 'productStetus', label: 'สถานะสินค้า', alignRight: false },
+  { id: 'nameproducttype', label: 'ประเภทสินค้า', alignRight: false },
   { id: '' }
 ];
 // ----------------------------------------------------------------------
@@ -58,27 +65,6 @@ function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(
-      array,
-      (_user) =>
-        _user.company_name.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.company_tel.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.book_name.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.book_number.toLowerCase().indexOf(query.toLowerCase()) &&
-        _user.company_address.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-  }
-  return stabilizedThis.map((el) => el[0]);
 }
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -109,50 +95,43 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(
+      array,
+      (_user) =>
+        _user.productName.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.productStetus.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.nameproducttype.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
+  return stabilizedThis.map((el) => el[0]);
 }
 
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
 function AdminCompanyApp() {
   // eslint-disable-next-line no-undef
-  const [Companylist, setCompanylist] = useState([]);
+  const [Productlist, setProductlist] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   // eslint-disable-next-line camelcase
   const [selected_id, setSelected_id] = useState([]);
+  const [selected_productImg, setSelected_productImg] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getCompany = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllCompany`);
-    console.log(getCompany.data.data);
-    setCompanylist(getCompany.data.data);
+    const getProduct = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
+    console.log(getProduct.data.data);
+    setProductlist(getProduct.data.data);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -162,8 +141,8 @@ function AdminCompanyApp() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Companylist.map((n) => n.company_name);
-      const newSelectedsid = Companylist.map((n) => n.company_id);
+      const newSelecteds = Productlist.map((n) => n.productName);
+      const newSelectedsid = Productlist.map((n) => n.productid);
       setSelected(newSelecteds);
       setSelected_id(newSelectedsid);
       return;
@@ -172,21 +151,30 @@ function AdminCompanyApp() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, id) => {
+  const handleClick = (event, name, id, productImg) => {
     const selectedIndex = selected.indexOf(name);
     const selectedIndexid = selected_id.indexOf(id);
+    const selectedproductImg = selected_productImg.indexOf(productImg);
     let newSelected = [];
     let newSelectedid = [];
+    let newselectedproductImg = [];
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
       newSelectedid = newSelectedid.concat(selected_id, id);
+      newselectedproductImg = newselectedproductImg.concat(selected_productImg, productImg);
+      console.log('if1');
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
       newSelectedid = newSelectedid.concat(selected_id.slice(1));
+      newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(1));
+      console.log('if2');
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
       newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
+      newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(0, -1));
+      console.log('if3');
     } else if (selectedIndex > 0) {
+      console.log('if4 ');
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
@@ -195,9 +183,15 @@ function AdminCompanyApp() {
         selected_id.slice(0, selectedIndexid),
         selected_id.slice(selectedIndexid + 1)
       );
+      newselectedproductImg = newselectedproductImg.concat(
+        selected_productImg.slice(0, selectedproductImg),
+        selected_productImg.slice(selectedproductImg + 1)
+      );
     }
     setSelected(newSelected);
     setSelected_id(newSelectedid);
+    console.log(newselectedproductImg);
+    setSelected_productImg(newselectedproductImg);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -213,69 +207,73 @@ function AdminCompanyApp() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Companylist.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Productlist.length) : 0;
 
   // eslint-disable-next-line no-undef
-  const filteredCompany = applySortFilter(Companylist, getComparator(order, orderBy), filterName);
+  const filteredProduct = applySortFilter(Productlist, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredCompany.length === 0;
+  const isUserNotFound = filteredProduct.length === 0;
   return (
     <>
-      <Page title="Company | FoodExpress">
+      <Page title="Product | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              Company
+              Product
             </Typography>
             <Button
               variant="contained"
               component={RouterLink}
-              to="/admin/AdminRiderApp/AdminCreateRiderApp"
+              to="/admin/AdminProductApp/AdminCreateProductApp"
               startIcon={<Icon icon={plusFill} />}
             >
-              New Company
+              New Product
             </Button>
           </Stack>
           <Card>
-            <CompanyListToolbar
+            <ProductListToolbar
               numSelected={selected.length}
               filterName={filterName}
               onFilterName={handleFilterByName}
               selected={selected}
               // eslint-disable-next-line camelcase
               selected_id={selected_id}
+              selected_productImg={selected_productImg}
             />
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
-                  <CompanyListHead
+                  <ProductListHead
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={Companylist.length}
+                    rowCount={Productlist.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {filteredCompany
+                    {filteredProduct
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          company_id,
-                          company_name,
-                          company_tel,
-                          book_name,
-                          book_number,
-                          company_address
+                          productid,
+                          productName,
+                          productPrice,
+                          productCost,
+                          productImg,
+                          productStetus,
+                          unitkg,
+                          currency,
+                          nameproducttype
                         } = row;
-                        const isItemSelected = selected.indexOf(company_name) !== -1;
+                        const isItemSelected = selected.indexOf(productName) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={company_id}
+                            key={productid}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
@@ -284,36 +282,46 @@ function AdminCompanyApp() {
                             <TableCell padding="checkbox">
                               <Checkbox
                                 checked={isItemSelected}
-                                onChange={(event) => handleClick(event, company_name, company_id)}
+                                onChange={(event) =>
+                                  handleClick(event, productName, productid, productImg)
+                                }
                               />
                             </TableCell>
+
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
-                                <StyledBadge
-                                  overlap="circular"
-                                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                  variant="dot"
-                                >
-                                  <Avatar {...stringAvatar(`${company_name} ${company_tel}`)} />
-                                </StyledBadge>
+                                {productStetus === 'สินค้าพร้อมจำหน่าย' ? (
+                                  <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                  >
+                                    <ProductImage images={productImg} Name={productName} />
+                                  </StyledBadge>
+                                ) : (
+                                  <ProductImage images={productImg} Name={productName} />
+                                )}
                                 <Typography variant="subtitle2" noWrap>
-                                  {company_name}
+                                  {productName}
                                 </Typography>
                               </Stack>
                             </TableCell>
-                            <TableCell align="left">{company_tel}</TableCell>
-                            <TableCell align="left">{book_name}</TableCell>
-                            <TableCell align="left">{book_number}</TableCell>
-                            <TableCell align="left">{company_address}</TableCell>
+                            <TableCell align="left">{productPrice}</TableCell>
+                            <TableCell align="left">{productCost}</TableCell>
+                            <TableCell align="left">{productStetus}</TableCell>
+                            <TableCell align="left">{nameproducttype}</TableCell>
 
                             <TableCell align="right">
-                              <CompanyMoreMenu
-                                id={company_id}
-                                company_name={company_name}
-                                company_tel={company_tel}
-                                book_name={book_name}
-                                book_number={book_number}
-                                company_address={company_address}
+                              <ProductMoreMenu
+                                productid={productid}
+                                productName={productName}
+                                productPrice={productPrice}
+                                productCost={productCost}
+                                productImg={productImg}
+                                productStetus={productStetus}
+                                unitkg={unitkg}
+                                currency={currency}
+                                nameproducttype={nameproducttype}
                               />
                             </TableCell>
                           </TableRow>
@@ -341,7 +349,7 @@ function AdminCompanyApp() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={Companylist.length}
+              count={Productlist.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
