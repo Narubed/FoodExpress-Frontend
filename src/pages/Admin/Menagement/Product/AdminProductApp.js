@@ -258,6 +258,7 @@ function AdminCompanyApp() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
+                          id,
                           productid,
                           productName,
                           productPrice,
@@ -322,6 +323,7 @@ function AdminCompanyApp() {
                                 unitkg={unitkg}
                                 currency={currency}
                                 nameproducttype={nameproducttype}
+                                id={id}
                               />
                             </TableCell>
                           </TableRow>

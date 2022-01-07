@@ -13,6 +13,7 @@ import AdminCompanyApp from './pages/Admin/Menagement/Company/AdminCompanyApp';
 import AdminProductApp from './pages/Admin/Menagement/Product/AdminProductApp';
 import AdminCreateCompanyApp from './pages/Admin/Menagement/Company/AdminCreateCompanyApp';
 import AdminCreateProductApp from './pages/Admin/Menagement/Product/AdminCreateProductApp';
+import AdminEditProductApp from './pages/Admin/Menagement/Product/AdminEditProductApp';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,8 @@ export default function Router() {
         { path: 'AdminCompanyApp', element: <AdminCompanyApp /> },
         { path: 'AdminCompanyApp/AdminCreateCompanyApp', element: <AdminCreateCompanyApp /> },
         { path: 'AdminProductApp', element: <AdminProductApp /> },
-        { path: 'AdminProductApp/AdminCreateProductApp', element: <AdminCreateProductApp /> }
+        { path: 'AdminProductApp/AdminCreateProductApp', element: <AdminCreateProductApp /> },
+        { path: 'AdminProductApp/AdminEditProductApp', element: <AdminEditProductApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

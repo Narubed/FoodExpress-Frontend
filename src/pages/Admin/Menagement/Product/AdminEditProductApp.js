@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
@@ -32,7 +33,7 @@ import {
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
-export default function AdminCreateProductApp() {
+export default function AdminEditProductApp() {
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [ProductType, setProductType] = useState([]);
@@ -61,14 +62,13 @@ export default function AdminCreateProductApp() {
   });
   const handleSubmits = async (e) => {
     const data = {
+      productid: parseInt(e.productid, 10),
       productName: e.productName,
-      productPrice: e.productPrice,
-      productCost: e.productCost,
+      productPrice: parseInt(e.productPrice, 10),
+      productCost: parseInt(e.productCost, 10),
       productStetus: e.productStetus,
-      selectTypeId: e.Typeid,
-      file,
-      filepreview,
-      unitkg: e.unitkg,
+      typeid: parseInt(e.Typeid, 10),
+      unitkg: parseInt(e.unitkg, 10),
       currency: e.currency
     };
 
@@ -82,6 +82,7 @@ export default function AdminCreateProductApp() {
     formdata.append('unitkg', e.unitkg);
     formdata.append('currency', e.currency);
     console.log(formdata);
+    console.log(data);
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการเพิ่มบริษัทหรือไม่ !',
@@ -92,33 +93,53 @@ export default function AdminCreateProductApp() {
       confirmButtonText: 'Yes, need it!'
     }).then(async (result) => {
       console.log(file);
-      if (file.length === 0) {
-        Swal.fire(
-          'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
-          'ลองเช็คที่ไฟล์รูปภาพของคุณอีกครั้ง?',
-          'question'
-        );
-      } else if (result.isConfirmed) {
-        console.log(data);
-        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
-        Swal.fire('Success!', 'คุณได้เพิ่มบริษัทเรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
+      if (result.isConfirmed) {
+        if (file.length === 0) {
+          console.log(data);
+          const a = await axios
+            .put(`${process.env.REACT_APP_WEB_BACKEND}/product`, data)
+            .then((response) => {
+              console.log('response: ', response);
+              // do something about response
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+          console.log(a);
+          Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
+          setTimeout(() => {
+            window.localStorage.clear();
+            window.history.back();
+          }, 1500);
+        } else {
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
+          await axios.delete(
+            `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem('productImg')}`
+          );
+          await axios.delete(
+            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
+          );
+          Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
+          // setTimeout(() => {
+          //   window.localStorage.clear();
+          //   window.history.back();
+          // }, 1500);
+        }
       }
     });
   };
   const formik = useFormik({
     initialValues: {
-      productName: '',
-      productPrice: '',
-      productCost: '',
-      productStetus: null,
-      productImg: '',
+      productid: localStorage.getItem('productid'),
+      productName: localStorage.getItem('productName'),
+      productPrice: localStorage.getItem('productPrice'),
+      productCost: localStorage.getItem('productCost'),
+      productStetus: localStorage.getItem('productStetus'),
+      productImg: localStorage.getItem('productImg'),
       productTypes: [],
-      Typeid: null,
-      unitkg: '',
-      currency: ''
+      Typeid: localStorage.getItem('id'),
+      unitkg: localStorage.getItem('unitkg'),
+      currency: localStorage.getItem('currency')
     },
     validationSchema: RegisterSchema,
     // onSubmit: (e) => console.log(e)
@@ -146,6 +167,7 @@ export default function AdminCreateProductApp() {
                 id="outlined-select-currency"
                 select
                 label="ประเภทของสินค้า"
+                defaultValue="cdcd"
                 // onChange={handleChange}
                 {...getFieldProps('Typeid')}
                 error={Boolean(touched.Typeid && errors.Typeid)}
@@ -249,7 +271,16 @@ export default function AdminCreateProductApp() {
               </LoadingButton>
               {filepreview !== null ? (
                 <img className="previewimg" src={filepreview} alt="UploadImage" />
-              ) : null}
+              ) : (
+                <img
+                  className="previewimg"
+                  src={
+                    // eslint-disable-next-line global-require
+                    require(`../../../../assets/img/${localStorage.getItem('productImg')}`).default
+                  }
+                  alt="UploadImage"
+                />
+              )}
             </Stack>
           </Form>
         </FormikProvider>
