@@ -1,13 +1,7 @@
-import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { Icon } from '@iconify/react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { FolderAddOutlined, AppstoreAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined } from '@ant-design/icons';
 // material tailwind
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -17,34 +11,15 @@ import Button from '@material-tailwind/react/Button';
 import Input from '@material-tailwind/react/Input';
 import 'animate.css';
 import {
-  Card,
   Table,
-  Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
-  Container,
-  Typography,
   TableContainer,
-  TablePagination,
-  Badge
+  TablePagination
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import Scrollbar from '../../../../components/Scrollbar';
 // ----------------------------------------------------------------------
-const people = [
-  {
-    name: 'Jane Cooper',
-    title: 'Regional Paradigm Technician',
-    department: 'Optimization',
-    role: 'Admin',
-    email: 'jane.cooper@example.com',
-    image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60'
-  }
-];
 export default function AdminProductTypeApp() {
   const [showModal, setShowModal] = useState(false);
   const [ProductType, setProductType] = useState([]);
@@ -104,7 +79,6 @@ export default function AdminProductTypeApp() {
       }
     });
 
-    console.log(e);
     setShowModal(false);
   };
   const showModalEditProductType = async (e) => {
@@ -155,9 +129,7 @@ export default function AdminProductTypeApp() {
     });
   };
   const showModalDeleteProductType = async (e) => {
-    console.log(e);
     setdeleteProductTypeID(e.id);
-    // seteditProductTypeName(e.nameproducttype);
     setShowModal(false);
     setShowModalCodeDelete(true);
   };

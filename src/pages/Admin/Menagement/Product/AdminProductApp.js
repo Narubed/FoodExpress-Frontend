@@ -7,11 +7,6 @@ import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
-import Image from '@material-tailwind/react/Image';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import numeral from 'numeral';
 // material
 import {
