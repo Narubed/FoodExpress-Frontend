@@ -44,6 +44,8 @@ import SearchNotFound from '../../../../components/SearchNotFound';
 // utils
 import { fNumber } from '../../../../utils/formatNumber';
 import AddProductType from './AddProductType';
+import AdminProductTypeApp from './AdminProductTypeApp';
+
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'productName', label: 'ชื่อสินค้า', alignRight: false },
@@ -229,6 +231,7 @@ function AdminCompanyApp() {
             </Button>
           </Stack>
           <AddProductType />
+          <AdminProductTypeApp />
           <Card>
             <ProductListToolbar
               numSelected={selected.length}

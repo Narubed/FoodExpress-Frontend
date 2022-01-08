@@ -150,7 +150,7 @@ export default function AdminEditProductApp() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Create Product FoodExpress
+            Edit Product FoodExpress
           </Typography>
         </Stack>
         <FormikProvider value={formik}>
