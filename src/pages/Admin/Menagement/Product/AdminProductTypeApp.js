@@ -51,10 +51,17 @@ export default function AdminProductTypeApp() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
   const [onChangeType, setonChangeType] = useState(null);
-
+  const [editProductTypeID, seteditProductTypeID] = useState(null);
+  const [editProductTypeName, seteditProductTypeName] = useState(null);
+  const [editnewProductTypeName, setneweditProductTypeName] = useState(null);
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalCodeDelete, setShowModalCodeDelete] = useState(false);
+  const [deleteProductTypeID, setdeleteProductTypeID] = useState(false);
+  const [showModalCodeDelete2, setShowModalCodeDelete2] = useState(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
+
     setProductType(ProductType.data.data);
   }, []);
 
@@ -100,8 +107,82 @@ export default function AdminProductTypeApp() {
     console.log(e);
     setShowModal(false);
   };
-  const editProductType = async (e) => {
+  const showModalEditProductType = async (e) => {
+    seteditProductTypeID(e.id);
+    seteditProductTypeName(e.nameproducttype);
+    setShowModal(false);
+    setShowModalEdit(true);
+  };
+  const confirmEditType = async () => {
+    const data = {
+      id: editProductTypeID,
+      nameproducttype: editnewProductTypeName
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      },
+      text: 'คุณต้องการแก้ไขประเภทสินค้าหรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, need it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if (editnewProductTypeName === null) {
+          Swal.fire({
+            title: 'กรุณาตรวจสอบรายการที่ต้องเพิ่มอีกครั้ง',
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutUp'
+            }
+          });
+        } else {
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/producttype`, data);
+          Swal.fire('success!', 'คุณได้ทำการแก้ประเภทสินค้าใหม่เรียบร้อยเเล้ว.', 'success');
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        }
+      }
+    });
+  };
+  const showModalDeleteProductType = async (e) => {
     console.log(e);
+    setdeleteProductTypeID(e.id);
+    // seteditProductTypeName(e.nameproducttype);
+    setShowModal(false);
+    setShowModalCodeDelete(true);
+  };
+  const deleteProductType = async () => {
+    const data = deleteProductTypeID;
+    const reqProduct = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/products`);
+    const newF = reqProduct.data.data.filter((fil) => fil.typeid === data);
+    if (newF.length !== 0) {
+      setShowModalCodeDelete2(true);
+      setShowModalCodeDelete(false);
+    } else {
+      await axios
+        .delete(`${process.env.REACT_APP_WEB_BACKEND}/producttype/${data}`)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      Swal.fire('success!', 'คุณได้ทำการลบประเภทสินค้าใหม่เรียบร้อยเเล้ว.', 'success');
+      // this.setState({ setShowModalCodeDelete: false });
+      setTimeout(() => {
+        window.location.reload(false);
+      }, 1500);
+    }
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -141,7 +222,7 @@ export default function AdminProductTypeApp() {
             size="regular"
             outline={false}
             placeholder=" กรุณาเพิ่มสถานะของสินค้าใหม่"
-            defaultValue={onChangeType}
+            // defaultValue={onChangeType}
             onChange={(e) => setonChangeType(e.target.value)}
           />
           <Scrollbar>
@@ -191,7 +272,7 @@ export default function AdminProductTypeApp() {
                                       block={false}
                                       iconOnly={false}
                                       ripple="dark"
-                                      onClick={() => editProductType(type.id)}
+                                      onClick={() => showModalEditProductType(type)}
                                     >
                                       เเก้ไข
                                     </Button>
@@ -207,7 +288,7 @@ export default function AdminProductTypeApp() {
                                       block={false}
                                       iconOnly={false}
                                       ripple="dark"
-                                      onClick={() => console.log(type.id)}
+                                      onClick={() => showModalDeleteProductType(type)}
                                     >
                                       ลบ
                                     </Button>
@@ -251,6 +332,77 @@ export default function AdminProductTypeApp() {
         <ModalFooter>
           <Button color="green" onClick={(e) => onClickNewType()} ripple="light">
             บันทึกประเภทสินค้าใหม่
+          </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal size="regular" active={showModalEdit} toggler={() => setShowModalEdit(false)}>
+        <ModalHeader toggler={() => setShowModalEdit(false)}>{editProductTypeName}</ModalHeader>
+        <ModalBody>
+          <Input
+            type="text"
+            color="lightBlue"
+            size="regular"
+            outline={false}
+            placeholder={editProductTypeName}
+            onChange={(e) => setneweditProductTypeName(e.target.value)}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="red"
+            buttonType="link"
+            onClick={(e) => setShowModalEdit(false)}
+            ripple="dark"
+          >
+            Close
+          </Button>
+
+          <Button color="green" onClick={(e) => confirmEditType(e)} ripple="light">
+            Save Changes
+          </Button>
+        </ModalFooter>
+      </Modal>
+      {/* DELETE-------------------------------------------------------- */}
+      <Modal
+        size="regular"
+        active={showModalCodeDelete}
+        toggler={() => setShowModalCodeDelete(false)}
+      >
+        <ModalHeader toggler={() => setShowModalCodeDelete(false)}>
+          ยืนยันที่จะลบประเภทสินค้านี้หรือไม่
+        </ModalHeader>
+        <ModalBody>
+          กรุณาตรวจสอบว่ายังมีสินค้าอยู่ที่อยู่ประเภทนี้ว่ามีอยู่หรือไม่
+          หากมีจะไม่สามารถทำการลบประเภทสินค้านี้ได้
+          <br />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="red"
+            buttonType="link"
+            onClick={(e) => setShowModalCodeDelete(false)}
+            ripple="dark"
+          >
+            ยกเลิก
+          </Button>
+          <Button color="green" onClick={() => deleteProductType()} ripple="light">
+            ยืนยัน
+          </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal
+        size="regular"
+        active={showModalCodeDelete2}
+        toggler={() => setShowModalCodeDelete2(false)}
+      >
+        <ModalHeader toggler={() => setShowModalCodeDelete2(false)}>ไม่สามารถลบได้</ModalHeader>
+        <ModalBody>
+          เนื่องจากยังมีสินค้าที่อยู่ในประเภทสินค้านี้อยู่กรุณาตรวจสอบใหม่อีกครั้ง
+          <br />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="green" onClick={(e) => setShowModalCodeDelete2(false)} ripple="light">
+            ยืนยัน
           </Button>
         </ModalFooter>
       </Modal>

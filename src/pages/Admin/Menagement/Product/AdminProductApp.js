@@ -43,7 +43,6 @@ import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 // utils
 import { fNumber } from '../../../../utils/formatNumber';
-import AddProductType from './AddProductType';
 import AdminProductTypeApp from './AdminProductTypeApp';
 
 // ----------------------------------------------------------------------
@@ -230,7 +229,6 @@ function AdminCompanyApp() {
               New Product
             </Button>
           </Stack>
-          <AddProductType />
           <AdminProductTypeApp />
           <Card>
             <ProductListToolbar
