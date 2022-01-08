@@ -7,40 +7,26 @@ import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import PropTypes from 'prop-types';
 // material-tailwind
 import '@material-tailwind/react/tailwind.css';
-import Input from '@material-tailwind/react/Input';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import Button from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 MemberMoreMenu.propTypes = {
-  id: PropTypes.number
+  id: PropTypes.number,
+  cardImg: PropTypes.string,
+  bookBankImg: PropTypes.string
 };
 export default function MemberMoreMenu(props) {
-  // eslint-disable-next-line camelcase
-  const {
-    id,
-    productid,
-    productName,
-    productPrice,
-    productCost,
-    productImg,
-    productStetus,
-    unitkg,
-    currency,
-    nameproducttype
-  } = props;
-  console.log(props);
-
+  const { id, cardImg, bookBankImg } = props;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const deleteProduct = (productid) => {
+  const deleteProduct = (id) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'คุณต้องการลบสินค้าชิ้นนี้หรือไม่ !',
+      text: 'คุณต้องการลบผู้ใช้หรือไม่ !',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -48,56 +34,60 @@ export default function MemberMoreMenu(props) {
       confirmButtonText: 'Yes, Delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/product/${productid}`);
-        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${productImg}`);
-        Swal.fire('Success!', 'คุณได้ลบสินค้าเรียบร้อยเเล้ว.', 'success');
+        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${id}`);
+        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${cardImg}`);
+        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${bookBankImg}`);
+        Swal.fire('Success!', 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
           window.location.reload(false);
         }, 1500);
       }
     });
   };
-  const setDataEditProduct = async () => {
-    localStorage.setItem('id', id);
-    localStorage.setItem('productid', productid);
-    localStorage.setItem('productName', productName);
-    localStorage.setItem('productPrice', productPrice);
-    localStorage.setItem('productCost', productCost);
-    localStorage.setItem('productImg', productImg);
-    localStorage.setItem('productStetus', productStetus);
-    localStorage.setItem('unitkg', unitkg);
-    localStorage.setItem('currency', currency);
-    localStorage.setItem('nameproducttype', nameproducttype);
-  };
-  // const handleOk = async () => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: 'คุณยืนยันที่จะเเก้ไขหรือไม่!',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes !'
-  //   }).then(async (result) => {
-  //     const data = {
-  //       company_id: id,
-  //       company_name: onChangeCompanyName,
-  //       company_tel: onChangeTel,
-  //       book_name: onChangeBookName,
-  //       book_number: onChangeBookNumber,
-  //       company_address: onChangeAddress
-  //     };
-  //     if (result.isConfirmed) {
-  //       Swal.fire('ยืนยันการเเก้ไข!', 'คุณได้ทำการเเก้ไขสำเร็จ', 'success');
-  //       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putCompany`, data);
-  //       setShowModalCode(false);
-  //       setTimeout(() => {
-  //         window.location.reload(false);
-  //       }, 2000);
-  //     }
-  //   });
-  // };
+  const setDataEditMember = async () => {
+    localStorage.setItem('EditMemberId', id);
+    const Member = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getMemberByid/${id}`);
+    const MemberlistID = Member.data.data;
+    const getApi = await axios.get(
+      'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
+    );
+    const getApiAmphure = await axios.get(
+      'https://codebee.co.th/labs/examples/autoprovince/json/amphures.json'
+    );
+    const getApitombon = await axios.get(
+      'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
+    );
 
+    const filterProvince = getApi.data.filter((e) => e.province_name === MemberlistID.province);
+    const filterDistrict = getApiAmphure.data.filter(
+      (e) => e.amphur_name === MemberlistID.district
+    );
+    const filterSubdistrict = getApitombon.data.filter(
+      (e) => e.district_name === MemberlistID.subdistrict
+    );
+    localStorage.setItem('id', MemberlistID.id);
+    localStorage.setItem('password', MemberlistID.password);
+    localStorage.setItem('email', MemberlistID.email);
+    localStorage.setItem('firstname', MemberlistID.firstname);
+    localStorage.setItem('lastname', MemberlistID.lastname);
+    localStorage.setItem('tel', MemberlistID.tel);
+    localStorage.setItem('bookname', MemberlistID.bookname);
+    localStorage.setItem('booknumber', MemberlistID.booknumber);
+    localStorage.setItem('role', MemberlistID.role);
+    localStorage.setItem('address', MemberlistID.address);
+    localStorage.setItem('subdistrict', filterSubdistrict[0].district_id);
+    localStorage.setItem('district', filterDistrict[0].amphur_id);
+    localStorage.setItem('province', filterProvince[0].province_id);
+    localStorage.setItem('EditMemberId', MemberlistID.EditMemberId);
+    localStorage.setItem('map', MemberlistID.map);
+    localStorage.setItem('userId', MemberlistID.userId);
+    localStorage.setItem('status', MemberlistID.status);
+    localStorage.setItem('bookBankImg', MemberlistID.bookBankImg);
+    localStorage.setItem('cardImg', MemberlistID.cardImg);
+    localStorage.setItem('level', MemberlistID.level);
+
+    console.log(Member.data.data);
+  };
   return (
     <>
       <>
@@ -122,13 +112,13 @@ export default function MemberMoreMenu(props) {
             <ListItemText
               primary="Delete"
               primaryTypographyProps={{ variant: 'body2' }}
-              onClick={() => deleteProduct(productid)}
+              onClick={() => deleteProduct(id)}
             />
           </MenuItem>
 
           <MenuItem
             component={RouterLink}
-            to="/admin/AdminProductApp/AdminEditProductApp"
+            to="/admin/AdminMemberApp/AdminEditMemberApp"
             sx={{ color: 'text.secondary' }}
           >
             <ListItemIcon>
@@ -138,7 +128,7 @@ export default function MemberMoreMenu(props) {
             <ListItemText
               primary="Edit"
               primaryTypographyProps={{ variant: 'body2' }}
-              onClick={() => setDataEditProduct()}
+              onClick={() => setDataEditMember()}
             />
           </MenuItem>
         </Menu>

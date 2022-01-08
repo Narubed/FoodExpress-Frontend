@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
@@ -45,7 +46,8 @@ MemberListToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   selected_id: PropTypes.array,
-  selected_productImg: PropTypes.array
+  selected: PropTypes.array,
+  Memberlist: PropTypes.array
 };
 
 export default function MemberListToolbar({
@@ -54,14 +56,18 @@ export default function MemberListToolbar({
   onFilterName,
   // eslint-disable-next-line camelcase
   selected_id,
-  // eslint-disable-next-line camelcase
-  selected_productImg
+  selected,
+  Memberlist
 }) {
-  console.log(selected_productImg);
-  const deleteRider = () => {
+  const deleteMember = async () => {
+    const filteredsMember = [];
+    await selected_id.forEach((element) => {
+      const filteredsMembers = Memberlist.filter((value) => value.id === element);
+      filteredsMember.push(filteredsMembers[0]);
+    });
     Swal.fire({
       title: 'Are you sure?',
-      text: 'คุณต้องการลบบริษัทหรือไม่ !',
+      text: 'คุณต้องการลบผู้ใช้ทั้งหมดนี้หรือไม่ !',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -69,18 +75,25 @@ export default function MemberListToolbar({
       confirmButtonText: 'Yes, Delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await selected_id.map(
+        filteredsMember.map(
           async (value) =>
             // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/product/${value}`)
+            await axios.delete(
+              `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value.bookBankImg}`
+            )
         );
-        await selected_productImg.map(
+        filteredsMember.map(
           async (value) =>
             // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value}`)
+            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value.cardImg}`)
         );
-        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบบริษัทเรียบร้อยเเล้ว.', 'success');
+        filteredsMember.map(
+          async (value) =>
+            // eslint-disable-next-line no-return-await
+            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${value.id}`)
+        );
+
+        Swal.fire('Success!', 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
           window.location.reload(false);
         }, 1500);
@@ -116,8 +129,7 @@ export default function MemberListToolbar({
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
-            {/* <Icon icon={trash2Fill} onClick={() => 'deleteRider()'} /> */}
-            <Icon icon={trash2Fill} onClick={() => deleteRider()} />
+            <Icon icon={trash2Fill} onClick={() => deleteMember()} />
           </IconButton>
         </Tooltip>
       ) : (

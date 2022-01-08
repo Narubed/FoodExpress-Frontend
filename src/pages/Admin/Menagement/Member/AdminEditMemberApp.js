@@ -37,7 +37,7 @@ import {
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
-export default function AdminCreateMemberApp() {
+export default function AdminEditMemberApp() {
   const [fileUserId, setfileUserId] = useState([]);
   const [filepreviewUserId, setfilepreviewUserId] = useState(null);
   const [fileBook, setfileBook] = useState([]);
@@ -52,8 +52,12 @@ export default function AdminCreateMemberApp() {
   const [ApiThaiTombon, setApiThaiTombon] = useState([]);
   const [ApiTombonId, setApiTombonId] = useState([]);
 
+  const [memberlist, setMemberlist] = useState();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
+    const id = localStorage.getItem('EditMemberId');
+    const Member = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getMemberByid/${id}`);
+    await setMemberlist(Member.data.data);
     const getApi = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
     );
@@ -69,9 +73,9 @@ export default function AdminCreateMemberApp() {
   }, []);
   const RegisterSchema = Yup.object().shape({
     // Typeid: Yup.number().required('product price is required'),
-    userId: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('ID is required'),
+    userId: Yup.string().min(1, 'Too Short!').max(50, 'Too Long!').required('ID is required'),
     password: Yup.string()
-      .min(2, 'Too Short!')
+      .min(1, 'Too Short!')
       .max(50, 'Too Long!')
       .required('password is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -145,25 +149,25 @@ export default function AdminCreateMemberApp() {
   };
   const formik = useFormik({
     initialValues: {
-      id: '',
-      password: '',
-      email: '',
-      firstname: '',
-      lastname: '',
-      tel: '',
-      bookname: '',
-      booknumber: '',
-      role: '',
-      address: '',
-      subdistrict: '',
-      district: '',
-      province: '',
-      map: '',
-      userId: '',
-      status: '',
-      bookBankImg: '', // img
-      cardImg: '', // img
-      level: ''
+      id: localStorage.getItem('id'),
+      password: localStorage.getItem('password'),
+      email: localStorage.getItem('email'),
+      firstname: localStorage.getItem('firstname'),
+      lastname: localStorage.getItem('lastname'),
+      tel: localStorage.getItem('tel'),
+      bookname: localStorage.getItem('bookname'),
+      booknumber: localStorage.getItem('booknumber'),
+      role: localStorage.getItem('role'),
+      address: localStorage.getItem('address'),
+      subdistrict: localStorage.getItem('subdistrict'),
+      district: localStorage.getItem('district'),
+      province: parseInt(localStorage.getItem('province'), 10),
+      map: localStorage.getItem('map'),
+      userId: localStorage.getItem('userId'),
+      status: localStorage.getItem('status'),
+      bookBankImg: localStorage.getItem('bookBankImg'), // img
+      cardImg: localStorage.getItem('cardImg'), // img
+      level: localStorage.getItem('level')
     },
     validationSchema: RegisterSchema,
     onSubmit: (e) => handleSubmits(e)
@@ -183,7 +187,7 @@ export default function AdminCreateMemberApp() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Create Member FoodExpress
+            Edit Member FoodExpress
           </Typography>
         </Stack>
         <FormikProvider value={formik}>
@@ -311,7 +315,12 @@ export default function AdminCreateMemberApp() {
                     id="outlined-select-currency"
                     select
                     label="จังหวัด"
-                    value={ApiProvinceId}
+                    value={
+                      ApiProvinceId.length === 0
+                        ? parseInt(localStorage.getItem('province'), 10)
+                        : ApiProvinceId
+                    }
+                    // value={ApiProvinceId}
                     onChange={(e) => setApiProvinceId(e.target.value)}
                   >
                     {ApiThai.map((option) => (
@@ -335,7 +344,11 @@ export default function AdminCreateMemberApp() {
                     select
                     // size="xl"
                     label="อำเภอ"
-                    value={ApiAmphureId}
+                    value={
+                      ApiAmphureId.length === 0
+                        ? parseInt(localStorage.getItem('district'), 10)
+                        : ApiProvinceId
+                    }
                     onChange={(e) => setApiAmphureId(e.target.value)}
                   >
                     {ApiThaiAmphure.filter((value) => value.province_id === ApiProvinceId).map(

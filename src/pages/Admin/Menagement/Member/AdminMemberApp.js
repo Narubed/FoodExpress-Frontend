@@ -273,7 +273,8 @@ function AdminMemberApp() {
               selected={selected}
               // eslint-disable-next-line camelcase
               selected_id={selected_id}
-              selected_productImg={selected_productImg}
+              Memberlist={Memberlist}
+              // selected_productImg={selected_productImg}
             />
 
             <Scrollbar>
@@ -372,23 +373,6 @@ function AdminMemberApp() {
                                   }
                                   alt=""
                                 />
-                                {/* {productStetus === 'สินค้าพร้อมจำหน่าย' ? (
-                                  <StyledBadge
-                                    overlap="circular"
-                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                    variant="dot"
-                                  >
-                                    <MemberImage images={productImg} Name={productName} />
-                                  </StyledBadge>
-                                ) : (
-                                  <StyledBadgeRed
-                                    overlap="circular"
-                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                    variant="dot"
-                                  >
-                                    <MemberImage images={productImg} Name={productName} />
-                                  </StyledBadgeRed>
-                                )} */}
                                 <Typography variant="subtitle2" noWrap>
                                   <div className="text-orange-200">{firstname}</div>
                                   <div className=" font-light text-xs">{email}</div>
@@ -412,18 +396,7 @@ function AdminMemberApp() {
                             <TableCell align="left">{tel}</TableCell>
                             <TableCell align="left">{role}</TableCell>
                             <TableCell align="right">
-                              <MemberMoreMenu
-                                // productid={productid}
-                                // productName={productName}
-                                // productPrice={productPrice}
-                                // productCost={productCost}
-                                // productImg={productImg}
-                                // productStetus={productStetus}
-                                // unitkg={unitkg}
-                                // currency={currency}
-                                // nameproducttype={nameproducttype}
-                                id={id}
-                              />
+                              <MemberMoreMenu bookBankImg={bookBankImg} cardImg={cardImg} id={id} />
                             </TableCell>
                           </TableRow>
                         );
