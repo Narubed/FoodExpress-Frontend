@@ -172,6 +172,7 @@ function AdminMemberApp() {
   useEffect(async () => {
     const getMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
     setMemberlist(getMember.data.data);
+    localStorage.clear();
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

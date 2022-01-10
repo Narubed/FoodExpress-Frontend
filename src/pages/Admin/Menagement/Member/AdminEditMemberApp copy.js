@@ -1,4 +1,3 @@
-/* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
@@ -10,55 +9,49 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import Label from '@material-tailwind/react/Label';
 import Image from '@material-tailwind/react/Image';
-import Input from '@material-tailwind/react/Input';
-
+import { Select } from 'antd';
 // material
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Stack,
   TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
   Container,
   Typography,
-  TableContainer,
   TablePagination,
+  Button,
   ImageList,
-  ImageListItem,
   MenuItem
 } from '@mui/material';
 // companent
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
-
-export default function AdminCreateMemberApp() {
+const { Option } = Select;
+export default function AdminEditMemberApp() {
   const [fileUserId, setfileUserId] = useState([]);
   const [filepreviewUserId, setfilepreviewUserId] = useState(null);
   const [fileBook, setfileBook] = useState([]);
-  const [filepreviewBook, setfilepreviewBook] = useState(localStorage.getItem('bookBankImg'));
+  const [filepreviewBook, setfilepreviewBook] = useState(null);
 
   const [ApiThai, setApiThai] = useState([]);
-  const [ApiProvinceId, setApiProvinceId] = useState([]);
+  const [ApiProvinceId, setApiProvinceId] = useState([localStorage.getItem('province')]);
+  const [province, setProvince] = useState([]);
 
   const [ApiThaiAmphure, setgetApiThaiAmphure] = useState([]);
-  const [ApiAmphureId, setApiAmphureId] = useState([]);
+  const [ApiAmphureId, setApiAmphureId] = useState([localStorage.getItem('district')]);
 
   const [ApiThaiTombon, setApiThaiTombon] = useState([]);
-  const [ApiTombonId, setApiTombonId] = useState([]);
+  const [ApiTombonId, setApiTombonId] = useState([localStorage.getItem('subdistrict')]);
 
-  const [buttonAddress, setbuttonAddress] = useState(false);
-
+  const [memberlist, setMemberlist] = useState();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
+    const id = localStorage.getItem('EditMemberId');
+    const Member = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getMemberByid/${id}`);
+    await setMemberlist(Member.data.data);
+    console.log(ApiProvinceId, 'ApiProvinceId');
+    console.log(ApiAmphureId, 'ApiAmphureId');
+
     const getApi = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
     );
@@ -68,15 +61,15 @@ export default function AdminCreateMemberApp() {
     const getApitombon = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
-    setApiThai(getApi.data);
-    setgetApiThaiAmphure(getApiAmphure.data);
-    setApiThaiTombon(getApitombon.data);
+    await setApiThai(getApi.data);
+    await setgetApiThaiAmphure(getApiAmphure.data);
+    await setApiThaiTombon(getApitombon.data);
   }, []);
   const RegisterSchema = Yup.object().shape({
     // Typeid: Yup.number().required('product price is required'),
-    userId: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('ID is required'),
+    userId: Yup.string().min(1, 'Too Short!').max(50, 'Too Long!').required('ID is required'),
     password: Yup.string()
-      .min(2, 'Too Short!')
+      .min(1, 'Too Short!')
       .max(50, 'Too Long!')
       .required('password is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
@@ -101,124 +94,52 @@ export default function AdminCreateMemberApp() {
     level: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('status is required')
   });
   const handleSubmits = async (e) => {
-    let filterProvince = null;
-    let filterDistrict = null;
-    let filterSubdistrict = null;
+    const filterProvince = ApiThai.filter((e) => e.province_id === ApiProvinceId);
+    const filterSubdistrict = ApiThaiAmphure.filter((e) => e.amphur_id === ApiAmphureId);
+    const filterDistrict = ApiThaiTombon.filter((e) => e.district_id === ApiTombonId);
 
-    if (buttonAddress) {
-      const a = ApiThai.filter((e) => e.province_id === ApiProvinceId);
-      const b = ApiThaiAmphure.filter((e) => e.amphur_id === ApiAmphureId);
-      const c = ApiThaiTombon.filter((e) => e.district_id === ApiTombonId);
-      filterProvince = a[0].province_name;
-      filterDistrict = b[0].amphur_name;
-      filterSubdistrict = c[0].district_name;
-    } else if (!buttonAddress) {
-      filterProvince = localStorage.getItem('province-name');
-      filterSubdistrict = localStorage.getItem('district-name');
-      filterDistrict = localStorage.getItem('subdistrict-name');
-    }
-
-    if (fileBook.length === 0 && fileUserId.length === 0) {
-      console.log('ไม่มีรูปเลย');
-      const data = {
-        id: parseInt(e.id, 10),
-        userId: e.userId,
-        password: e.password,
-        email: e.email,
-        firstname: e.firstname,
-        lastname: e.lastname,
-        tel: e.tel,
-        bookname: e.bookname,
-        booknumber: e.booknumber,
-        role: e.role,
-        address: e.address,
-        subdistrict: filterSubdistrict,
-        district: filterDistrict,
-        province: filterProvince,
-        map: e.map,
-        status: e.status,
-        level: e.level
-      };
-      console.log(data);
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'คุณต้องการแก้ไขผู้ใช้งานหรือไม่ !',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, need it!'
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await axios
-            .put(`${process.env.REACT_APP_WEB_BACKEND}/member`, data)
-            .then((response) => {
-              console.log('response: ', response);
-              // do something about response
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
-        }
-      });
-    } else if (fileBook.length !== 0 && fileUserId.length === 0) {
-      console.log('มีรูปสมุด');
-    } else if (fileBook.length === 0 && fileUserId.length !== 0) {
-      console.log('มีรูปบัตร');
-    } else {
-      console.log('มีรูปบัตรเเละสมุดทั้งคูป');
-      const formdata = new FormData();
-      formdata.append('cardImg', fileUserId);
-      formdata.append('bookBankImg', fileBook);
-      formdata.append('userId', e.userId);
-      formdata.append('password', e.password);
-      formdata.append('email', e.email);
-      formdata.append('firstname', e.firstname);
-      formdata.append('lastname', e.lastname);
-      formdata.append('tel', e.tel);
-      formdata.append('bookname', e.bookname);
-      formdata.append('booknumber', e.booknumber);
-      formdata.append('role', e.role);
-      formdata.append('address', e.address);
-      formdata.append('subdistrict', filterSubdistrict);
-      formdata.append('district', filterDistrict);
-      formdata.append('province', filterProvince);
-      formdata.append('map', e.map);
-      formdata.append('status', e.status);
-      formdata.append('level', e.level);
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'คุณต้องการแก้ไขผู้ใช้งานหรือไม่ !',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, need it!'
-      }).then(async (result) => {
-        if (fileUserId.length === 0 || fileBook.length === 0) {
-          Swal.fire(
-            'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
-            'ลองเช็คที่ไฟล์รูปภาพ หรือ ที่อยู่ ของคุณอีกครั้ง?',
-            'question'
-          );
-        } else if (result.isConfirmed) {
-          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
-          await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
-          await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
-          );
-          await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('bookBankImg')}`
-          );
-          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
-          // setTimeout(() => {
-          //   window.location.reload(false);
-          // }, 1500);
-        }
-      });
-    }
-    console.log(e);
+    const formdata = new FormData();
+    formdata.append('cardImg', fileUserId);
+    formdata.append('bookBankImg', fileBook);
+    formdata.append('userId', e.userId);
+    formdata.append('password', e.password);
+    formdata.append('email', e.email);
+    formdata.append('firstname', e.firstname);
+    formdata.append('lastname', e.lastname);
+    formdata.append('tel', e.tel);
+    formdata.append('bookname', e.bookname);
+    formdata.append('booknumber', e.booknumber);
+    formdata.append('role', e.role);
+    formdata.append('address', e.address);
+    formdata.append('subdistrict', filterDistrict[0].district_name);
+    formdata.append('district', filterSubdistrict[0].amphur_name);
+    formdata.append('province', filterProvince[0].province_name);
+    formdata.append('map', e.map);
+    formdata.append('status', e.status);
+    formdata.append('level', e.level);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการเพิ่มผู้ใช้งานคนใหม่หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, need it!'
+    }).then(async (result) => {
+      if (fileUserId.length === 0 || fileBook.length === 0) {
+        Swal.fire(
+          'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
+          'ลองเช็คที่ไฟล์รูปภาพ หรือ ที่อยู่ ของคุณอีกครั้ง?',
+          'question'
+        );
+      } else if (result.isConfirmed) {
+        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
+        Swal.fire('Success!', 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว.', 'success');
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      }
+    });
   };
   const formik = useFormik({
     initialValues: {
@@ -254,7 +175,16 @@ export default function AdminCreateMemberApp() {
     setfilepreviewBook(event.target.files[0] ? URL.createObjectURL(event.target.files[0]) : null);
   };
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
+  const onChangeProvince = (res) => {
+    console.log(res);
+    if (res === null) {
+      setProvince(localStorage.getItem('province'));
+    } else if (res !== null) {
+      const resProvice = ApiThai.filter((e) => e.province_id === res);
+      setProvince({ province: resProvice[0].province_name });
+    }
+    setApiProvinceId({ ApiProvinceId: res });
+  };
   return (
     <Page title="Member | FoodExpress">
       <Container>
@@ -262,7 +192,15 @@ export default function AdminCreateMemberApp() {
           <Typography variant="h4" gutterBottom>
             Edit Member FoodExpress
           </Typography>
-          <Button onClick={() => window.location.reload(false)}>เรียกช้อมูล</Button>
+          <Button
+            onClick={() => window.location.reload(false)}
+            // variant="contained"
+            // component={RouterLink}
+            // to="/admin/AdminMemberApp/AdminCreateMemberApp"
+            // startIcon={<Icon icon={plusFill} />}
+          >
+            เรียกช้อมูล
+          </Button>
         </Stack>
         <FormikProvider value={formik}>
           <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -375,13 +313,7 @@ export default function AdminCreateMemberApp() {
                   helperText={touched.address && errors.address}
                 />
               </Stack>{' '}
-              <Label color="blueGray">
-                {buttonAddress ? (
-                  <Button onClick={() => setbuttonAddress(false)}>ยกเลิกแก้ไขที่อยู่</Button>
-                ) : (
-                  <Button onClick={() => setbuttonAddress(true)}>แก้ไขที่อยู่</Button>
-                )}
-              </Label>
+              <Label color="pink">**ให้เลือกจากจังหวัดลงไปจะหาค่าเจอง่ายกว่า** </Label>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <Box
                   component="form"
@@ -391,30 +323,45 @@ export default function AdminCreateMemberApp() {
                   noValidate
                   autoComplete="off"
                 >
-                  {buttonAddress ? (
-                    <TextField
-                      id="outlined-select-currency"
-                      select
-                      label="จังหวัด"
-                      value={ApiProvinceId}
-                      onChange={(e) => setApiProvinceId(e.target.value)}
-                    >
-                      {ApiThai.map((option) => (
-                        <MenuItem key={option.province_id} value={option.province_id}>
-                          {option.province_name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  ) : (
-                    <Input
-                      class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                      type="text"
-                      placeholder="จังหวัด"
-                      aria-label="Full name"
-                      defaultValue={localStorage.getItem('province-name')}
-                      disabled
-                    />
-                  )}
+                  <TextField
+                    id="outlined-select-currency"
+                    defaultValue={localStorage.getItem('province')}
+                    select
+                    label="จังหวัด"
+                    value={
+                      ApiProvinceId.length === 0
+                        ? parseInt(localStorage.getItem('province'), 10)
+                        : ApiProvinceId
+                    }
+                    // value={ApiProvinceId}
+
+                    onChange={(e) => setApiProvinceId(e.target.value)}
+                    // {...getFieldProps('province')}
+                  >
+                    {ApiThai.map((option) => (
+                      <MenuItem key={option.province_id} value={option.province_id}>
+                        {option.province_name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Select
+                    // onChange= {(e) => console.log(e)}
+                    onChange={(e) => onChangeProvince(e)}
+                    showSearch
+                    defaultValue={localStorage.getItem('province')}
+                    optionFilterProp="children"
+                    filterOption={(input, option) =>
+                      option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    filterSort={(optionA, optionB) =>
+                      optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                    }
+                    allowClear
+                  >
+                    {ApiThai.map((a) => (
+                      <Option value={a.province_id}>{a.province_name}</Option>
+                    ))}
+                  </Select>
                 </Box>
 
                 <Box
@@ -425,33 +372,21 @@ export default function AdminCreateMemberApp() {
                   noValidate
                   autoComplete="off"
                 >
-                  {buttonAddress ? (
-                    <TextField
-                      id="outlined-select-currency"
-                      select
-                      // size="xl"
-                      label="อำเภอ"
-                      value={ApiAmphureId}
-                      onChange={(e) => setApiAmphureId(e.target.value)}
-                    >
-                      {ApiThaiAmphure.filter((value) => value.province_id === ApiProvinceId).map(
-                        (option) => (
-                          <MenuItem key={option.amphur_id} value={option.amphur_id}>
-                            {option.amphur_name}
-                          </MenuItem>
-                        )
-                      )}
-                    </TextField>
-                  ) : (
-                    <Input
-                      class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                      type="text"
-                      placeholder="อำเภอ"
-                      aria-label="Full name"
-                      defaultValue={localStorage.getItem('district-name')}
-                      disabled
-                    />
-                  )}
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    defaultValue={localStorage.getItem('province')}
+                    // size="xl"
+                    label="อำเภอ"
+                    value={ApiAmphureId}
+                    onChange={(e) => setApiAmphureId(e.target.value)}
+                  >
+                    {ApiThaiAmphure.filter((value) => value.province_id === 5).map((option) => (
+                      <MenuItem key={option.amphur_id} value={option.amphur_id}>
+                        {option.amphur_name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Box>
                 <Box
                   component="form"
@@ -461,33 +396,22 @@ export default function AdminCreateMemberApp() {
                   noValidate
                   autoComplete="off"
                 >
-                  {buttonAddress ? (
-                    <TextField
-                      id="outlined-select-currency"
-                      select
-                      // size="xl"
-                      label="ตำบล"
-                      value={ApiTombonId}
-                      onChange={(e) => setApiTombonId(e.target.value)}
-                    >
-                      {ApiThaiTombon.filter((value) => value.amphur_id === ApiAmphureId).map(
-                        (option) => (
-                          <MenuItem key={option.district_id} value={option.district_id}>
-                            {option.district_name}
-                          </MenuItem>
-                        )
-                      )}
-                    </TextField>
-                  ) : (
-                    <Input
-                      class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                      type="text"
-                      placeholder="ตำบล"
-                      aria-label="Full name"
-                      defaultValue={localStorage.getItem('subdistrict-name')}
-                      disabled
-                    />
-                  )}
+                  <TextField
+                    id="outlined-select-currency"
+                    select
+                    // size="xl"
+                    label="ตำบล"
+                    value={ApiTombonId}
+                    onChange={(e) => setApiTombonId(e.target.value)}
+                  >
+                    {ApiThaiTombon.filter((value) => value.amphur_id === ApiAmphureId).map(
+                      (option) => (
+                        <MenuItem key={option.district_id} value={option.district_id}>
+                          {option.district_name}
+                        </MenuItem>
+                      )
+                    )}
+                  </TextField>
                 </Box>
               </Stack>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -587,44 +511,16 @@ export default function AdminCreateMemberApp() {
                 ยืนยันการเพิ่มข้อมูล
               </LoadingButton>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                {fileUserId.length !== 0 ? (
+                {filepreviewUserId !== null ? (
                   <ImageList sx={{ width: 1080, height: 450 }} cols={1} rowHeight={164}>
                     <Image className="previewimg" src={filepreviewUserId} alt="UploadImage" />
                   </ImageList>
-                ) : (
-                  <ImageList sx={{ width: 1080, height: 450 }} cols={1} rowHeight={164}>
-                    <Image
-                      className="previewimg"
-                      src={
-                        localStorage.getItem('cardImg')
-                          ? // eslint-disable-next-line global-require
-                            require(`../../../../assets/img/${localStorage.getItem('cardImg')}`)
-                              .default
-                          : null
-                      }
-                      alt="UploadImage"
-                    />
-                  </ImageList>
-                )}
-                {fileBook.length !== 0 ? (
+                ) : null}
+                {filepreviewBook !== null ? (
                   <ImageList sx={{ width: 1080, height: 450 }} cols={1} rowHeight={164}>
                     <Image className="previewimg" src={filepreviewBook} alt="UploadImage" />
                   </ImageList>
-                ) : (
-                  <ImageList sx={{ width: 1080, height: 450 }} cols={1} rowHeight={164}>
-                    <Image
-                      className="previewimg"
-                      src={
-                        localStorage.getItem('bookBankImg')
-                          ? // eslint-disable-next-line global-require
-                            require(`../../../../assets/img/${localStorage.getItem('bookBankImg')}`)
-                              .default
-                          : null
-                      }
-                      alt="UploadImage"
-                    />
-                  </ImageList>
-                )}
+                ) : null}
               </Stack>
             </Stack>
           </Form>

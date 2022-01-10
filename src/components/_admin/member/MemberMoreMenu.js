@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, NavLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import PropTypes from 'prop-types';
@@ -45,7 +45,6 @@ export default function MemberMoreMenu(props) {
     });
   };
   const setDataEditMember = async () => {
-    localStorage.setItem('EditMemberId', id);
     const Member = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getMemberByid/${id}`);
     const MemberlistID = Member.data.data;
     const getApi = await axios.get(
@@ -60,10 +59,10 @@ export default function MemberMoreMenu(props) {
 
     const filterProvince = getApi.data.filter((e) => e.province_name === MemberlistID.province);
     const filterDistrict = getApiAmphure.data.filter(
-      (e) => e.amphur_name === MemberlistID.district
+      async (e) => (await e.amphur_name) === (await MemberlistID.district)
     );
     const filterSubdistrict = getApitombon.data.filter(
-      (e) => e.district_name === MemberlistID.subdistrict
+      async (e) => (await e.district_name) === (await MemberlistID.subdistrict)
     );
     localStorage.setItem('id', MemberlistID.id);
     localStorage.setItem('password', MemberlistID.password);
@@ -78,14 +77,16 @@ export default function MemberMoreMenu(props) {
     localStorage.setItem('subdistrict', filterSubdistrict[0].district_id);
     localStorage.setItem('district', filterDistrict[0].amphur_id);
     localStorage.setItem('province', filterProvince[0].province_id);
-    localStorage.setItem('EditMemberId', MemberlistID.EditMemberId);
+    localStorage.setItem('EditMemberId', MemberlistID.id);
     localStorage.setItem('map', MemberlistID.map);
     localStorage.setItem('userId', MemberlistID.userId);
     localStorage.setItem('status', MemberlistID.status);
     localStorage.setItem('bookBankImg', MemberlistID.bookBankImg);
     localStorage.setItem('cardImg', MemberlistID.cardImg);
     localStorage.setItem('level', MemberlistID.level);
-
+    localStorage.setItem('subdistrict-name', filterSubdistrict[0].district_name);
+    localStorage.setItem('district-name', filterDistrict[0].amphur_name);
+    localStorage.setItem('province-name', filterProvince[0].province_name);
     console.log(Member.data.data);
   };
   return (
@@ -117,6 +118,8 @@ export default function MemberMoreMenu(props) {
           </MenuItem>
 
           <MenuItem
+            // eslint-disable-next-line no-return-await
+            onClick={async () => await setDataEditMember()}
             component={RouterLink}
             to="/admin/AdminMemberApp/AdminEditMemberApp"
             sx={{ color: 'text.secondary' }}
@@ -128,7 +131,7 @@ export default function MemberMoreMenu(props) {
             <ListItemText
               primary="Edit"
               primaryTypographyProps={{ variant: 'body2' }}
-              onClick={() => setDataEditMember()}
+              // onClick={async () => await setDataEditMember()}
             />
           </MenuItem>
         </Menu>

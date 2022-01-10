@@ -17,6 +17,7 @@ import AdminEditProductApp from './pages/Admin/Menagement/Product/AdminEditProdu
 import AdminMemberApp from './pages/Admin/Menagement/Member/AdminMemberApp';
 import AdminCreateMemberApp from './pages/Admin/Menagement/Member/AdminCreateMemberApp';
 import AdminEditMemberApp from './pages/Admin/Menagement/Member/AdminEditMemberApp';
+import EditMemberComponent from './pages/Admin/Menagement/Member/EditMemberComponent';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,8 @@ export default function Router() {
         { path: 'AdminProductApp/AdminEditProductApp', element: <AdminEditProductApp /> },
         { path: 'AdminMemberApp', element: <AdminMemberApp /> },
         { path: 'AdminMemberApp/AdminCreateMemberApp', element: <AdminCreateMemberApp /> },
-        { path: 'AdminMemberApp/AdminEditMemberApp', element: <AdminEditMemberApp /> }
+        { path: 'AdminMemberApp/AdminEditMemberApp', element: <AdminEditMemberApp /> },
+        { path: 'AdminMemberApp/EditMemberComponent', element: <EditMemberComponent /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
