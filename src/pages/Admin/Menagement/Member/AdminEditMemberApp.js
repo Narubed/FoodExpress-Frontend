@@ -162,10 +162,90 @@ export default function AdminCreateMemberApp() {
           Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
         }
       });
-    } else if (fileBook.length !== 0 && fileUserId.length === 0) {
-      console.log('มีรูปสมุด');
     } else if (fileBook.length === 0 && fileUserId.length !== 0) {
       console.log('มีรูปบัตร');
+      const formdata = new FormData();
+      formdata.append('cardImg', fileUserId);
+      formdata.append('bookBankImg', e.bookBankImg);
+      formdata.append('userId', e.userId);
+      formdata.append('password', e.password);
+      formdata.append('email', e.email);
+      formdata.append('firstname', e.firstname);
+      formdata.append('lastname', e.lastname);
+      formdata.append('tel', e.tel);
+      formdata.append('bookname', e.bookname);
+      formdata.append('booknumber', e.booknumber);
+      formdata.append('role', e.role);
+      formdata.append('address', e.address);
+      formdata.append('subdistrict', filterSubdistrict);
+      formdata.append('district', filterDistrict);
+      formdata.append('province', filterProvince);
+      formdata.append('map', e.map);
+      formdata.append('status', e.status);
+      formdata.append('level', e.level);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'คุณต้องการแก้ไขผู้ใช้งานหรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, need it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postMemberCardImg`, formdata);
+          await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
+          await axios.delete(
+            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
+          );
+          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
+          // setTimeout(() => {
+          //   window.location.reload(false);
+          // }, 1500);
+        }
+      });
+    } else if (fileBook.length !== 0 && fileUserId.length === 0) {
+      console.log('มีรูปสมุด');
+      const formdata = new FormData();
+      formdata.append('cardImg', e.cardImg);
+      formdata.append('bookBankImg', fileBook);
+      formdata.append('userId', e.userId);
+      formdata.append('password', e.password);
+      formdata.append('email', e.email);
+      formdata.append('firstname', e.firstname);
+      formdata.append('lastname', e.lastname);
+      formdata.append('tel', e.tel);
+      formdata.append('bookname', e.bookname);
+      formdata.append('booknumber', e.booknumber);
+      formdata.append('role', e.role);
+      formdata.append('address', e.address);
+      formdata.append('subdistrict', filterSubdistrict);
+      formdata.append('district', filterDistrict);
+      formdata.append('province', filterProvince);
+      formdata.append('map', e.map);
+      formdata.append('status', e.status);
+      formdata.append('level', e.level);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'คุณต้องการแก้ไขผู้ใช้งานหรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, need it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postMemberBookBankImg`, formdata);
+          await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
+          await axios.delete(
+            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
+          );
+          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
+          // setTimeout(() => {
+          //   window.location.reload(false);
+          // }, 1500);
+        }
+      });
     } else {
       console.log('มีรูปบัตรเเละสมุดทั้งคูป');
       const formdata = new FormData();
