@@ -20,6 +20,12 @@ const sidebarConfig = [
   },
   {
     title: 'rider',
+    titleth: 'กำหนดเปอร์เซ็น',
+    path: '/admin/AdminPercentApp',
+    icon: <Icon icon="mdi:sack-percent" width={22} height={22} />
+  },
+  {
+    title: 'rider',
     titleth: 'จัดการข้อมูลไรเดอร์',
     path: '/admin/AdminRiderApp',
     icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />

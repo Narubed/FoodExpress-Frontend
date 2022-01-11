@@ -119,7 +119,6 @@ export default function AdminCreateMemberApp() {
     }
 
     if (fileBook.length === 0 && fileUserId.length === 0) {
-      console.log('ไม่มีรูปเลย');
       const data = {
         id: parseInt(e.id, 10),
         userId: e.userId,
@@ -139,7 +138,6 @@ export default function AdminCreateMemberApp() {
         status: e.status,
         level: e.level
       };
-      console.log(data);
       Swal.fire({
         title: 'Are you sure?',
         text: 'คุณต้องการแก้ไขผู้ใช้งานหรือไม่ !',
@@ -163,7 +161,6 @@ export default function AdminCreateMemberApp() {
         }
       });
     } else if (fileBook.length === 0 && fileUserId.length !== 0) {
-      console.log('มีรูปบัตร');
       const formdata = new FormData();
       formdata.append('cardImg', fileUserId);
       formdata.append('bookBankImg', e.bookBankImg);
@@ -205,7 +202,6 @@ export default function AdminCreateMemberApp() {
         }
       });
     } else if (fileBook.length !== 0 && fileUserId.length === 0) {
-      console.log('มีรูปสมุด');
       const formdata = new FormData();
       formdata.append('cardImg', e.cardImg);
       formdata.append('bookBankImg', fileBook);
@@ -247,7 +243,6 @@ export default function AdminCreateMemberApp() {
         }
       });
     } else {
-      console.log('มีรูปบัตรเเละสมุดทั้งคูป');
       const formdata = new FormData();
       formdata.append('cardImg', fileUserId);
       formdata.append('bookBankImg', fileBook);
@@ -298,7 +293,6 @@ export default function AdminCreateMemberApp() {
         }
       });
     }
-    console.log(e);
   };
   const formik = useFormik({
     initialValues: {
