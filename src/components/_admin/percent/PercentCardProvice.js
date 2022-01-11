@@ -1,66 +1,112 @@
-import React from 'react';
+/* eslint-disable camelcase */
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useFormik, Form, FormikProvider } from 'formik';
-import { Box, Grid, Container, Typography, TextField } from '@mui/material';
 import Card from '@material-tailwind/react/Card';
 import CardHeader from '@material-tailwind/react/CardHeader';
 import CardBody from '@material-tailwind/react/CardBody';
 import Input from '@material-tailwind/react/Input';
 import CardFooter from '@material-tailwind/react/CardFooter';
 import Button from '@material-tailwind/react/Button';
+import Swal from 'sweetalert2';
 
-export default function PercentCardProvice({ images, Name }) {
-  const formik = useFormik({
-    // initialValues: {},
-    // validationSchema: RegisterSchema,
-    // onSubmit: (e) => handleSubmits(e)
-  });
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+export default function PercentCardProvice() {
+  const [province_province, setProvince_province] = useState([]);
+  const [province_nba, setProvince_nba] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
+    console.log(getAllPrecent.data.data);
+    setProvince_province(getAllPrecent.data.data[2].percent_provice * 100);
+    setProvince_nba(getAllPrecent.data.data[2].percent_nba * 100);
+  }, []);
+
+  const handleSubmits = (e) => {
+    const data = {
+      percent_id: 3,
+      percent_name: 'province',
+      percent_subdistrict: 0,
+      percent_district: 0,
+      percent_provice: province_province / 100,
+      percent_nba: province_nba / 100
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการเเก้ไขข้อมูลจังหวัดหรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, need it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
+        Swal.fire({
+          position: '',
+          icon: 'success',
+          title: 'คุณได้ทำการเเก้ไขข้อมูลระดับตำบลเเล้ว @!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
+      }
+    });
+  };
+
   return (
     <div>
       {' '}
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Card>
-            {' '}
-            <CardHeader color="purple" contentPosition="none">
-              <div className="w-full flex items-center justify-between">
-                <h2 className="text-white text-2xl">ระดับจังหวัด </h2>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <TextField
-                color="info"
-                fullWidth
-                label="จังหวัด"
-                {...getFieldProps('province_province')}
-                error={Boolean(touched.province_province && errors.province_province)}
-                helperText={touched.province_province && errors.province_province}
-              />
-              <br />
-              <br />
-              <TextField
-                color="info"
-                fullWidth
-                label="NBA"
-                {...getFieldProps('province_nba')}
-                error={Boolean(touched.province_nba && errors.province_nba)}
-                helperText={touched.province_nba && errors.province_nba}
-              />
-              <br />
-              <br />
-            </CardBody>
-            <CardFooter>
-              {' '}
-              <div className="h-56 grid grid-cols-3 gap-4 content-between">
-                <Button color="purple" buttonType="outline" ripple="dark">
-                  ยืนยัน
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
-        </Form>
-      </FormikProvider>
+      <Card>
+        {' '}
+        <CardHeader color="purple" contentPosition="none">
+          <div className="w-full flex items-center justify-between">
+            <h2 className="text-white text-2xl">ระดับจังหวัด </h2>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <br />
+          <Input
+            type="number"
+            color="purple"
+            placeholder="จังหวัด"
+            min="0"
+            onChange={(e) => setProvince_province(e.target.value)}
+            defaultValue={province_province}
+          />{' '}
+          <br />
+          <Input
+            type="number"
+            color="purple"
+            placeholder="NBA"
+            min="0"
+            onChange={(e) => setProvince_nba(e.target.value)}
+            defaultValue={province_nba}
+          />
+        </CardBody>
+        <CardFooter>
+          {' '}
+          <div className="h-56 grid grid-cols-3 gap-4 content-between">
+            <Button
+              color="purple"
+              buttonType="outline"
+              size="regular"
+              rounded={false}
+              block={false}
+              iconOnly={false}
+              ripple="dark"
+              onClick={() => handleSubmits()}
+            >
+              ยืนยัน
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

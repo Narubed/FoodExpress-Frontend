@@ -26,7 +26,7 @@ function AdminPercentApp() {
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4}>
-            <PercentCardSubdistrict Percent={Percent[0]} />
+            <PercentCardSubdistrict Percent={Percent} />
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <PercentCardDistrict Percent={Percent[1]} />

@@ -18,6 +18,13 @@ const sidebarConfig = [
     path: '/admin/app',
     icon: getIcon(pieChart2Fill)
   },
+
+  {
+    title: 'checkorder',
+    titleth: 'ตรวจสอบออเดอร์',
+    path: '/admin/AdminCheckOrderApp',
+    icon: <Icon icon="mdi:beaker-check" width={22} height={22} />
+  },
   {
     title: 'rider',
     titleth: 'กำหนดเปอร์เซ็น',
@@ -47,7 +54,7 @@ const sidebarConfig = [
     titleth: 'จัดการข้อมูลผู้ใช้',
     path: '/admin/AdminMemberApp',
     icon: <Icon icon="ic:baseline-supervised-user-circle" width={22} height={22} />
-  },
+  }
   // {
   //   title: 'rider',
   //   titleth: 'จัดการข้อมูลไรเดอร์',
@@ -66,24 +73,24 @@ const sidebarConfig = [
   //   path: '/dashboard/blog',
   //   icon: getIcon(fileTextFill)
   // },
-  {
-    title: 'login',
-    titleth: 'เข้าสู่ระบบ',
-    path: '/login',
-    icon: getIcon(lockFill)
-  },
-  {
-    title: 'register',
-    titleth: 'สมัครสมาชิก',
-    path: '/register',
-    icon: getIcon(personAddFill)
-  },
-  {
-    title: 'Not found',
-    titleth: 'หาหน้าไม่เจอ',
-    path: '/404',
-    icon: getIcon(alertTriangleFill)
-  }
+  // {
+  //   title: 'login',
+  //   titleth: 'เข้าสู่ระบบ',
+  //   path: '/login',
+  //   icon: getIcon(lockFill)
+  // },
+  // {
+  //   title: 'register',
+  //   titleth: 'สมัครสมาชิก',
+  //   path: '/register',
+  //   icon: getIcon(personAddFill)
+  // },
+  // {
+  //   title: 'Not found',
+  //   titleth: 'หาหน้าไม่เจอ',
+  //   path: '/404',
+  //   icon: getIcon(alertTriangleFill)
+  // }
 ];
 
 export default sidebarConfig;

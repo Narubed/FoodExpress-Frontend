@@ -1,119 +1,134 @@
-import React from 'react';
-import * as Yup from 'yup';
-import PropTypes from 'prop-types';
+/* eslint-disable camelcase */
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useFormik, Form, FormikProvider } from 'formik';
-import { Box, Grid, Container, Typography, TextField } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import Card from '@material-tailwind/react/Card';
 import CardHeader from '@material-tailwind/react/CardHeader';
 import CardBody from '@material-tailwind/react/CardBody';
 import Input from '@material-tailwind/react/Input';
 import CardFooter from '@material-tailwind/react/CardFooter';
 import Button from '@material-tailwind/react/Button';
+import Swal from 'sweetalert2';
 
-PercentCardSubdistrict.propTypes = {
-  Percent: PropTypes.array
-};
-export default function PercentCardSubdistrict({ Percent }) {
-  const RegisterSchema = Yup.object().shape({
-    subdistrict_subdistrict: Yup.number().required('subdistrict_subdistrict tel is required'),
-    subdistrict_district: Yup.number().required('subdistrict_district tel is required'),
-    subdistrict_province: Yup.number().required('subdistrict_province tel is required'),
-    subdistrict_nba: Yup.number().required('subdistrict_nba tel is required')
-  });
+export default function PercentCardSubdistrict() {
+  const [subdistrict_subdistrict, setSubdistrict_subdistrict] = useState([]);
+  const [subdistrict_district, setSubdistrict_district] = useState([]);
+  const [subdistrict_province, setSubdistrict_province] = useState([]);
+  const [subdistrict_nba, setSubdistrict_nba] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
+    setSubdistrict_subdistrict(getAllPrecent.data.data[0].percent_subdistrict * 100);
+    setSubdistrict_district(getAllPrecent.data.data[0].percent_district * 100);
+    setSubdistrict_province(getAllPrecent.data.data[0].percent_provice * 100);
+    setSubdistrict_nba(getAllPrecent.data.data[0].percent_nba * 100);
+  }, []);
+
   const handleSubmits = (e) => {
-    console.log(e);
+    const dataSubdistric = {
+      percent_id: 1,
+      percent_name: 'subdistrict',
+      percent_subdistrict: subdistrict_subdistrict / 100,
+      percent_district: subdistrict_district / 100,
+      percent_provice: subdistrict_province / 100,
+      percent_nba: subdistrict_nba / 100
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการเเก้ไขข้อมูลตำบลนี้หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, need it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, dataSubdistric);
+        Swal.fire({
+          position: '',
+          icon: 'success',
+          title: 'คุณได้ทำการเเก้ไขข้อมูลระดับตำบลเเล้ว @!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
+      }
+    });
   };
-  const formik = useFormik({
-    initialValues: {
-      subdistrict_id: '',
-      subdistrict_subdistrict: '',
-      subdistrict_district: '',
-      subdistrict_province: '',
-      subdistrict_nba: ''
-      // subdistrict: Percent.percent_id,
-      // subdistrict_subdistrict: Percent.percent_subdistrict,
-      // subdistrict_district: Percent.percent_district,
-      // subdistrict_province: Percent.percent_provice,
-      // subdistrict_nba: Percent.percent_nba
-    },
-    validationSchema: RegisterSchema,
-    onSubmit: (e) => handleSubmits(e)
-  });
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+
   return (
     <div>
       {' '}
-      <FormikProvider value={formik}>
-        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-          <Card>
-            {' '}
-            <CardHeader color="yellow" contentPosition="none">
-              <div className="w-full flex items-center justify-between">
-                <h2 className="text-white text-2xl">ระดับตำบล </h2>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <TextField
-                color="warning"
-                fullWidth
-                label="ตำบล"
-                {...getFieldProps('subdistrict_subdistrict')}
-                error={Boolean(touched.subdistrict_subdistrict && errors.subdistrict_subdistrict)}
-                helperText={touched.subdistrict_subdistrict && errors.subdistrict_subdistrict}
-              />
-              <br />
-              <br />
-              <TextField
-                color="warning"
-                fullWidth
-                label="อำเภอ"
-                {...getFieldProps('subdistrict_district')}
-                error={Boolean(touched.subdistrict_district && errors.subdistrict_district)}
-                helperText={touched.subdistrict_district && errors.subdistrict_district}
-              />
-              <br />
-              <br />
-              <TextField
-                color="warning"
-                fullWidth
-                label="จังหวัด"
-                {...getFieldProps('subdistrict_province')}
-                error={Boolean(touched.subdistrict_province && errors.subdistrict_province)}
-                helperText={touched.subdistrict_province && errors.subdistrict_province}
-              />
-              <br />
-              <br />
-              <TextField
-                color="warning"
-                fullWidth
-                label="NBA"
-                {...getFieldProps('subdistrict_nba')}
-                error={Boolean(touched.subdistrict_nba && errors.subdistrict_nba)}
-                helperText={touched.subdistrict_nba && errors.subdistrict_nba}
-              />
-              <br />
-              <br />
-            </CardBody>
-            <CardFooter>
-              {' '}
-              <div className="h-56 grid grid-cols-3 gap-4 content-between">
-                <LoadingButton
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="warning"
-                  loading={isSubmitting}
-                >
-                  ยืนยัน
-                </LoadingButton>
-              </div>
-            </CardFooter>
-          </Card>
-        </Form>
-      </FormikProvider>
+      <Card>
+        {' '}
+        <CardHeader color="yellow" contentPosition="none">
+          <div className="w-full flex items-center justify-between">
+            <h2 className="text-white text-2xl">ระดับตำบล </h2>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <br />
+          <Input
+            type="number"
+            color="yellow"
+            placeholder="ตำบล"
+            min="0"
+            max="100"
+            onChange={(e) => setSubdistrict_subdistrict(e.target.value)}
+            defaultValue={subdistrict_subdistrict}
+          />{' '}
+          <br />
+          <Input
+            type="number"
+            color="yellow"
+            placeholder="อำเภอ"
+            min="0"
+            onChange={(e) => setSubdistrict_district(e.target.value)}
+            defaultValue={subdistrict_district}
+          />{' '}
+          <br />
+          <Input
+            type="number"
+            color="yellow"
+            placeholder="จังหวัด"
+            min="0"
+            onChange={(e) => setSubdistrict_province(e.target.value)}
+            defaultValue={subdistrict_province}
+          />{' '}
+          <br />
+          <Input
+            type="number"
+            color="yellow"
+            placeholder="NBA"
+            min="0"
+            onChange={(e) => setSubdistrict_nba(e.target.value)}
+            defaultValue={subdistrict_nba}
+          />
+        </CardBody>
+        <CardFooter>
+          {' '}
+          <div className="h-56 grid grid-cols-3 gap-4 content-between">
+            <Button
+              color="yellow"
+              buttonType="outline"
+              size="regular"
+              rounded={false}
+              block={false}
+              iconOnly={false}
+              ripple="dark"
+              onClick={() => handleSubmits()}
+            >
+              ยืนยัน
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

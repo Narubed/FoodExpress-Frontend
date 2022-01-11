@@ -19,6 +19,7 @@ import AdminCreateMemberApp from './pages/Admin/Menagement/Member/AdminCreateMem
 import AdminEditMemberApp from './pages/Admin/Menagement/Member/AdminEditMemberApp';
 import EditMemberComponent from './pages/Admin/Menagement/Member/EditMemberComponent';
 import AdminPercentApp from './pages/Admin/Percent/AdminPercentApp';
+import AdminCheckOrderApp from './pages/Admin/CheckOrder/AdminCheckOrderApp';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,8 @@ export default function Router() {
         { path: 'AdminMemberApp/AdminCreateMemberApp', element: <AdminCreateMemberApp /> },
         { path: 'AdminMemberApp/AdminEditMemberApp', element: <AdminEditMemberApp /> },
         { path: 'AdminMemberApp/EditMemberComponent', element: <EditMemberComponent /> },
-        { path: 'AdminPercentApp', element: <AdminPercentApp /> }
+        { path: 'AdminPercentApp', element: <AdminPercentApp /> },
+        { path: 'AdminCheckOrderApp', element: <AdminCheckOrderApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
