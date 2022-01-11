@@ -38,17 +38,11 @@ RiderMoreMenu.propTypes = {
 };
 export default function RiderMoreMenu(props) {
   // eslint-disable-next-line camelcase
-  const { order_id, Orderlist, row, order_product_total, order_status } = props;
-  const [onChangeCompanyName, setonChangeCompanyName] = useState('');
-  const [onChangeTel, setonChangeTel] = useState();
-  const [onChangeBookName, setonChangeBookName] = useState();
-  const [onChangeBookNumber, setonChangeBookNumber] = useState();
-  const [onChangeAddress, setonChangeAddress] = useState();
+  const { order_id, Orderlist, row, order_product_total, order_status, order_member_id } = props;
   const [showModal, setShowModal] = useState(false);
   const [orderDetail, setOrderDetail] = useState([]);
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(order_status);
   const detailOrder = async () => {
     const data = await axios.get(
       // eslint-disable-next-line camelcase
@@ -57,6 +51,76 @@ export default function RiderMoreMenu(props) {
     setOrderDetail(data.data.data);
     console.log(data.data.data);
     setShowModal(true);
+  };
+  const deleteOrderByAdmin = async () => {
+    console.log('ยืนยัน');
+    const data = {
+      order_id,
+      order_status: 'ผู้ดูแลระบบยกเลิก'
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการยกเลิกออเดอร์นี้หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, need it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        Swal.fire({
+          position: '',
+          icon: 'success',
+          title: 'คุณได้ยืนยันการยกเลิกออเดอร์นี้เเล้ว ',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled', 'คุณทำการออกจากการยกเลิกออเดอร์ :)', 'error');
+      }
+    });
+  };
+  const confirmSlipOrder = async () => {
+    console.log('ยืนยัน');
+    const data = {
+      order_id,
+      order_status: 'รอจัดส่ง'
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการยืนยันการโอนเงินของออเดอร์นี้หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, need it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        Swal.fire({
+          position: '',
+          icon: 'success',
+          title: 'คุณได้ยืนยันการโอนเงินของออเดอร์นี้เเล้ว ',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled', 'คุณทำการยกเลิกการยืนยันการโอนเงิน :)', 'error');
+      }
+    });
   };
   return (
     <>
@@ -85,6 +149,7 @@ export default function RiderMoreMenu(props) {
               onClick={() => detailOrder()}
             />
           </MenuItem>
+
           {order_status === 'รอตรวจสอบ' ? (
             <>
               <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
@@ -94,17 +159,17 @@ export default function RiderMoreMenu(props) {
                 <ListItemText
                   primary="ยืนยันการโอน"
                   primaryTypographyProps={{ variant: 'body2' }}
-                  onClick={() => console.log('edit')}
+                  onClick={() => confirmSlipOrder()}
                 />
               </MenuItem>
               <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
                 <ListItemIcon>
-                  <Icon icon={editFill} width={24} height={24} />
+                  <Icon icon="flat-color-icons:delete-database" width={24} height={24} />
                 </ListItemIcon>
                 <ListItemText
                   primary="ยกเลิกรายการนี้"
                   primaryTypographyProps={{ variant: 'body2' }}
-                  onClick={() => console.log('edit')}
+                  onClick={() => deleteOrderByAdmin()}
                 />
               </MenuItem>
             </>

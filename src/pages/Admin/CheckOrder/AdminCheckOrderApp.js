@@ -375,6 +375,7 @@ function AdminCheckOrderApp() {
                                 row={row}
                                 order_product_total={order_product_total}
                                 order_status={order_status}
+                                order_member_id={order_member_id}
                               />
                             </TableCell>
                           </TableRow>
