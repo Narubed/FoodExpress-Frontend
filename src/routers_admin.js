@@ -20,6 +20,10 @@ import AdminEditMemberApp from './pages/Admin/Menagement/Member/AdminEditMemberA
 import EditMemberComponent from './pages/Admin/Menagement/Member/EditMemberComponent';
 import AdminPercentApp from './pages/Admin/Percent/AdminPercentApp';
 import AdminCheckOrderApp from './pages/Admin/CheckOrder/AdminCheckOrderApp';
+import AdminConfirmExpressApp from './pages/Admin/ConfirmExpress/AdminConfirmExpressApp';
+import AdminWalletApp from './pages/Admin/Wallet/AdminWalletApp';
+import AdminCutArountApp from './pages/Admin/CutArount/AdminCutArountApp';
+import AdminTakesOrderApp from './pages/Admin/TakesOrder/AdminTakesOrderApp';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +47,11 @@ export default function Router() {
         { path: 'AdminMemberApp/AdminEditMemberApp', element: <AdminEditMemberApp /> },
         { path: 'AdminMemberApp/EditMemberComponent', element: <EditMemberComponent /> },
         { path: 'AdminPercentApp', element: <AdminPercentApp /> },
-        { path: 'AdminCheckOrderApp', element: <AdminCheckOrderApp /> }
+        { path: 'AdminCheckOrderApp', element: <AdminCheckOrderApp /> },
+        { path: 'AdminConfirmExpressApp', element: <AdminConfirmExpressApp /> },
+        { path: 'AdminWalletApp', element: <AdminWalletApp /> },
+        { path: 'AdminCutArountApp', element: <AdminCutArountApp /> },
+        { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

@@ -16,44 +16,70 @@ const sidebarConfig = [
     title: 'admin',
     titleth: 'หน้าหลัก',
     path: '/admin/app',
-    icon: getIcon(pieChart2Fill)
+    icon: <Icon icon="twemoji:card-index" width={22} height={22} />
   },
 
   {
     title: 'checkorder',
     titleth: 'ตรวจสอบออเดอร์',
     path: '/admin/AdminCheckOrderApp',
-    icon: <Icon icon="mdi:beaker-check" width={22} height={22} />
+    icon: <Icon icon="jam:task-list-f" width={22} height={22} color="blue" />
   },
   {
-    title: 'rider',
+    title: 'percent',
     titleth: 'กำหนดเปอร์เซ็น',
     path: '/admin/AdminPercentApp',
-    icon: <Icon icon="mdi:sack-percent" width={22} height={22} />
+    icon: <Icon icon="emojione-v1:money-bag" width={22} height={22} />
   },
+  {
+    title: 'wallet',
+    titleth: 'ค่าคอมมิสชั่น',
+    path: '/admin/AdminWalletApp',
+    icon: <Icon icon="emojione:money-bag" width={22} height={22} />
+  },
+
+  {
+    title: 'confrim',
+    titleth: 'รวมยอดรายการสินค้า',
+    path: '/admin/AdminConfirmExpressApp',
+    icon: <Icon icon="flat-color-icons:todo-list" width={22} height={22} />
+  },
+  {
+    title: 'cutarount',
+    titleth: 'รายการตัดรอบเเล้ว',
+    path: '/admin/AdminCutArountApp',
+    icon: <Icon icon="icon-park:order" width={22} height={22} />
+  },
+  {
+    title: 'takesorder',
+    titleth: 'Takes Order',
+    path: '/admin/AdminTakesOrderApp',
+    icon: <Icon icon="fxemoji:deliverytruck" width={22} height={22} />
+  },
+
   {
     title: 'rider',
     titleth: 'จัดการข้อมูลไรเดอร์',
     path: '/admin/AdminRiderApp',
-    icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
+    icon: <Icon icon="noto:person-biking-light-skin-tone" width={22} height={22} />
   },
   {
     title: 'company',
     titleth: 'จัดการข้อมูลบริษัท',
     path: '/admin/AdminCompanyApp',
-    icon: <Icon icon="mdi:office-building-cog-outline" width={22} height={22} />
+    icon: <Icon icon="emojione:office-building" width={22} height={22} />
   },
   {
     title: 'product',
     titleth: 'จัดการข้อมูลสินค้า',
     path: '/admin/AdminProductApp',
-    icon: <Icon icon="ri:shopping-basket-2-fill" width={22} height={22} />
+    icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
   },
   {
     title: 'member',
     titleth: 'จัดการข้อมูลผู้ใช้',
     path: '/admin/AdminMemberApp',
-    icon: <Icon icon="ic:baseline-supervised-user-circle" width={22} height={22} />
+    icon: <Icon icon="emojione:person-walking-medium-skin-tone" width={22} height={22} />
   }
   // {
   //   title: 'rider',

@@ -15,7 +15,14 @@ const RootStyle = styled(Card)(({ theme }) => ({
   textAlign: 'center',
   padding: theme.spacing(5, 0),
   color: theme.palette.warning.darker,
-  backgroundColor: theme.palette.warning.lighter
+  backgroundColor: theme.palette.warning.lighter,
+  '&:hover': {
+    background: theme.palette.warning.lighter,
+    boxShadow: '10px 10px 4px #DEB887'
+  },
+  '&:last-child': {
+    borderRight: 'solid 1px #cccccc'
+  }
 }));
 
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -28,6 +35,13 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   marginBottom: theme.spacing(3),
   color: theme.palette.warning.dark,
+  '&:hover': {
+    background: theme.palette.warning.lighter,
+    boxShadow: '10px 10px 4px #DEB887'
+  },
+  '&:last-child': {
+    borderRight: 'solid 1px #cccccc'
+  },
   backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.warning.dark, 0)} 0%, ${alpha(
     theme.palette.warning.dark,
     0.24
