@@ -1,7 +1,7 @@
 import faker from 'faker';
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { set, sub, formatDistanceToNow } from 'date-fns';
 import { Icon } from '@iconify/react';
@@ -26,6 +26,7 @@ import {
   ListItemButton
 } from '@mui/material';
 // utils
+import axios from 'axios';
 import { mockImgAvatar } from '../../utils/mockImages';
 // components
 import Scrollbar from '../../components/Scrollbar';
@@ -126,11 +127,11 @@ NotificationItem.propTypes = {
 };
 
 function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
-
+  // const { avatar, title } = renderContent(notification);
+  const title = `${notification.order_status} ${notification.province}`;
   return (
     <ListItemButton
-      to="#"
+      to="/admin/AdminCheckOrderApp"
       disableGutters
       component={RouterLink}
       sx={{
@@ -143,7 +144,9 @@ function NotificationItem({ notification }) {
       }}
     >
       <ListItemAvatar>
-        <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
+        <Avatar sx={{ bgcolor: 'background.neutral' }}>
+          <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={title}
@@ -158,7 +161,7 @@ function NotificationItem({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.createdAt))}
+            {formatDistanceToNow(new Date(notification.order_product_date))}
           </Typography>
         }
       />
@@ -169,12 +172,19 @@ function NotificationItem({ notification }) {
 export default function NotificationsPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState(NOTIFICATIONS);
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
-
-  const handleOpen = () => {
+  const [notifications, setNotifications] = useState();
+  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  const [Total, setTotal] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`);
+    const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
+    setTotal(filterStatusOrder);
+    setNotifications(filterStatusOrder);
+  }, []);
+  function handleOpen() {
     setOpen(true);
-  };
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -182,7 +192,7 @@ export default function NotificationsPopover() {
 
   const handleMarkAllAsRead = () => {
     setNotifications(
-      notifications.map((notification) => ({
+      Total.map((notification) => ({
         ...notification,
         isUnRead: false
       }))
@@ -195,6 +205,7 @@ export default function NotificationsPopover() {
         ref={anchorRef}
         size="large"
         color={open ? 'primary' : 'default'}
+        // eslint-disable-next-line react/jsx-no-bind
         onClick={handleOpen}
         sx={{
           ...(open && {
@@ -202,7 +213,7 @@ export default function NotificationsPopover() {
           })
         }}
       >
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={Total.length} color="error">
           <Icon icon={bellFill} width={20} height={20} />
         </Badge>
       </IconButton>
@@ -217,11 +228,11 @@ export default function NotificationsPopover() {
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">Notifications</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {totalUnRead} unread messages
+              คุณมี {Total.length} รายการที่ต้องตรวจสอบ
             </Typography>
           </Box>
 
-          {totalUnRead > 0 && (
+          {Total.length > 0 && (
             <Tooltip title=" Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Icon icon={doneAllFill} width={20} height={20} />
@@ -241,12 +252,12 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {Total.map((notification) => (
+              <NotificationItem key={notification.order_id} notification={notification} />
             ))}
           </List>
 
-          <List
+          {/* <List
             disablePadding
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
@@ -257,13 +268,13 @@ export default function NotificationsPopover() {
             {notifications.slice(2, 5).map((notification) => (
               <NotificationItem key={notification.id} notification={notification} />
             ))}
-          </List>
+          </List> */}
         </Scrollbar>
 
         <Divider />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple component={RouterLink} to="#">
+          <Button fullWidth disableRipple component={RouterLink} to="/admin/AdminCheckOrderApp">
             View All
           </Button>
         </Box>

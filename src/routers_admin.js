@@ -24,6 +24,8 @@ import AdminConfirmExpressApp from './pages/Admin/ConfirmExpress/AdminConfirmExp
 import AdminWalletApp from './pages/Admin/Wallet/AdminWalletApp';
 import AdminCutArountApp from './pages/Admin/CutArount/AdminCutArountApp';
 import AdminTakesOrderApp from './pages/Admin/TakesOrder/AdminTakesOrderApp';
+import AdminTakesOrderDetail from './pages/Admin/TakesOrder/AdminTakesOrderDetail';
+import AdminCreateOrderRiderApp from './pages/Admin/TakesOrder/AdminCreateOrderRiderApp';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +53,12 @@ export default function Router() {
         { path: 'AdminConfirmExpressApp', element: <AdminConfirmExpressApp /> },
         { path: 'AdminWalletApp', element: <AdminWalletApp /> },
         { path: 'AdminCutArountApp', element: <AdminCutArountApp /> },
-        { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> }
+        { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> },
+        { path: 'AdminTakesOrderApp/AdminTakesOrderDetail', element: <AdminTakesOrderDetail /> },
+        {
+          path: 'AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp',
+          element: <AdminCreateOrderRiderApp />
+        }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

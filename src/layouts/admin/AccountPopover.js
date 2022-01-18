@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -8,6 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 // components
+import axios from 'axios';
 import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';
@@ -19,16 +20,6 @@ const MENU_OPTIONS = [
     label: 'Home',
     icon: homeFill,
     linkTo: '/'
-  },
-  {
-    label: 'Profile',
-    icon: personFill,
-    linkTo: '#'
-  },
-  {
-    label: 'Settings',
-    icon: settings2Fill,
-    linkTo: '#'
   }
 ];
 
@@ -37,7 +28,14 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-
+  const [User, setUser] = useState();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const getMember = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/member/${sessionStorage.getItem('user')}`
+    );
+    setUser(getMember.data.data);
+  }, []);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -72,7 +70,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Icon icon="si-glyph:customer-support" width={30} height={30} color="#8A2BE2" />
       </IconButton>
 
       <MenuPopover
@@ -83,10 +81,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {`${User.firstname} ${User.lastname}`}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {User.email}
           </Typography>
         </Box>
 
