@@ -1,7 +1,9 @@
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, Button } from '@mui/material';
 // components
 import Page from '../components/Page';
 import {
@@ -17,7 +19,13 @@ import PRODUCTS from '../_mocks_/products';
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
-
+  const [ProductsType, setProductsType] = useState([]);
+  const [count, setCount] = useState(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const Products = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
+    setProductsType(Products.data.data);
+  }, []);
   const formik = useFormik({
     initialValues: {
       gender: '',
@@ -72,8 +80,13 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+        <ProductList
+          products={PRODUCTS}
+          ProductsType={ProductsType}
+          setCount={setCount}
+          count={count}
+        />
+        <ProductCartWidget count={count} />
       </Container>
     </Page>
   );
