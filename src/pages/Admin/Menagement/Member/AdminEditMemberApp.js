@@ -237,9 +237,10 @@ export default function AdminCreateMemberApp() {
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
           );
           Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
-          // setTimeout(() => {
-          //   window.location.reload(false);
-          // }, 1500);
+          setTimeout(() => {
+            window.localStorage.clear();
+            window.history.back();
+          }, 1500);
         }
       });
     } else {
