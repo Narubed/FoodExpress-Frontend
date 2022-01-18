@@ -34,6 +34,7 @@ export default function AccountPopover() {
     const getMember = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/member/${sessionStorage.getItem('user')}`
     );
+    console.log(getMember.data.data);
     setUser(getMember.data.data);
   }, []);
   const handleOpen = () => {
@@ -81,10 +82,11 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {User.firstname}
+            Admin
+            {/* {User.firstname} */}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {User.email}
+            {/* {User.email} */}
           </Typography>
         </Box>
 
