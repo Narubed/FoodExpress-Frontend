@@ -69,7 +69,6 @@ export default function AdminCreateCompanyApp() {
       confirmButtonText: 'Yes, need it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(data);
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postCompany`, data);
         Swal.fire('Success!', 'คุณได้เพิ่มบริษัทเรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {

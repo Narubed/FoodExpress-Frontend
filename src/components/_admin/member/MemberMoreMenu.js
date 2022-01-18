@@ -87,7 +87,6 @@ export default function MemberMoreMenu(props) {
     localStorage.setItem('subdistrict-name', filterSubdistrict[0].district_name);
     localStorage.setItem('district-name', filterDistrict[0].amphur_name);
     localStorage.setItem('province-name', filterProvince[0].province_name);
-    console.log(Member.data.data);
   };
   return (
     <>

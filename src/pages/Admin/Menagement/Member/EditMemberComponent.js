@@ -81,12 +81,10 @@ export default class EditMemberComponent extends Component {
     const getApiTombon = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
-    // console.log(getApiTombon.data)
     const results = await axios.get(
       `http://localhost:8000/member/${localStorage.getItem('editUserId')}`
     );
 
-    console.log(results.data.data);
     this.setState({
       editUserId: localStorage.getItem('editUserId'),
       id: results.data.data.id,
@@ -121,7 +119,6 @@ export default class EditMemberComponent extends Component {
   // componentDidMount = async () => {};
 
   onChangeProvince = (res) => {
-    console.log(res);
     if (res === null) {
       this.setState({ province: localStorage.getItem('province') });
     } else if (res !== null) {
@@ -132,7 +129,6 @@ export default class EditMemberComponent extends Component {
   };
 
   onChangeDistrict = (res) => {
-    console.log(res);
     if (res === null) {
       this.setState({ district: localStorage.getItem('district') });
     } else if (res !== null) {
@@ -143,12 +139,10 @@ export default class EditMemberComponent extends Component {
   };
 
   onChangeSubDistrict = (res) => {
-    console.log(res);
     if (res === null) {
       this.setState({ district: localStorage.getItem('district') });
     } else if (res !== null) {
       const resProvice = this.state.ApiTombon.filter((e) => e.district_id === res);
-      console.log(resProvice[0].district_name);
       this.setState({ subdistrict: resProvice[0].district_name });
     }
     this.setState({ ApiTombonId: res });
@@ -161,7 +155,6 @@ export default class EditMemberComponent extends Component {
     if (this.state.ApiTombonId === null) {
       this.setState({ subdistrict: localStorage.getItem('subdistrict') });
     }
-    console.log(this.state.province);
     if (this.state.disabledButton === true) {
       const results = {
         userId: this.state.userId,
@@ -238,8 +231,6 @@ export default class EditMemberComponent extends Component {
   };
 
   render() {
-    console.log(this.state.ApiProvinceId);
-    // console.log(this.props.location.aboutProps)
     return (
       <>
         <div>
@@ -357,7 +348,6 @@ export default class EditMemberComponent extends Component {
                   ]}
                 >
                   <Select
-                    // onChange= {(e) => console.log(e)}
                     onChange={(e) => this.onChangeProvince(e)}
                     showSearch
                     defaultValue={localStorage.getItem('province')}

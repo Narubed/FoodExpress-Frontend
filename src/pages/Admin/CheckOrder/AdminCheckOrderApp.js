@@ -167,7 +167,6 @@ function AdminCheckOrderApp() {
     const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     const reverseData = getOrdder.data.data.reverse();
     setOrderlist(reverseData);
-    console.log(valueDate);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

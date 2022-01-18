@@ -49,11 +49,9 @@ export default function WalletMoreMenu(props) {
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderDetail_id/${order_id}`
     );
     setOrderDetail(data.data.data);
-    console.log(data.data.data);
     setShowModal(true);
   };
   const deleteOrderByAdmin = async () => {
-    console.log('ยืนยัน');
     const data = {
       order_id,
       order_status: 'ผู้ดูแลระบบยกเลิก'
@@ -88,7 +86,6 @@ export default function WalletMoreMenu(props) {
     });
   };
   const confirmSlipOrder = async () => {
-    console.log('ยืนยัน');
     const data = {
       order_id,
       order_status: 'รอจัดส่ง'

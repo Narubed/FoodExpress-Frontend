@@ -57,7 +57,6 @@ export default function ProductListToolbar({
   // eslint-disable-next-line camelcase
   selected_productImg
 }) {
-  console.log(selected_productImg);
   const deleteRider = () => {
     Swal.fire({
       title: 'Are you sure?',

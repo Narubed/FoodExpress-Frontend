@@ -89,11 +89,6 @@ export default function RegisterForm() {
     setMembers(Members.data.data);
   }, []);
   const handleSubmits = async (e) => {
-    console.log(e);
-    console.log(SelectMembers); // ผู้ใช้ที่ต้องได้รับสินค้า
-    console.log(CutArountProvince);
-    console.log(value);
-    console.log(SelectCompany); // บริษัทที่ต้องไปรับของ
     const orderRiderId = Date.now() + localStorage.getItem('rider_id') + SelectCompany.company_id;
     const data = {
       id_order_rider_id: orderRiderId,
@@ -108,7 +103,6 @@ export default function RegisterForm() {
       order_rider_date_cut_arount: value,
       order_rider_province_cut_arount: CutArountProvince
     };
-    console.log(data);
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่ !',
@@ -137,19 +131,12 @@ export default function RegisterForm() {
   });
 
   const onChangeCompany = (e) => {
-    console.log(e.target.value);
     setSelectCompany(e.target.value);
   };
-
-  // const onChangeMember = (e) => {
-  //   console.log(e.target.value);
-  //   setSelectMembers(e.target.value);
-  // };
   const onChangeProvinceMember = (e) => {
     const filterProvinceMembers = Members.filter((f) => f.province === e.target.value);
     setprovinceMember(e.target.value);
     setSelectprovinceMember(filterProvinceMembers);
-    console.log(e.target.value);
   };
   const confirmMemberAddress = (data) => {
     setSelectMembers(data);

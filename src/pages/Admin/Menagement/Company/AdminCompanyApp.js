@@ -151,7 +151,6 @@ function AdminCompanyApp() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getCompany = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllCompany`);
-    console.log(getCompany.data.data);
     setCompanylist(getCompany.data.data);
   }, []);
   const handleRequestSort = (event, property) => {

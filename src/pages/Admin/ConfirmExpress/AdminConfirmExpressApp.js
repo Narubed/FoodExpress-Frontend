@@ -35,7 +35,6 @@ function AdminConfirmExpressApp() {
       }
     });
     setOrder(filtereds);
-    console.log(filtereds);
   }, []);
   return (
     <Page title="Confirm | admin NBA-Express">

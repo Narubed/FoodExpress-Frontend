@@ -16,7 +16,6 @@ function AdminPercentApp() {
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
     setPercent(getAllPrecent.data.data);
-    console.log(getAllPrecent.data.data);
   }, []);
   return (
     <Page title="เปอร์เซ็น | admin NBA-Express">

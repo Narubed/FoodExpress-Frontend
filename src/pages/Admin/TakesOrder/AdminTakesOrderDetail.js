@@ -108,7 +108,6 @@ export default function AdminTakesOrderDetail() {
     const filterRider_id = getRider.data.data.filter(
       (f) => f.order_rider_id === parseInt(localStorage.getItem('rider_id'), 10)
     );
-    console.log(filterRider_id);
     setRiderlist(filterRider_id);
   }, []);
   const handleRequestSort = (event, property) => {
@@ -187,7 +186,6 @@ export default function AdminTakesOrderDetail() {
             color="secondary"
             variant="outlined"
             component={RouterLink}
-            onClick={() => console.log('321')}
             to="/admin/AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp"
             startIcon={<Icon icon={plusFill} />}
           >

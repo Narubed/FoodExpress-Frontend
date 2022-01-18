@@ -10,7 +10,6 @@ import Button from '@material-tailwind/react/Button';
 
 export default function ProductImage({ images, Name }) {
   const [showModal, setShowModal] = React.useState(false);
-  console.log(Name);
   return (
     <div>
       <button onClick={(e) => setShowModal(true)}>

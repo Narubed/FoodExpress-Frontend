@@ -172,7 +172,6 @@ function AdminWalletApp() {
     );
     const reverseData = WalletMember.data.data.reverse();
     setWalletMemberlist(reverseData);
-    console.log(valueDate);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

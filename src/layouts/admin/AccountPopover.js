@@ -28,15 +28,6 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [User, setUser] = useState();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    const getMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/member/${sessionStorage.getItem('user')}`
-    );
-    console.log(getMember.data.data);
-    setUser(getMember.data.data);
-  }, []);
   const handleOpen = () => {
     setOpen(true);
   };

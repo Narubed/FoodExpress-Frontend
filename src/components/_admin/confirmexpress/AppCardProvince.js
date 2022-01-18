@@ -123,7 +123,6 @@ export default function AppCardProvince(props) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.post('http://localhost:8000/CreateCutArount', dataCutAroundOrder);
-        // console.log(dataCutAroundOrder);
         // eslint-disable-next-line array-callback-return
         await filterProvince.map(async (value) => {
           const dataPutOrderDetail = {
@@ -132,7 +131,6 @@ export default function AppCardProvince(props) {
             order_company_status: 'ตัดรอบการจัดส่งแล้ว'
           };
           await axios.put('http://localhost:8000/putCutArountStatus', dataPutOrderDetail);
-          // console.log(dataPutOrderDetail);
         });
         Swal.fire('ยืนยัน!', 'ยืนยันการตัดรอบสินค้านี้แล้ว.', 'success');
         // setTimeout(() => {

@@ -15,7 +15,6 @@ export default function PercentCardProvice() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
-    console.log(getAllPrecent.data.data);
     setProvince_province(getAllPrecent.data.data[2].percent_provice * 100);
     setProvince_nba(getAllPrecent.data.data[2].percent_nba * 100);
   }, []);

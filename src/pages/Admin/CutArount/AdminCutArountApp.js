@@ -30,7 +30,6 @@ function AdminCutArountApp() {
     const filterCompanyStatus = filterOrderStatus.filter(
       (f) => f.order_company_status === 'ตัดรอบการจัดส่งแล้ว'
     );
-    console.log(filterCompanyStatus);
     const filetereds = [];
     filterCompanyStatus.forEach((element) => {
       const idx = filetereds.findIndex(
@@ -41,7 +40,6 @@ function AdminCutArountApp() {
       }
     });
     setOrder(filetereds);
-    console.log(filetereds);
   }, []);
   return (
     <Page title="CutArount | admin NBA-Express">

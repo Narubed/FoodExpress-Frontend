@@ -32,7 +32,6 @@ export default function ProductMoreMenu(props) {
     currency,
     nameproducttype
   } = props;
-  console.log(props);
 
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
