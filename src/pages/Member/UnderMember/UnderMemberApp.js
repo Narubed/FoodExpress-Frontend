@@ -1,24 +1,26 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable react/button-has-type */
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { filter } from 'lodash';
-import numeral from 'numeral';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
-import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
-import { Tag } from 'antd';
 import axios from 'axios';
+import Image from '@material-tailwind/react/Image';
+import Modal from '@material-tailwind/react/Modal';
+import ModalHeader from '@material-tailwind/react/ModalHeader';
+import ModalBody from '@material-tailwind/react/ModalBody';
+import ModalFooter from '@material-tailwind/react/ModalFooter';
+import Label from '@material-tailwind/react/Label';
+import numeral from 'numeral';
 // material
 import {
   Card,
   Table,
   Stack,
   Avatar,
+  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -27,33 +29,26 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Badge,
-  TextField,
-  Box
+  Badge
 } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import { styled } from '@mui/material/styles';
 import {
-  CheckOrderMemberListHead,
-  CheckOrderMemberListToolbar,
-  CheckOrderMemberMoreMenu,
-  CheckSlipImageMember,
-  CheckOrderMemberPutSlip
-} from '../../../components/_dashboard/checkordermember';
+  UnderMemberListHead,
+  UnderMemberListToolbar
+} from '../../../components/_dashboard/undermember';
 import Page from '../../../components/Page';
-// import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
+// utils
+import { fNumber } from '../../../utils/formatNumber';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'order_id', label: 'ID', alignRight: false },
-  { id: 'order_status', label: 'Status', alignRight: false },
-  { id: 'order_slip', label: 'Slip', alignRight: false },
-  { id: 'order_product_total', label: 'ผลรวมของออเดอร์', alignRight: false },
-  { id: 'order_product_date', label: 'วัน-เดือน-ปี', alignRight: false },
+  { id: 'level', label: 'ระดับ', alignRight: false },
+  { id: 'firstname', label: 'ชื่อ', alignRight: false },
+  { id: 'userId', label: 'เลขบัตร', alignRight: false },
+  { id: 'address', label: 'ที่อยู่', alignRight: false },
+  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'tel', label: 'tel', alignRight: false },
   { id: '' }
 ];
 // ----------------------------------------------------------------------
@@ -72,26 +67,6 @@ function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(
-      array,
-      (_user) =>
-        _user.order_status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.order_id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.order_product_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-  }
-  return stabilizedThis.map((el) => el[0]);
 }
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -122,38 +97,35 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(
+      array,
+      (_user) =>
+        _user.userId.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.email.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.lastname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.tel.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.booknumber.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
+  return stabilizedThis.map((el) => el[0]);
 }
 
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
-function UnderMemberApp() {
+function AdminMemberApp() {
   // eslint-disable-next-line no-undef
-  const [Orderlist, setOrderlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
+  const [Memberlist, setMemberlist] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -163,18 +135,48 @@ function UnderMemberApp() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
-    const filterMemberId = getOrdder.data.data.filter(
-      (f) => f.order_member_id === sessionStorage.getItem('user')
-    );
-    const reverseData = filterMemberId.reverse();
-    const sortData = reverseData.sort(
-      (a, b) => dayjs(a.order_product_date).format - dayjs(b.order_product_date).format
-    );
-    setOrderlist(sortData);
+    const level = sessionStorage.getItem('level');
+    const user = sessionStorage.getItem('user');
+    const results = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
+    const getUser_id = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${user}`);
+    const filterMember = results.data.data.filter((e) => e.role === 'Member');
+    if (level === 'province') {
+      const filterUser = filterMember.filter((e) => e.province === getUser_id.data.data.province);
+      setMemberlist(filterUser);
+    }
+    if (level === 'district') {
+      const filterUser = filterMember.filter((e) => e.district === getUser_id.data.data.district);
+      const filterUser3 = filterMember.filter(
+        (e) => e.province === getUser_id.data.data.province && e.level === 'province'
+      );
+      const findUser = filterUser.find((e) => e === filterUser3[0]);
+      if (!findUser) {
+        filterUser.push(filterUser3[0]);
+      }
+      setMemberlist(filterUser);
+    }
+    if (level === 'subdistrict') {
+      const filterUser = filterMember.filter(
+        (e) => e.subdistrict === getUser_id.data.data.subdistrict
+      );
+      const filterUser2 = filterMember.filter(
+        (e) => e.district === getUser_id.data.data.district && e.level === 'district'
+      );
+      const filterUser3 = filterMember.filter(
+        (e) => e.province === getUser_id.data.data.province && e.level === 'province'
+      );
+      const findUser = filterUser.find((e) => e === filterUser2[0]);
+      const findUser2 = filterUser.find((e) => e === filterUser3[0]);
+      if (findUser) {
+        filterUser.push(filterUser2[0]);
+      }
+      if (findUser2) {
+        filterUser.push(filterUser3[0]);
+      }
+      setMemberlist(filterUser);
+    }
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -184,42 +186,14 @@ function UnderMemberApp() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Orderlist.map((n) => n.order_id);
-      // const newSelectedsid = Orderlist.map((n) => n.order_id);
+      const newSelecteds = Memberlist.map((n) => n.userId);
+      const newSelectedsid = Memberlist.map((n) => n.id);
       setSelected(newSelecteds);
-      // setSelected_id(newSelectedsid);
+      setSelected_id(newSelectedsid);
       return;
     }
     setSelected([]);
     setSelected_id([]);
-  };
-
-  const handleClick = (event, name, order_id) => {
-    const selectedIndex = selected.indexOf(order_id);
-    // const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    // let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, order_id);
-      // newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      // newSelectedid = newSelectedid.concat(
-      //   selected_id.slice(0, selectedIndexid),
-      //   selected_id.slice(selectedIndexid + 1)
-      // );
-    }
-    setSelected(newSelected);
-    // setSelected_id(newSelectedid);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -235,86 +209,84 @@ function UnderMemberApp() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Orderlist.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Memberlist.length) : 0;
 
-  const newOrderlist =
-    valueDate[0] && valueDate[1] !== null
-      ? Orderlist.filter(
-          (f) =>
-            dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
-            dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
-        )
-      : Orderlist;
-  const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
+  // eslint-disable-next-line no-undef
+  const filteredProduct = applySortFilter(Memberlist, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredOrder.length === 0;
+  const isUserNotFound = filteredProduct.length === 0;
   return (
     <>
-      <Page title="CheckOrder | FoodExpress">
+      <Page title="Member | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              CheckOrder
+              Member
             </Typography>
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to="/admin/AdminMemberApp/AdminCreateMemberApp"
+              startIcon={<Icon icon={plusFill} />}
+            >
+              New Member
+            </Button>
           </Stack>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <MobileDateRangePicker
-                startText="start"
-                value={valueDate}
-                onChange={(newValue) => {
-                  setValueDate(newValue);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField size="small" {...startProps} />
-                    <Box sx={{ mx: 2 }}> to </Box>
-                    <TextField size="small" {...endProps} />
-                  </>
-                )}
-              />
-            </Stack>
-          </LocalizationProvider>
           <Card>
-            <CheckOrderMemberListToolbar
+            <UnderMemberListToolbar
               numSelected={selected.length}
               filterName={filterName}
               onFilterName={handleFilterByName}
               selected={selected}
               // eslint-disable-next-line camelcase
               selected_id={selected_id}
+              Memberlist={Memberlist}
+              // selected_productImg={selected_productImg}
             />
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
-                  <CheckOrderMemberListHead
+                  <UnderMemberListHead
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
-                    rowCount={Orderlist.length}
+                    rowCount={Memberlist.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
                   />
                   <TableBody>
-                    {filteredOrder
+                    {filteredProduct
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          order_id,
-                          order_member_id,
-                          order_status,
-                          order_slip,
-                          order_product_total,
-                          order_product_date
+                          id,
+                          password,
+                          email,
+                          firstname,
+                          lastname,
+                          bookname,
+                          booknumber,
+                          role,
+                          tel,
+                          address,
+                          subdistrict,
+                          district,
+                          province,
+                          map,
+                          userId,
+                          status,
+                          bookBankImg,
+                          cardImg,
+                          level
                         } = row;
-                        const isItemSelected = selected.indexOf(order_id) !== -1;
+                        const isItemSelected = selected.indexOf(userId) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={order_id}
+                            key={id}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
@@ -323,69 +295,83 @@ function UnderMemberApp() {
                             <TableCell padding="checkbox">
                               {/* <Checkbox
                                 checked={isItemSelected}
-                                onChange={(event) => handleClick(event, company_name, company_id)}
+                                onChange={(event) => handleClick(event, userId, id)}
                               /> */}
+                            </TableCell>
+                            <TableCell align="left">
+                              {role === 'Member' ? (
+                                <Label color="">
+                                  <div className="text-xs">
+                                    {level === 'subdistrict' ? (
+                                      <Label color="lightBlue">
+                                        <div className="text-xs">ตำบล</div>
+                                      </Label>
+                                    ) : null}
+                                    {level === 'district' ? (
+                                      <Label color="green">
+                                        <div className="text-xs">อำเภอ</div>
+                                      </Label>
+                                    ) : null}
+                                    {level === 'province' ? (
+                                      <Label color="pink">
+                                        <div className="text-xs">จังหวัด</div>
+                                      </Label>
+                                    ) : null}
+                                  </div>
+                                </Label>
+                              ) : (
+                                <Label color="">
+                                  <Label color="blueGray">
+                                    <div className="text-xs">admin</div>
+                                  </Label>
+                                </Label>
+                              )}
+
+                              {/* <Label color="lightBlue"> {level}</Label> */}
                             </TableCell>
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
-                                <Typography variant="subtitle2" noWrap>
-                                  <Label color="blueGray"> {order_id}</Label>
-                                </Typography>{' '}
-                              </Stack>
-                            </TableCell>
-                            <TableCell align="left">
-                              {order_status === 'รอชำระเงิน' ? (
-                                <Label color="brown">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'รอตรวจสอบ' ? (
-                                <Label color="lightBlue">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'รอจัดส่ง' ? (
-                                <Label color="amber">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'จัดส่งสำเร็จ' ? (
-                                <Label color="green">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'ผู้ใช้ยกเลิก' ? (
-                                <Label color="red">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'ผู้ดูแลระบบยกเลิก' ? (
-                                <Label color="pink">{order_status}</Label>
-                              ) : null}
-                            </TableCell>
-                            <TableCell align="left">
-                              {order_slip !== '' ? (
                                 <StyledBadge
                                   overlap="circular"
                                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                   variant="dot"
                                 >
-                                  <CheckSlipImageMember images={order_slip} Name={order_id} />
+                                  <Image
+                                    className="h-10 w-10 rounded-full"
+                                    src="https://imchun.files.wordpress.com/2017/09/user-male.png"
+                                    alt=""
+                                  />
                                 </StyledBadge>
-                              ) : order_status === 'รอชำระเงิน' ? (
-                                <CheckOrderMemberPutSlip order_id={order_id} />
-                              ) : null}
+                                <Typography variant="subtitle2" noWrap>
+                                  <div className="text-orange-200">{firstname}</div>
+                                  <div className=" font-light text-xs">{email}</div>
+                                </Typography>
+                              </Stack>
                             </TableCell>
+                            <TableCell align="left">{userId}</TableCell>
+
+                            <TableCell align="left">{address}</TableCell>
                             <TableCell align="left">
-                              {numeral(order_product_total).format()}
+                              {status === 'Active' ? (
+                                <Label color="green">
+                                  <div className="text-xs">{status}</div>
+                                </Label>
+                              ) : (
+                                <Label color="red">
+                                  <div className="text-xs">{status}</div>
+                                </Label>
+                              )}
                             </TableCell>
-                            <TableCell align="left">
-                              <Label color="lightGreen">
-                                {order_product_date
-                                  ? dayjs(order_product_date).locale('th').format('DD MMMM YYYY')
-                                  : null}
-                              </Label>{' '}
-                            </TableCell>
+                            <TableCell align="left">{tel}</TableCell>
 
                             <TableCell align="right">
-                              <CheckOrderMemberMoreMenu
-                                order_id={order_id}
-                                Orderlist={Orderlist}
-                                row={row}
-                                order_product_total={order_product_total}
-                                order_status={order_status}
-                                order_member_id={order_member_id}
-                              />
+                              <Button target="_blank" href={map}>
+                                <Icon icon="emojione:world-map" width="32" height="32" />
+                              </Button>
+                            </TableCell>
+                            <TableCell align="left">
+                              {' '}
+                              {/* <MemberMoreMenu bookBankImg={bookBankImg} cardImg={cardImg} id={id} /> */}
                             </TableCell>
                           </TableRow>
                         );
@@ -412,7 +398,7 @@ function UnderMemberApp() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={newOrderlist.length}
+              count={Memberlist.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -424,4 +410,4 @@ function UnderMemberApp() {
     </>
   );
 }
-export default UnderMemberApp;
+export default AdminMemberApp;

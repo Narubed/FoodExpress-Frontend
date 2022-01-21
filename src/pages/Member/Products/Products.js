@@ -33,7 +33,6 @@ export default function EcommerceShop() {
     const filterStatusProduct = Products.data.data.filter(
       (f) => f.productStetus === 'สินค้าพร้อมจำหน่าย'
     );
-    console.log('useEffect');
     setProductsType(filterStatusProduct);
   }, []);
   const onSubmitProduct = (e) => {
