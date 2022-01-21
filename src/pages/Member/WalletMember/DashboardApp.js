@@ -1,62 +1,68 @@
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 // components
-import Page from '../../components/Page';
+import Page from '../../../components/Page';
 import {
-  AppTasks,
-  AppNewUsers,
-  AppBugReports,
-  AppItemOrders,
-  AppNewsUpdate,
-  AppWeeklySales,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppCurrentSubject,
-  AppConversionRates
-} from '../../components/_dashboard/app';
-
+  AppWaitingforDelivery,
+  AppSuccessfulDelivery,
+  AppLastMonthIncome,
+  AppTotalIncome,
+  AppWebsiteVisitsMember,
+  AppCurrentVisitsMember
+} from '../../../components/_dashboard/walletmember';
+import { AppNewsUpdate, AppTrafficBySite } from '../../../components/_dashboard/app';
+import MemberWalletApp from './MemberWalletApp';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  const [Total, setTotal] = useState([]);
+  const user = sessionStorage.getItem('user');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const getAllOrder = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getByOrderMember_id/${user}`
+    );
+    setTotal(getAllOrder.data.data);
+  }, []);
   return (
-    <Page title="หน้าหลัก | NBA-Express">
+    <Page title="Wallet | NBA-Express">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWeeklySales />
+            <AppWaitingforDelivery props={Total} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppNewUsers />
+            <AppSuccessfulDelivery props={Total} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppItemOrders />
+            <AppLastMonthIncome props={Total} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppBugReports />
+            <AppTotalIncome props={Total} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppWebsiteVisits />
+            <AppWebsiteVisitsMember />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentVisits />
+            <AppCurrentVisitsMember />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
-            <AppConversionRates />
+            <MemberWalletApp />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentSubject />
+            <AppTrafficBySite />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/*  <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate />
           </Grid>
 
@@ -70,7 +76,7 @@ export default function DashboardApp() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppTasks />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Page>

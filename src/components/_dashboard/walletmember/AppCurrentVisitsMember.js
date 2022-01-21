@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { merge, parseInt } from 'lodash';
 import { Icon } from '@iconify/react';
 
+import { merge, parseInt } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 // material
 import { useTheme, styled } from '@mui/material/styles';

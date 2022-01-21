@@ -4,7 +4,6 @@ import ReactApexChart from 'react-apexcharts';
 import Chart from 'chart.js';
 import axios from 'axios';
 import { Icon } from '@iconify/react';
-
 // material
 import { Card, CardHeader, Box } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

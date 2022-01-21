@@ -35,7 +35,7 @@ const sidebarConfig = [
     title: 'dashboard',
     titleth: 'กระเป๋าเงิน',
     path: '/dashboard/app',
-    icon: getIcon(pieChart2Fill)
+    icon: <Icon icon="emojione:money-bag" width={22} height={22} />
   }
   // {
   //   title: 'user',
