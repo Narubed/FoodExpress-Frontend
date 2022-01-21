@@ -6,15 +6,15 @@ import axios from 'axios';
 // material
 import { Container, Stack, Typography, Button } from '@mui/material';
 // components
-import Page from '../components/Page';
+import Page from '../../components/Page';
 import {
   ProductSort,
   ProductList,
   ProductCartWidget,
   ProductFilterSidebar
-} from '../components/_dashboard/products';
+} from '../../components/_dashboard/products';
 //
-import PRODUCTS from '../_mocks_/products';
+import PRODUCTS from '../../_mocks_/products';
 
 // ----------------------------------------------------------------------
 

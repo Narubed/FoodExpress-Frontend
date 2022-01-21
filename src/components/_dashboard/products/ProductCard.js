@@ -66,14 +66,12 @@ export default function ShopProductCard({ product, setCount, count }) {
         };
         Object.assign(item, value);
         filtereds.push(item);
-        console.log('Card');
       }
     });
     const findIndexProduct = value.findIndex((value) => value.productid === productid);
     if (findIndexProduct >= 0) {
       setButton(true);
     }
-    console.log(filtereds);
     setCount(filtereds);
   };
   return (

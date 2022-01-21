@@ -14,13 +14,15 @@ ProductList.propTypes = {
   setCount: PropTypes.func.isRequired
 };
 
-export default function ProductList({ products, ProductsType, setCount, count, ...other }) {
+export default function ProductList({ products, ProductsType, setCount, count }) {
   return (
-    <Grid container spacing={3} {...other}>
+    <Grid container spacing={3}>
       {ProductsType.map((product) => (
-        <Grid key={product.id} item xs={12} sm={6} md={3}>
-          <ShopProductCard product={product} setCount={setCount} count={count} key={product.id} />
-        </Grid>
+        <>
+          <Grid key={product.id} item xs={12} sm={6} md={3}>
+            <ShopProductCard product={product} setCount={setCount} count={count} key={product.id} />
+          </Grid>
+        </>
       ))}
     </Grid>
   );

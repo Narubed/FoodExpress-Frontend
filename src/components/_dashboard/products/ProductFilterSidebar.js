@@ -61,6 +61,7 @@ ShopFilterSidebar.propTypes = {
   onResetFilter: PropTypes.func,
   onOpenFilter: PropTypes.func,
   onCloseFilter: PropTypes.func,
+  onChangeType: PropTypes.func,
   formik: PropTypes.object
 };
 
@@ -70,14 +71,15 @@ export default function ShopFilterSidebar({
   onOpenFilter,
   onCloseFilter,
   formik,
-  setTypeProduct1Unit
+  onChangeType
 }) {
   const { values, getFieldProps, handleChange } = formik;
   const [TypeProduct, setTypeProduct] = useState([]);
   useEffect(async () => {
-    const ProductsType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
-    setTypeProduct(ProductsType.data.data);
+    const Type = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
+    setTypeProduct(Type.data.data);
   }, []);
+
   return (
     <>
       <Button
@@ -86,7 +88,7 @@ export default function ShopFilterSidebar({
         endIcon={<Icon icon={roundFilterList} />}
         onClick={onOpenFilter}
       >
-        Filters&nbsp;
+        ประเภทสินค้า&nbsp;
       </Button>
 
       <FormikProvider value={formik}>
@@ -117,134 +119,21 @@ export default function ShopFilterSidebar({
 
             <Scrollbar>
               <Stack spacing={3} sx={{ p: 3 }}>
-                <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    ประเภทสินค้า
-                  </Typography>
-                  <div>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Category
-                    </Typography>
-                    <RadioGroup {...getFieldProps('category')}>
-                      {TypeProduct.map((item) => (
-                        <FormControlLabel
-                          key={item.nameproducttype}
-                          value={item.nameproducttype}
-                          control={<Radio />}
-                          onChange={(e) => setTypeProduct1Unit(e.target.value)}
-                          label={item.nameproducttype}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </div>
-                  {/* <FormGroup>
-                    {TypeProduct.map((item) => (
-                      <FormControlLabel
-                        key={item.id}
-                        control={
-                          <Checkbox
-                            color="secondary"
-                            // {...getFieldProps('types')}
-                            onChange={(e) => setTypes(e.target.value)}
-                            value={item.nameproducttype}
-                            checked={values.types.includes(item.nameproducttype)}
-                          />
-                        }
-                        label={item.nameproducttype}
-                      />
-                    ))}
-                  </FormGroup> */}
-                  {/* <FormGroup>
-                    {FILTER_GENDER_OPTIONS.map((item) => (
-                      <FormControlLabel
-                        key={item}
-                        control={
-                          <Checkbox
-                            {...getFieldProps('gender')}
-                            value={item}
-                            checked={values.gender.includes(item)}
-                          />
-                        }
-                        label={item}
-                      />
-                    ))}
-                  </FormGroup> */}
-                </div>
+                <Typography variant="subtitle1" gutterBottom>
+                  ประเภทสินค้า
+                </Typography>
 
-                {/* <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Category
-                  </Typography>
-                  <RadioGroup {...getFieldProps('category')}>
-                    {FILTER_CATEGORY_OPTIONS.map((item) => (
-                      <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
-                    ))}
-                  </RadioGroup>
-                </div> */}
-
-                {/* <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Colour
-                  </Typography>
-                  <ColorManyPicker
-                    name="colors"
-                    colors={FILTER_COLOR_OPTIONS}
-                    onChange={handleChange}
-                    onChecked={(color) => values.colors.includes(color)}
-                    sx={{ maxWidth: 36 * 4 }}
-                  />
-                </div> */}
-
-                {/* <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Price
-                  </Typography>
-                  <RadioGroup {...getFieldProps('priceRange')}>
-                    {FILTER_PRICE_OPTIONS.map((item) => (
-                      <FormControlLabel
-                        key={item.value}
-                        value={item.value}
-                        control={<Radio />}
-                        label={item.label}
-                      />
-                    ))}
-                  </RadioGroup>
-                </div> */}
-
-                {/* <div>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Rating
-                  </Typography>
-                  <RadioGroup {...getFieldProps('rating')}>
-                    {FILTER_RATING_OPTIONS.map((item, index) => (
-                      <FormControlLabel
-                        key={item}
-                        value={item}
-                        control={
-                          <Radio
-                            disableRipple
-                            color="default"
-                            icon={<Rating readOnly value={4 - index} />}
-                            checkedIcon={<Rating readOnly value={4 - index} />}
-                          />
-                        }
-                        label="& Up"
-                        sx={{
-                          my: 0.5,
-                          borderRadius: 1,
-                          '& > :first-of-type': { py: 0.5 },
-                          '&:hover': {
-                            opacity: 0.48,
-                            '& > *': { bgcolor: 'transparent' }
-                          },
-                          ...(values.rating.includes(item) && {
-                            bgcolor: 'background.neutral'
-                          })
-                        }}
-                      />
-                    ))}
-                  </RadioGroup>
-                </div> */}
+                <RadioGroup {...getFieldProps('category')}>
+                  {TypeProduct.map((item) => (
+                    <FormControlLabel
+                      key={item.nameproducttype}
+                      value={item.nameproducttype}
+                      control={<Radio />}
+                      onChange={(e) => onChangeType(e.target.value)}
+                      label={item.nameproducttype}
+                    />
+                  ))}
+                </RadioGroup>
               </Stack>
             </Scrollbar>
 

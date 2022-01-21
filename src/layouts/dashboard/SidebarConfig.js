@@ -16,7 +16,7 @@ const sidebarConfig = [
     title: 'product',
     titleth: 'สินค้าทั้งหมด',
     path: '/dashboard/products',
-    icon: getIcon(shoppingBagFill)
+    icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
   },
   {
     title: 'dashboard',
