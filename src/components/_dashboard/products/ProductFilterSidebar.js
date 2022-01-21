@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
+import { useState, useEffect, useMemo } from 'react';
 import { Icon } from '@iconify/react';
 import { Form, FormikProvider } from 'formik';
 import closeFill from '@iconify/icons-eva/close-fill';
 import roundClearAll from '@iconify/icons-ic/round-clear-all';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import axios from 'axios';
 // material
 import {
   Box,
@@ -66,10 +69,15 @@ export default function ShopFilterSidebar({
   onResetFilter,
   onOpenFilter,
   onCloseFilter,
-  formik
+  formik,
+  setTypeProduct1Unit
 }) {
   const { values, getFieldProps, handleChange } = formik;
-
+  const [TypeProduct, setTypeProduct] = useState([]);
+  useEffect(async () => {
+    const ProductsType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
+    setTypeProduct(ProductsType.data.data);
+  }, []);
   return (
     <>
       <Button
@@ -111,9 +119,42 @@ export default function ShopFilterSidebar({
               <Stack spacing={3} sx={{ p: 3 }}>
                 <div>
                   <Typography variant="subtitle1" gutterBottom>
-                    Gender
+                    ประเภทสินค้า
                   </Typography>
-                  <FormGroup>
+                  <div>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Category
+                    </Typography>
+                    <RadioGroup {...getFieldProps('category')}>
+                      {TypeProduct.map((item) => (
+                        <FormControlLabel
+                          key={item.nameproducttype}
+                          value={item.nameproducttype}
+                          control={<Radio />}
+                          onChange={(e) => setTypeProduct1Unit(e.target.value)}
+                          label={item.nameproducttype}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </div>
+                  {/* <FormGroup>
+                    {TypeProduct.map((item) => (
+                      <FormControlLabel
+                        key={item.id}
+                        control={
+                          <Checkbox
+                            color="secondary"
+                            // {...getFieldProps('types')}
+                            onChange={(e) => setTypes(e.target.value)}
+                            value={item.nameproducttype}
+                            checked={values.types.includes(item.nameproducttype)}
+                          />
+                        }
+                        label={item.nameproducttype}
+                      />
+                    ))}
+                  </FormGroup> */}
+                  {/* <FormGroup>
                     {FILTER_GENDER_OPTIONS.map((item) => (
                       <FormControlLabel
                         key={item}
@@ -127,10 +168,10 @@ export default function ShopFilterSidebar({
                         label={item}
                       />
                     ))}
-                  </FormGroup>
+                  </FormGroup> */}
                 </div>
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Category
                   </Typography>
@@ -139,9 +180,9 @@ export default function ShopFilterSidebar({
                       <FormControlLabel key={item} value={item} control={<Radio />} label={item} />
                     ))}
                   </RadioGroup>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Colour
                   </Typography>
@@ -152,9 +193,9 @@ export default function ShopFilterSidebar({
                     onChecked={(color) => values.colors.includes(color)}
                     sx={{ maxWidth: 36 * 4 }}
                   />
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Price
                   </Typography>
@@ -168,9 +209,9 @@ export default function ShopFilterSidebar({
                       />
                     ))}
                   </RadioGroup>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <Typography variant="subtitle1" gutterBottom>
                     Rating
                   </Typography>
@@ -203,7 +244,7 @@ export default function ShopFilterSidebar({
                       />
                     ))}
                   </RadioGroup>
-                </div>
+                </div> */}
               </Stack>
             </Scrollbar>
 

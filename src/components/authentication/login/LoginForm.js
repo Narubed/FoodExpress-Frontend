@@ -62,6 +62,8 @@ export default function LoginForm() {
         sessionStorage.setItem('user', response.data.userId);
         sessionStorage.setItem('role', response.data.role);
         sessionStorage.setItem('level', response.data.level);
+        sessionStorage.setItem('firstname', response.data.firstname);
+        sessionStorage.setItem('lastname', response.data.lastname);
         // navigate('/dashboard', { replace: true });
         window.location.href = '/';
       });

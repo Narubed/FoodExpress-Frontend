@@ -36,15 +36,46 @@ const ProductImgStyle = styled('img')({
 // ----------------------------------------------------------------------
 
 ShopProductCard.propTypes = {
-  product: PropTypes.object
+  product: PropTypes.object,
+  count: PropTypes.object,
+  setCount: PropTypes.func.isRequired
 };
 
 export default function ShopProductCard({ product, setCount, count }) {
   const [showModal, setShowModal] = React.useState(false);
-  const { name, productStetus, productName, productImg, productPrice } = product;
+  const [showButton, setButton] = React.useState(false);
+  React.useEffect(async () => {}, [count]);
+  const { name, productStetus, productName, productImg, productPrice, productid } = product;
   // eslint-disable-next-line global-require
   const ImageProduct = require(`../../../assets/img/${productImg}`).default;
-  console.log(product);
+  const AddProduct = async () => {
+    const value = count.concat(product);
+    const filtereds = [];
+    await value.forEach((item, index) => {
+      const idx = filtereds.findIndex((value) => value.productid === item.productid);
+      if (idx !== -1) {
+        console.log('ซ้ำ');
+        // eslint-disable-next-line operator-assignment
+        // filtereds[idx].value = item.productPrice;
+        // filtereds[idx].amount = 1;
+        //   filtereds[idx].order_product_amoumt + item.order_product_amoumt;
+      } else {
+        const value = {
+          amount: 1,
+          value: item.productPrice
+        };
+        Object.assign(item, value);
+        filtereds.push(item);
+        console.log('Card');
+      }
+    });
+    const findIndexProduct = value.findIndex((value) => value.productid === productid);
+    if (findIndexProduct >= 0) {
+      setButton(true);
+    }
+    console.log(filtereds);
+    setCount(filtereds);
+  };
   return (
     <>
       <Card>
@@ -52,7 +83,7 @@ export default function ShopProductCard({ product, setCount, count }) {
           {productStetus && (
             <Label
               variant="filled"
-              color={(productStetus === 'sale' && 'error') || 'info'}
+              color={(productStetus === 'สินค้ายังไม่พร้อมจำหน่าย' && 'error') || 'info'}
               sx={{
                 zIndex: 9,
                 top: 16,
@@ -76,18 +107,20 @@ export default function ShopProductCard({ product, setCount, count }) {
 
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             {/* <ColorPreview colors={colors} /> */}
+
             <Button
               color="purple"
-              buttonType="link"
+              buttonType="outline"
               size="sm"
               rounded={false}
               block={false}
               iconOnly={false}
               ripple="dark"
-              onClick={() => setCount(count + 1)}
+              onClick={() => AddProduct()}
             >
-              add to card
+              เพิ่มในตะกร้า
             </Button>
+
             <Typography variant="subtitle1">
               <Typography
                 component="span"
