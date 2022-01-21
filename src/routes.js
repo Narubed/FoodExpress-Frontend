@@ -6,11 +6,12 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/Member/DashboardApp';
-import Products from './pages/Member/Products';
+import Products from './pages/Member/Products/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
-
+import CheckOrderMemberApp from './pages/Member/CheckOrderMember/CheckOrderMemberApp';
+import UnderMemberApp from './pages/Member/UnderMember/UnderMemberApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -23,6 +24,9 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
+        { path: 'CheckOrderMemberApp', element: <CheckOrderMemberApp /> },
+        { path: 'UnderMemberApp', element: <UnderMemberApp /> },
+
         { path: 'blog', element: <Blog /> }
       ]
     },

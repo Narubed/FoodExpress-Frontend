@@ -19,6 +19,19 @@ const sidebarConfig = [
     icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
   },
   {
+    title: 'checkorder',
+    titleth: 'เช็คออเดอร์',
+    path: '/dashboard/CheckOrderMemberApp',
+    icon: <Icon icon="flat-color-icons:todo-list" width={22} height={22} />
+  },
+  {
+    title: 'undermember',
+    titleth: 'ผู้ใช้ใต้สังกัต',
+    path: '/dashboard/UnderMemberApp',
+    icon: <Icon icon="logos:undertow" width={22} height={22} />
+  },
+
+  {
     title: 'dashboard',
     titleth: 'กระเป๋าเงิน',
     path: '/dashboard/app',
