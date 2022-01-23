@@ -7,6 +7,7 @@ import ModalHeader from '@material-tailwind/react/ModalHeader';
 import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
+import { Box, Grid, Card, Paper, Typography, CardHeader, CardContent } from '@mui/material';
 
 export default function CheckSlipImage({ images, Name }) {
   const [showModal, setShowModal] = React.useState(false);
@@ -25,24 +26,33 @@ export default function CheckSlipImage({ images, Name }) {
         />
       </button>
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>{Name}</ModalHeader>
-        <ModalBody>
-          <Image
-            className="h-50 w-50 rounded-full"
-            src={
-              // eslint-disable-next-line global-require
-              require(`../../../assets/img/${images}`).default
-            }
-            rounded={false}
-            raised
-            alt="Rounded Image"
-          />
-        </ModalBody>
-        <ModalFooter>
-          <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
-            Close
-          </Button>
-        </ModalFooter>
+        <Card>
+          <CardContent>
+            {/* <ModalHeader toggler={() => setShowModal(false)}>{Name}</ModalHeader> */}
+            <ModalBody>
+              <Image
+                className="h-50 w-50 rounded-full"
+                src={
+                  // eslint-disable-next-line global-require
+                  require(`../../../assets/img/${images}`).default
+                }
+                rounded={false}
+                raised
+                alt="Rounded Image"
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="red"
+                buttonType="link"
+                onClick={(e) => setShowModal(false)}
+                ripple="dark"
+              >
+                Close
+              </Button>
+            </ModalFooter>
+          </CardContent>
+        </Card>
       </Modal>
     </div>
   );

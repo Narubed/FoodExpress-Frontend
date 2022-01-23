@@ -12,6 +12,7 @@ import User from './pages/User';
 import NotFound from './pages/Page404';
 import CheckOrderMemberApp from './pages/Member/CheckOrderMember/CheckOrderMemberApp';
 import UnderMemberApp from './pages/Member/UnderMember/UnderMemberApp';
+import CheckOrderDetailUnderMemberApp from './pages/Member/CheckOrderDetailUnderMember/CheckOrderDetailUnderMemberApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -26,6 +27,7 @@ export default function Router() {
         { path: 'products', element: <Products /> },
         { path: 'CheckOrderMemberApp', element: <CheckOrderMemberApp /> },
         { path: 'UnderMemberApp', element: <UnderMemberApp /> },
+        { path: 'CheckOrderDetailUnderMemberApp', element: <CheckOrderDetailUnderMemberApp /> },
 
         { path: 'blog', element: <Blog /> }
       ]

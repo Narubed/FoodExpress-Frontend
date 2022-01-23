@@ -13,44 +13,30 @@ const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
 const sidebarConfig = [
   {
-    title: 'product',
-    titleth: 'สินค้าทั้งหมด',
-    path: '/dashboard/products',
-    icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
+    title: 'rider',
+    titleth: 'หน้าหลัก',
+    path: '/rider/app',
+    icon: <Icon icon="twemoji:card-index" width={22} height={22} />
   },
   {
-    title: 'checkorder',
-    titleth: 'เช็คออเดอร์',
-    path: '/dashboard/CheckOrderMemberApp',
-    icon: <Icon icon="flat-color-icons:todo-list" width={22} height={22} />
-  },
-  {
-    title: 'checkorderdetailundermember',
-    titleth: 'ออเดอร์ผู้ใช้ใต้สังกัต',
-    path: '/dashboard/CheckOrderDetailUnderMemberApp',
-    icon: <Icon icon="logos:airtable" width={22} height={22} />
-  },
-
-  {
-    title: 'undermember',
-    titleth: 'ผู้ใช้ใต้สังกัต',
-    path: '/dashboard/UnderMemberApp',
-    icon: <Icon icon="logos:undertow" width={22} height={22} />
-  },
-
-  {
-    title: 'dashboard',
-    titleth: 'กระเป๋าเงิน',
-    path: '/dashboard/app',
-    icon: <Icon icon="emojione:money-bag" width={22} height={22} />
+    title: 'rider',
+    titleth: 'รายการที่ได้รับมอบหมาย',
+    path: '/rider/RiderTakesOrderApp',
+    icon: <Icon icon="twemoji:card-index" width={22} height={22} />
   }
-  // {
-  //   title: 'user',
-  //   titleth: 'ผู้ใช้',
-  //   path: '/dashboard/user',
-  //   icon: getIcon(peopleFill)
-  // },
 
+  // {
+  //   title: 'rider',
+  //   titleth: 'จัดการข้อมูลไรเดอร์',
+  //   path: '/admin/AdminCreateRiderApp',
+  //   icon: <Icon icon="icon-park-outline:riding" width={22} height={22} />
+  // },
+  // {
+  //   title: 'product',
+  //   titleth: 'สินค้า',
+  //   path: '/dashboard/products',
+  //   icon: getIcon(shoppingBagFill)
+  // },
   // {
   //   title: 'blog',
   //   titleth: 'บล๊อคข่าวสาร',

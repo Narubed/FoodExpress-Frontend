@@ -62,7 +62,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Icon icon="carbon:user-avatar-filled" width={36} height={36} color="#8A2BE2" />
+        <Icon icon="si-glyph:customer-support" width={30} height={30} color="#8A2BE2" />
       </IconButton>
 
       <MenuPopover
@@ -73,7 +73,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {`${sessionStorage.getItem('firstname')}  ${sessionStorage.getItem('lastname')}`}
+            Admin
             {/* {User.firstname} */}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>

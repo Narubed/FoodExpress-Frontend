@@ -217,20 +217,12 @@ function AdminMemberApp() {
   const isUserNotFound = filteredProduct.length === 0;
   return (
     <>
-      <Page title="Member | FoodExpress">
+      <Page title="underMember | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              Member
+              ผู้ใช้งานใต้สังกัต
             </Typography>
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to="/admin/AdminMemberApp/AdminCreateMemberApp"
-              startIcon={<Icon icon={plusFill} />}
-            >
-              New Member
-            </Button>
           </Stack>
           <Card>
             <UnderMemberListToolbar

@@ -79,10 +79,12 @@ export default function LoginForm() {
         }).then((value) => {
           sessionStorage.setItem('accessToken', response.accessToken);
           sessionStorage.setItem('user', response.data.rider_id);
+          sessionStorage.setItem('firstname', response.data.rider_first_name);
+          sessionStorage.setItem('lastname', response.data.rider_last_name);
           sessionStorage.setItem('role', 'Rider');
           sessionStorage.setItem('level', 'Rider');
-          navigate('/dashboard', { replace: true });
-          // window.location.href = '/';
+          // navigate('/dashboard', { replace: true });
+          window.location.href = '/';
         });
       } else {
         swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error');

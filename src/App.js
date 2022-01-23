@@ -9,6 +9,7 @@ import GlobalStyles from './theme/globalStyles';
 import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import RouterNoAccessToken from './routes_no_accessToken';
+import RouterRider from './routes_rider';
 // ----------------------------------------------------------------------
 // eslint-disable-next-line react/prefer-stateless-function
 class App extends Component {
@@ -33,6 +34,18 @@ class App extends Component {
             <GlobalStyles />
             <BaseOptionChartStyle />
             <RouterAdmin />
+          </ThemeConfig>
+        </>
+      );
+    }
+    if (role === 'Rider') {
+      return (
+        <>
+          <ThemeConfig>
+            <ScrollToTop />
+            <GlobalStyles />
+            <BaseOptionChartStyle />
+            <RouterRider />
           </ThemeConfig>
         </>
       );

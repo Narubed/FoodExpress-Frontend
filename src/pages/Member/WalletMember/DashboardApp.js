@@ -10,9 +10,9 @@ import {
   AppLastMonthIncome,
   AppTotalIncome,
   AppWebsiteVisitsMember,
-  AppCurrentVisitsMember
+  AppCurrentVisitsMember,
+  AppTrafficBySite
 } from '../../../components/_dashboard/walletmember';
-import { AppNewsUpdate, AppTrafficBySite } from '../../../components/_dashboard/app';
 import MemberWalletApp from './MemberWalletApp';
 // ----------------------------------------------------------------------
 

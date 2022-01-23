@@ -8,7 +8,6 @@ import { Icon } from '@iconify/react';
 import bellFill from '@iconify/icons-eva/bell-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import doneAllFill from '@iconify/icons-eva/done-all-fill';
-import numeral from 'numeral';
 // material
 import { alpha } from '@mui/material/styles';
 import {
@@ -128,15 +127,11 @@ NotificationItem.propTypes = {
 };
 
 function NotificationItem({ notification }) {
-  console.log(notification);
   // const { avatar, title } = renderContent(notification);
-  const title = `${notification.order_status} ${numeral(
-    notification.order_product_total
-  ).format()} บาท`;
-  //
+  const title = `${notification.order_status} ${notification.province}`;
   return (
     <ListItemButton
-      to="/dashboard/CheckOrderMemberApp"
+      to="/admin/AdminCheckOrderApp"
       disableGutters
       component={RouterLink}
       sx={{
@@ -182,11 +177,8 @@ export default function NotificationsPopover() {
   const [Total, setTotal] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const user = sessionStorage.getItem('user');
-    const getAllOrder = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getByOrderMember_id/${user}`
-    );
-    const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอชำระเงิน');
+    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`);
+    const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
     setTotal(filterStatusOrder);
     setNotifications(filterStatusOrder);
   }, []);
@@ -236,7 +228,7 @@ export default function NotificationsPopover() {
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">Notifications</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              คุณมี {Total.length} รายการที่ต้องชำระเงิน
+              คุณมี {Total.length} รายการที่ต้องตรวจสอบ
             </Typography>
           </Box>
 
