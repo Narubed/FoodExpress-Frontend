@@ -5,20 +5,14 @@ import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import {
   Box,
-  Grid,
-  Card,
-  Table,
   Checkbox,
   TableRow,
-  TableBody,
   TableCell,
-  Container,
   TableHead,
-  Typography,
   TableSortLabel,
-  Button,
-  TableContainer
+  Button
 } from '@mui/material';
+import Barcode from 'react-barcode';
 import { Icon } from '@iconify/react';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -27,27 +21,11 @@ import ModalFooter from '@material-tailwind/react/ModalFooter';
 import ButtonT from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 import { alpha, styled } from '@mui/material/styles';
-import Scrollbar from '../../Scrollbar';
 
-TakesOrderListHead.propTypes = {
+TakesOrderModalBarcode.propTypes = {
   props: PropTypes.array,
   id_order_rider_id: PropTypes.string
 };
-const RootStyle = styled(Card)(({ theme }) => ({
-  boxShadow: 'none',
-  textAlign: 'center',
-  padding: theme.spacing(5, 0),
-  color: 'theme.palette.warning.darker',
-  backgroundColor: '#F0FFFF',
-  '&:hover': {
-    background: '#F0F8FF',
-    boxShadow: '10px 10px 4px #F0FFFF'
-  },
-  '&:last-child': {
-    borderRight: 'solid 1px #cccccc'
-  }
-}));
-
 const IconWrapperStyle = styled('div')(({ theme }) => ({
   margin: 'auto',
   display: 'flex',
@@ -58,10 +36,9 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   marginBottom: theme.spacing(3)
 }));
-export default function TakesOrderListHead({ props }) {
+export default function TakesOrderModalBarcode({ props }) {
   const [showModal, setShowModal] = useState(false);
   console.log(props);
-  const emptyRows = 4;
   return (
     <>
       <TableHead>
@@ -77,7 +54,7 @@ export default function TakesOrderListHead({ props }) {
               ripple="dark"
               onClick={() => setShowModal(true)}
             >
-              <Icon icon="flat-color-icons:todo-list" width={30} height={30} />
+              <Icon icon="mdi:barcode-scan" width={30} height={30} />
             </ButtonT>
           </TableCell>
         </TableRow>
@@ -85,32 +62,13 @@ export default function TakesOrderListHead({ props }) {
       <Modal size="lg" active={showModal} toggler={() => setShowModal(false)}>
         <div>
           <ModalHeader toggler={() => setShowModal(false)}>
-            ชื่อสินค้า:{props.order_rider_product_name}
+            {props.order_rider_product_name}
           </ModalHeader>
         </div>
         <ModalBody>
-          <Grid>
-            {[props].map((m) => (
-              <Grid key={m.id_order_rider_id}>
-                <RootStyle>
-                  <IconWrapperStyle>
-                    <Button target="_blank" href={m.map}>
-                      <Icon icon="emojione:world-map" width="64" height="64" />
-                    </Button>
-                    {/* <Barcode value={m.id_order_rider_id} format="CODE128" /> */}
-                  </IconWrapperStyle>
-                  <Typography variant="h">ชื่อบริษัท : {m.order_rider_company_name} </Typography>
-                  <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                    ที่อยู่บริษัท : {m.order_rider_company_company_address}
-                  </Typography>
-                  <Typography variant="h">ชื่อผู้รับ : {m.firstname}</Typography>
-                  <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                    ที่อยู่ผู้รับ : {m.address}
-                  </Typography>
-                </RootStyle>
-              </Grid>
-            ))}
-          </Grid>
+          <IconWrapperStyle>
+            <Barcode value={props.id_order_rider_id} format="CODE128" />
+          </IconWrapperStyle>
         </ModalBody>
         <ModalFooter>
           <ButtonT

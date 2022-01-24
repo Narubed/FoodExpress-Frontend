@@ -17,7 +17,7 @@ export default function Router() {
       path: '/rider',
       element: <RiderLayout />,
       children: [
-        { element: <Navigate to="/rider/app" replace /> },
+        { element: <Navigate to="/rider/RiderTakesOrderApp" replace /> },
         { path: 'app', element: <RiderApp /> },
         { path: 'RiderTakesOrderApp', element: <RiderTakesOrderApp /> },
         { path: 'RiderTakesOrderApp/RiderCreatBarCodeApp', element: <RiderCreatBarCodeApp /> }

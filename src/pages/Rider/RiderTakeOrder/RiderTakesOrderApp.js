@@ -34,7 +34,8 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import {
   TakesOrderListHead,
   TakesOrderListToolbar,
-  TakesOrderDetail
+  TakesOrderDetail,
+  TakesOrderModalBarcode
 } from '../../../components/_rider/takesorder';
 //
 
@@ -50,6 +51,7 @@ const TABLE_HEAD = [
   // { id: 'firstname', label: 'firstname', alignRight: false },
   // { id: 'address', label: 'ที่อยู่ที่ต้องจัดส่ง', alignRight: false },
   { id: '', label: 'รายระเอียด', alignRight: false },
+  { id: '', label: 'บาร์โค๊ต', alignRight: false },
   { id: '' }
 ];
 
@@ -247,13 +249,16 @@ export default function AdminTakesOrderDetail() {
                           <TableCell align="left">{numeral(order_rider_Amount).format()}</TableCell>
                           <TableCell align="left">
                             {order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (
-                              <Label color="green">{order_rider_status}</Label>
-                            ) : (
                               <Label color="pink">{order_rider_status}</Label>
+                            ) : (
+                              <Label color="green">{order_rider_status}</Label>
                             )}
                           </TableCell>
                           <TableCell align="">
                             <TakesOrderDetail props={row} />
+                          </TableCell>
+                          <TableCell align="">
+                            <TakesOrderModalBarcode props={row} />
                           </TableCell>
                         </TableRow>
                       );
