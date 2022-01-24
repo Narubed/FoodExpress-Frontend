@@ -81,6 +81,7 @@
     "react-scripts": "^4.0.1",
     "react-table": "^7.7.0",
     "react-to-print": "^2.14.2",
+    "react-webcam-barcode-scanner": "^0.0.2-rc2",
     "redux": "^4.1.2",
     "simplebar": "^5.3.5",
     "simplebar-react": "^2.3.5",
