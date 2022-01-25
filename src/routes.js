@@ -13,6 +13,7 @@ import NotFound from './pages/Page404';
 import CheckOrderMemberApp from './pages/Member/CheckOrderMember/CheckOrderMemberApp';
 import UnderMemberApp from './pages/Member/UnderMember/UnderMemberApp';
 import CheckOrderDetailUnderMemberApp from './pages/Member/CheckOrderDetailUnderMember/CheckOrderDetailUnderMemberApp';
+import TakeOrdersMemberApp from './pages/Member/TakeOrdersMember/TakeOrdersMemberApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -28,6 +29,7 @@ export default function Router() {
         { path: 'CheckOrderMemberApp', element: <CheckOrderMemberApp /> },
         { path: 'UnderMemberApp', element: <UnderMemberApp /> },
         { path: 'CheckOrderDetailUnderMemberApp', element: <CheckOrderDetailUnderMemberApp /> },
+        { path: 'TakeOrdersMemberApp', element: <TakeOrdersMemberApp /> },
 
         { path: 'blog', element: <Blog /> }
       ]

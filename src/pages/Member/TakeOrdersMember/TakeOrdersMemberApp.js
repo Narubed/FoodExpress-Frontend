@@ -34,24 +34,18 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import {
   TakesOrderListHead,
   TakesOrderListToolbar,
-  TakesOrderDetail,
-  TakesOrderModalBarcode
-} from '../../../components/_rider/takesorder';
+  TakesOrderInputBarCode
+} from '../../../components/_dashboard/takesorder';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id_order_rider_id', label: 'รหัส barcode', alignRight: false },
   { id: 'order_rider_product_name', label: 'ชื่อสินค้า', alignRight: false },
   { id: 'order_rider_Amount', label: 'จำนวน/กิโลกรัม', alignRight: false },
   { id: 'order_rider_status', label: 'สถานะ', alignRight: false },
-  // { id: 'order_rider_company_name', label: 'ชื่อบริษัท', alignRight: false },
-  // { id: 'order_rider_company_company_address', label: 'ที่อยู่บริษัท', alignRight: false },
-  // { id: 'firstname', label: 'firstname', alignRight: false },
-  // { id: 'address', label: 'ที่อยู่ที่ต้องจัดส่ง', alignRight: false },
-  { id: '', label: 'รายระเอียด', alignRight: false },
-  { id: '', label: 'บาร์โค๊ต', alignRight: false },
+  { id: 'rider_first_name', label: 'ชื่อไรเดอร์', alignRight: false },
+  { id: 'rider_tel', label: 'เบอร์ไรเดอร์', alignRight: false },
   { id: '' }
 ];
 
@@ -86,7 +80,7 @@ function applySortFilter(array, comparator, query) {
       (_user) =>
         _user.order_rider_product_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.order_rider_status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.id_order_rider_id.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.rider_first_name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -103,15 +97,17 @@ export default function AdminTakesOrderDetail() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const rider = sessionStorage.getItem('user');
-    const getRider = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrderExpressJoinMember`
+    const user = sessionStorage.getItem('user');
+    const getOrderRider = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getAllOrderExpressJoinRider`
     );
-    const filterRider_id = getRider.data.data.filter(
-      (f) => f.order_rider_id === parseInt(rider, 10)
+    console.log(getOrderRider.data.data);
+    const filterOrder = getOrderRider.data.data.filter(
+      (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
     );
-    console.log(getRider.data.data);
-    setRiderlist(filterRider_id);
+    console.log(filterOrder);
+    // console.log(getRider.data.data);
+    setRiderlist(filterOrder);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -145,26 +141,18 @@ export default function AdminTakesOrderDetail() {
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Riderlist.length) : 0;
-
   const filteredUsers = applySortFilter(Riderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="TakeOrder | FoodExpress">
+    <Page title="TakeOrders | FoodExpress">
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
           <Typography variant="h4" gutterBottom>
-            Rider TakeOrder
+            ออเดอร์ที่ต้องได้รับจากไรเดอร์โดยตรง
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="/rider/RiderTakesOrderApp/RiderCreatBarCodeApp"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            สร้าง Barcode
-          </Button>
+          <TakesOrderInputBarCode orderList={Riderlist} />
         </Stack>
         <Card>
           <TakesOrderListToolbar
@@ -195,7 +183,9 @@ export default function AdminTakesOrderDetail() {
                         id_order_rider_id,
                         order_rider_product_name,
                         order_rider_Amount,
-                        order_rider_status
+                        order_rider_status,
+                        rider_first_name,
+                        rider_tel
                       } = row;
                       const isItemSelected = selected.indexOf(id_order_rider_id) !== -1;
 
@@ -214,9 +204,7 @@ export default function AdminTakesOrderDetail() {
                               onChange={(event) => handleClick(event, rider_first_name, rider_id)}
                             /> */}
                           </TableCell>
-                          <TableCell align="left">
-                            <Label color="blueGray">{id_order_rider_id}</Label>
-                          </TableCell>
+
                           <TableCell align="left">{order_rider_product_name}</TableCell>
                           <TableCell align="left">{numeral(order_rider_Amount).format()}</TableCell>
                           <TableCell align="left">
@@ -226,12 +214,8 @@ export default function AdminTakesOrderDetail() {
                               <Label color="green">{order_rider_status}</Label>
                             )}
                           </TableCell>
-                          <TableCell align="">
-                            <TakesOrderDetail props={row} />
-                          </TableCell>
-                          <TableCell align="">
-                            <TakesOrderModalBarcode props={row} />
-                          </TableCell>
+                          <TableCell align="left">{rider_first_name}</TableCell>
+                          <TableCell align="left">{rider_tel}</TableCell>
                         </TableRow>
                       );
                     })}

@@ -43,7 +43,14 @@ const sidebarConfig = [
     titleth: 'กระเป๋าเงิน',
     path: '/dashboard/app',
     icon: <Icon icon="emojione:money-bag" width={22} height={22} />
+  },
+  {
+    title: 'TakeOrdersMemberApp',
+    titleth: 'TakeOrders',
+    path: '/dashboard/TakeOrdersMemberApp',
+    icon: <Icon icon="fa-solid:people-carry" width={24} height={24} />
   }
+
   // {
   //   title: 'user',
   //   titleth: 'ผู้ใช้',

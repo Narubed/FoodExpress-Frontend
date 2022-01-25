@@ -90,9 +90,11 @@ export default function RegisterForm() {
   }, []);
   const handleSubmits = async (e) => {
     const orderRiderId = Date.now() + localStorage.getItem('rider_id') + SelectCompany.company_id;
+    const filterProductID = ProductType.filter((f) => f.productName === e.product_name);
     const data = {
       id_order_rider_id: orderRiderId,
       order_rider_id: localStorage.getItem('rider_id'),
+      order_rider_product_id: filterProductID[0].productid,
       order_rider_product_name: e.product_name,
       order_rider_Amount: e.product_amount,
       order_rider_company_name: SelectCompany.company_name,

@@ -3,22 +3,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 // material
 import { visuallyHidden } from '@mui/utils';
-import {
-  Box,
-  Grid,
-  Card,
-  Table,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  TableHead,
-  Typography,
-  TableSortLabel,
-  Button,
-  TableContainer
-} from '@mui/material';
+import { Grid, Card, TableRow, TableCell, TableHead, Typography, Button } from '@mui/material';
 import { Icon } from '@iconify/react';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -27,11 +12,10 @@ import ModalFooter from '@material-tailwind/react/ModalFooter';
 import ButtonT from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 import { alpha, styled } from '@mui/material/styles';
-import Scrollbar from '../../Scrollbar';
 
 TakesOrderListHead.propTypes = {
   props: PropTypes.array,
-  id_order_rider_id: PropTypes.string
+  order_rider_product_name: PropTypes.string
 };
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -60,8 +44,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 export default function TakesOrderListHead({ props }) {
   const [showModal, setShowModal] = useState(false);
-  console.log(props);
-  const emptyRows = 4;
   return (
     <>
       <TableHead>
@@ -122,18 +104,6 @@ export default function TakesOrderListHead({ props }) {
           >
             ยกเลิก
           </ButtonT>
-          {/* <Button onClick={handlePrint}> oss</Button> */}
-          {/* <Button
-            color="lightBlue"
-            buttonType="link"
-            size="regular"
-            rounded
-            block={false}
-            iconOnly
-            ripple="dark"
-          >
-            <Icon icon="flat-color-icons:print" width={32} height={32} />
-          </Button> */}
         </ModalFooter>
       </Modal>
     </>
