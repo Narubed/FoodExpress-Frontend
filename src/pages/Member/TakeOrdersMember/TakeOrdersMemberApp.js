@@ -42,7 +42,7 @@ import {
 
 const TABLE_HEAD = [
   { id: 'order_rider_product_name', label: 'ชื่อสินค้า', alignRight: false },
-  { id: 'order_rider_Amount', label: 'จำนวน/กิโลกรัม', alignRight: false },
+  { id: 'order_rider_Amount', label: 'จำนวน', alignRight: false },
   { id: 'order_rider_status', label: 'สถานะ', alignRight: false },
   { id: 'rider_first_name', label: 'ชื่อไรเดอร์', alignRight: false },
   { id: 'rider_tel', label: 'เบอร์ไรเดอร์', alignRight: false },
@@ -105,9 +105,13 @@ export default function AdminTakesOrderDetail() {
     const filterOrder = getOrderRider.data.data.filter(
       (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
     );
-    console.log(filterOrder);
+    const filterOrderStatus = filterOrder.filter(
+      (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
+    );
+    console.log(filterOrderStatus);
+
     // console.log(getRider.data.data);
-    setRiderlist(filterOrder);
+    setRiderlist(filterOrderStatus);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

@@ -14,6 +14,8 @@ import CheckOrderMemberApp from './pages/Member/CheckOrderMember/CheckOrderMembe
 import UnderMemberApp from './pages/Member/UnderMember/UnderMemberApp';
 import CheckOrderDetailUnderMemberApp from './pages/Member/CheckOrderDetailUnderMember/CheckOrderDetailUnderMemberApp';
 import TakeOrdersMemberApp from './pages/Member/TakeOrdersMember/TakeOrdersMemberApp';
+import BlogReportOrderApp from './pages/Member/BlogReportOrder/BlogsReportOrderApp';
+import StockProductApp from './pages/Member/StockProduct/StockProductApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -30,6 +32,8 @@ export default function Router() {
         { path: 'UnderMemberApp', element: <UnderMemberApp /> },
         { path: 'CheckOrderDetailUnderMemberApp', element: <CheckOrderDetailUnderMemberApp /> },
         { path: 'TakeOrdersMemberApp', element: <TakeOrdersMemberApp /> },
+        { path: 'BlogsReportOrderApp', element: <BlogReportOrderApp /> },
+        { path: 'StockProductApp', element: <StockProductApp /> },
 
         { path: 'blog', element: <Blog /> }
       ]

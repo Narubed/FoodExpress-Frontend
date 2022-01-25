@@ -100,7 +100,7 @@ export default function EcommerceShop() {
     setNumber(3);
   };
   return (
-    <Page title="Dashboard: Products | NBA-Express">
+    <Page title="Products | NBA-Express">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Products

@@ -49,6 +49,19 @@ const sidebarConfig = [
     titleth: 'TakeOrders',
     path: '/dashboard/TakeOrdersMemberApp',
     icon: <Icon icon="fa-solid:people-carry" width={24} height={24} />
+  },
+  {
+    title: 'StockProductApp',
+    titleth: 'สต๊อกสินค้า',
+    path: '/dashboard/StockProductApp',
+    icon: <Icon icon="emojione:card-file-box" width={24} height={24} />
+  },
+
+  {
+    title: 'BlogsReportOrderApp',
+    titleth: 'บล๊อคข่าวสาร',
+    path: '/dashboard/BlogsReportOrderApp',
+    icon: <Icon icon="twemoji:rolled-up-newspaper" width={24} height={24} />
   }
 
   // {
@@ -63,7 +76,7 @@ const sidebarConfig = [
   //   titleth: 'บล๊อคข่าวสาร',
   //   path: '/dashboard/blog',
   //   icon: getIcon(fileTextFill)
-  // },
+  // }
   // {
   //   title: 'login',
   //   titleth: 'เข้าสู่ระบบ',
