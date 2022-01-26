@@ -20,13 +20,10 @@ export default function StockProductApp() {
     const ReportOrders = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getStockMemberJoinProduct`
     );
-    console.log(ReportOrders.data.data);
     const filterUserID = ReportOrders.data.data.filter(
       (value) => value.stock_product_member_userid === user
     );
-    const a = filterUserID.reverse();
-    console.log(a);
-    setStock(filterUserID);
+    setStock(filterUserID.reverse());
   }, []);
   return (
     <Page title="StockProduct| NBA-Express">

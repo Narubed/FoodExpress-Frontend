@@ -62,6 +62,13 @@ const sidebarConfig = [
     titleth: 'บล๊อคข่าวสาร',
     path: '/dashboard/BlogsReportOrderApp',
     icon: <Icon icon="twemoji:rolled-up-newspaper" width={24} height={24} />
+  },
+
+  {
+    title: 'CheckOrderUnderMemberApp',
+    titleth: 'ออเดอร์ที่รอจัดส่ง',
+    path: '/dashboard/CheckOrderUnderMemberApp',
+    icon: <Icon icon="mdi:truck-delivery" width={24} height={24} />
   }
 
   // {

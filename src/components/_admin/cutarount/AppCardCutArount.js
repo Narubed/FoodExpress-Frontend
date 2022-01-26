@@ -63,6 +63,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+// eslint-disable-next-line camelcase
 export default function AppCardCutArount(props) {
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
@@ -81,8 +82,12 @@ export default function AppCardCutArount(props) {
     const filterProvince = filterCompanyStatus.filter(
       (f) => f.order_product_province === props.props.order_product_province
     );
+    const filterCutArountID = filterProvince.filter(
+      (f) => f.cut_arount_id === props.props.cut_arount_id
+    );
+
     const filtereds = [];
-    await filterProvince.forEach((item, index) => {
+    await filterCutArountID.forEach((item, index) => {
       const idx = filtereds.findIndex(
         (value) => value.order_product_name === item.order_product_name
       );

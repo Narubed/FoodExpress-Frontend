@@ -110,8 +110,8 @@ export default function AdminTakesOrderDetail() {
     const filterRider_id = getRider.data.data.filter(
       (f) => f.order_rider_id === parseInt(rider, 10)
     );
-    console.log(getRider.data.data);
-    setRiderlist(filterRider_id);
+    const reverseRider = filterRider_id.reverse();
+    setRiderlist(reverseRider);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
