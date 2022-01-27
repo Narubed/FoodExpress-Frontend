@@ -20,7 +20,11 @@ import {
   ListItemIcon,
   ListItemText,
   TableContainer,
-  Table
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -88,7 +92,14 @@ export default function CheckOrderMemberMoreMenu(props) {
       }
     });
   };
-
+  const confirmDelivery = async (req, res) => {
+    const data = {
+      order_detail_id: req.order_detail_id,
+      order_company_status: 'ได้รับสินค้าแล้ว'
+    };
+    await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail`, data);
+    setShowModal(false);
+  };
   return (
     <>
       <>
@@ -146,14 +157,19 @@ export default function CheckOrderMemberMoreMenu(props) {
             </>
           ) : null}
         </Menu>
-        <Modal size="lg" active={showModal} toggler={() => setShowModal(false)}>
-          <ModalHeader toggler={() => setShowModal(false)}>รายระเอียดออเดอร์</ModalHeader>
-          <ModalBody>
-            <div className="px-6 py-3 text-left text-sm font-medium text-gray-900 uppercase tracking-wider">
-              ราคาสินค้าทั้งหมด {numeral(order_product_total).format()} บาท
-            </div>{' '}
-            {/* <Scrollbar> */}
-            <TableContainer sx={{ minWidth: 200 }}>
+        <Dialog
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          maxWidth="xl"
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">รายระเอียดออเดอร์</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <div className="px-6 py-3 text-left text-sm font-medium text-gray-1300 uppercase tracking-wider">
+                ราคาสินค้าทั้งหมด {numeral(order_product_total).format()} บาท
+              </div>{' '}
               <div className="flex flex-col">
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -237,6 +253,13 @@ export default function CheckOrderMemberMoreMenu(props) {
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {person.order_company_status}
                               </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {person.order_company_status === 'ตัดรอบการจัดส่งแล้ว' ? (
+                                  <Button onClick={() => confirmDelivery(person)}>
+                                    ได้รับสินค้าชิ้นนี้เเล้ว
+                                  </Button>
+                                ) : null}
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -245,20 +268,21 @@ export default function CheckOrderMemberMoreMenu(props) {
                   </div>
                 </div>
               </div>
-            </TableContainer>
-            {/* </Scrollbar> */}
-          </ModalBody>
-          <ModalFooter>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
             <Button
               color="red"
               buttonType="link"
               onClick={(e) => setShowModal(false)}
               ripple="dark"
+              danger
             >
-              Close
+              ยกเลิก
             </Button>
-          </ModalFooter>
-        </Modal>
+            {/* <Button onClick={handlePrint}> oss</Button> */}
+          </DialogActions>
+        </Dialog>
       </>
     </>
   );

@@ -120,7 +120,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
       >
         <div ref={(el) => (componentRef = el)}>
           <DialogTitle id="alert-dialog-title">
-            ตำบล: {props.props.order_product_district}
+            ตำบล: {props.props.order_product_subdistrict}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
