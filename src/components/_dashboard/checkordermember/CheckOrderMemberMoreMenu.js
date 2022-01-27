@@ -29,13 +29,9 @@ import {
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 
-import Scrollbar from '../../Scrollbar';
+import CheckProductStock from './CheckProductStock';
 // ----------------------------------------------------------------------
 CheckOrderMemberMoreMenu.propTypes = {
   order_id: PropTypes.number,
@@ -49,12 +45,24 @@ export default function CheckOrderMemberMoreMenu(props) {
   const [orderDetail, setOrderDetail] = useState([]);
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [confirmExpress, setconfirmExpress] = useState(true);
   const detailOrder = async () => {
     const data = await axios.get(
       // eslint-disable-next-line camelcase
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderDetail_id/${order_id}`
     );
+    setconfirmExpress(true);
+    data.data.data.forEach((element) => {
+      if (order_status !== 'รอจัดส่ง') {
+        setconfirmExpress(false);
+      }
+      if (element.order_company_status === 'ตัดรอบการจัดส่งแล้ว') {
+        setconfirmExpress(false);
+      }
+      if (element.order_company_status === 'ยังไม่ได้จัดส่ง') {
+        setconfirmExpress(false);
+      }
+    });
     setOrderDetail(data.data.data);
     setShowModal(true);
   };
@@ -93,13 +101,41 @@ export default function CheckOrderMemberMoreMenu(props) {
     });
   };
   const confirmDelivery = async (req, res) => {
-    const data = {
-      order_detail_id: req.order_detail_id,
-      order_company_status: 'ได้รับสินค้าแล้ว'
-    };
-    await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail`, data);
+    await CheckProductStock(req);
     setShowModal(false);
   };
+  const confirmExpressStatus = () => {
+    setShowModal(false);
+    const dataConfirmExpress = {
+      order_id,
+      order_status: 'จัดส่งสำเร็จ'
+    };
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณได้รับสินค้าทั้งหมดเเล้วใช่หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ใช่, ฉันได้รับสินค้าเเล้ว!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, dataConfirmExpress);
+        Swal.fire({
+          icon: 'success',
+          title: 'ยืนยันการรับส่งสินค้าทั้งหมดแล้ว ',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 1500);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการยืนยันสินค้าเเล้ว :)', 'error');
+      }
+    });
+  };
+
   return (
     <>
       <>
@@ -170,6 +206,22 @@ export default function CheckOrderMemberMoreMenu(props) {
               <div className="px-6 py-3 text-left text-sm font-medium text-gray-1300 uppercase tracking-wider">
                 ราคาสินค้าทั้งหมด {numeral(order_product_total).format()} บาท
               </div>{' '}
+              {confirmExpress === true ? (
+                <div className="grid grid-cols-2 gap-4 place-content-end h-48">
+                  <Button
+                    color="lightBlue"
+                    buttonType="outline"
+                    size="regular"
+                    rounded={false}
+                    block={false}
+                    iconOnly={false}
+                    ripple="dark"
+                    onClick={() => confirmExpressStatus()}
+                  >
+                    ยืนยันการจัดส่งสำเร็จทั้งหมด
+                  </Button>
+                </div>
+              ) : null}
               <div className="flex flex-col">
                 <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -255,7 +307,16 @@ export default function CheckOrderMemberMoreMenu(props) {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {person.order_company_status === 'ตัดรอบการจัดส่งแล้ว' ? (
-                                  <Button onClick={() => confirmDelivery(person)}>
+                                  <Button
+                                    color="purple"
+                                    buttonType="outline"
+                                    size="regular"
+                                    rounded
+                                    block={false}
+                                    iconOnly={false}
+                                    ripple="dark"
+                                    onClick={() => confirmDelivery(person)}
+                                  >
                                     ได้รับสินค้าชิ้นนี้เเล้ว
                                   </Button>
                                 ) : null}

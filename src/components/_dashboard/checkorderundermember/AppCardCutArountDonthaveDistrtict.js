@@ -62,7 +62,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppCardCutArountDonthaveDistrtict(props) {
-  console.log(props);
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -96,6 +95,56 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.props.order_product_subdistrict]);
 
+  const CutArountOrderSubDistrict = async () => {
+    const filterMyMemberIDME = props.GetAllMembers.filter(
+      (f) => f.userId === sessionStorage.getItem('user')
+    );
+    const filterMySubDistrict = props.GetAllMembers.filter(
+      (f) => f.subdistrict === props.props.order_product_subdistrict && f.level === 'subdistrict'
+    );
+    console.log(filterMySubDistrict);
+    //
+    //
+    console.log('ตัดรอบออเดอร์ของตำบลนี้', props.props.order_product_subdistrict);
+    const min = 1000;
+    const max = 9999;
+    const createReportID =
+      85 +
+      Date.now() +
+      sessionStorage.getItem('user') +
+      Math.floor(Math.random() * (max - min) + min);
+    const setMemberDelivery = {
+      member_delivery_id: createReportID,
+      member_delivery_member_id: sessionStorage.getItem('user'),
+      member_delivery_status: 'ตัดรอบแล้ว',
+      member_delivery_province: filterMyMemberIDME[0].province,
+      member_delivery_level: filterMyMemberIDME[0].level,
+      receiver_delivery_member_id: filterMySubDistrict[0].userId
+    };
+    await axios.post(
+      `${process.env.REACT_APP_WEB_BACKEND}/portDeliveryInProvice`,
+      setMemberDelivery
+    );
+
+    const dataMemberDeliveryDetail = [];
+    DataFilterProductName.forEach((value) => {
+      const setMemberDeliveryDetail = {
+        member_delivery_id: createReportID,
+        receiver_delivery_detail_member_id: filterMySubDistrict[0].userId,
+        member_delivery_detail_product_id: value.order_product_id,
+        member_delivery_detail_product_name: value.order_product_name,
+        member_delivery_detail_product_amoumt: value.order_product_amoumt,
+        member_delivery_detail_product_currency: value.currency
+      };
+      dataMemberDeliveryDetail.push(setMemberDeliveryDetail);
+    });
+    dataMemberDeliveryDetail.map(
+      async (value) =>
+        // eslint-disable-next-line no-return-await
+        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`, value)
+    );
+    console.log(setMemberDelivery);
+  };
   return (
     <>
       <RootStyle onClick={() => setShowModal(true)}>
@@ -121,6 +170,20 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
         <div ref={(el) => (componentRef = el)}>
           <DialogTitle id="alert-dialog-title">
             ตำบล: {props.props.order_product_subdistrict}
+            <div className="flex justify-end ...">
+              <Button
+                color="red"
+                buttonType="outline"
+                size="sm"
+                rounded={false}
+                block={false}
+                iconOnly={false}
+                ripple="dark"
+                onClick={() => CutArountOrderSubDistrict()}
+              >
+                ตัดรอบออเดอร์ของตำบลนี้
+              </Button>
+            </div>
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
@@ -214,5 +277,6 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
   );
 }
 AppCardCutArountDonthaveDistrtict.propTypes = {
-  props: PropTypes.array.isRequired
+  props: PropTypes.array.isRequired,
+  GetAllMembers: PropTypes.array.isRequired
 };

@@ -16,13 +16,14 @@ function CheckOrderUnderMemberApp() {
   const [OrderDontHaveDistrict, setOrderDontHaveDistrict] = useState([]);
   const [Query, setQuery] = useState('');
   const [MyMemberMe, setMyMemberMe] = useState([]);
+  const [GetAllMembers, setGetAllMembers] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const userid = sessionStorage.getItem('user');
     const MyMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${userid}`);
     const GetAllMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
+    setGetAllMembers(GetAllMember.data.data);
     console.log(GetAllMember);
-    console.log(MyMember.data.data.province);
     // eslint-disable-next-line camelcase
     const JoinOrder_Detail = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
@@ -106,15 +107,20 @@ function CheckOrderUnderMemberApp() {
           }).map((m) => (
             // eslint-disable-next-line react/jsx-key
             <Grid item xs={12} sm={6} md={3}>
-              {/* {m.order_product_district} */}
+              {/* {m.order_product_district}  */}
+              {/* ต้องส่ง filterCheckMemberID เป็นออเดอร์ในจังหวัดทั้งหมด ยกเวินของตัวเองไปด้วย   */}
               {MyMemberMe.level === 'province' ? (
-                <AppCardCutArount key={m.order_detail_id} props={m} />
+                <AppCardCutArount key={m.order_detail_id} props={m} GetAllMembers={GetAllMembers} />
               ) : null}
             </Grid>
           ))}
           {OrderDontHaveDistrict.map((m) => (
             <Grid item xs={12} sm={6} md={3}>
-              <AppCardCutArountDonthaveDistrtict key={m.order_detail_id} props={m} />
+              <AppCardCutArountDonthaveDistrtict
+                key={m.order_detail_id}
+                props={m}
+                GetAllMembers={GetAllMembers}
+              />
             </Grid>
           ))}
         </Grid>

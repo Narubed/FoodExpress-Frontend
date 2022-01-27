@@ -64,6 +64,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppCardCutArount(props) {
+  console.log(props.GetAllMembers);
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -75,12 +76,15 @@ export default function AppCardCutArount(props) {
     const filterCompanyStatus = filterOrderStatus.filter(
       (f) => f.order_company_status === 'ตัดรอบการจัดส่งแล้ว'
     );
-    const filterProvince = filterCompanyStatus.filter(
+    const filterDeleteOrderMe = filterCompanyStatus.filter(
+      (f) => f.order_member_id !== sessionStorage.getItem('user')
+    );
+    const filterDistrict = filterDeleteOrderMe.filter(
       (f) => f.order_product_district === props.props.order_product_district
     );
 
     const filtereds = [];
-    await filterProvince.forEach((item, index) => {
+    await filterDistrict.forEach((item, index) => {
       const idx = filtereds.findIndex(
         (value) => value.order_product_name === item.order_product_name
       );
@@ -96,7 +100,62 @@ export default function AppCardCutArount(props) {
     setOrderlist(result.data.data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.props.order_product_district]);
+  const CutArountOrderDistrict = async () => {
+    const filterMyMemberIDME = props.GetAllMembers.filter(
+      (f) => f.userId === sessionStorage.getItem('user')
+    );
+    const filterMyDistrict = props.GetAllMembers.filter(
+      (f) => f.district === props.props.order_product_district && f.level === 'district'
+    );
+    console.log(filterMyDistrict);
+    //
+    //
+    console.log('ตัดรอบออเดอร์ของอำเภอนี้', props.props.order_product_district);
+    const min = 1000;
+    const max = 9999;
+    const createReportID =
+      85 +
+      Date.now() +
+      sessionStorage.getItem('user') +
+      Math.floor(Math.random() * (max - min) + min);
+    const setMemberDelivery = {
+      member_delivery_id: createReportID,
+      member_delivery_member_id: sessionStorage.getItem('user'),
+      member_delivery_status: 'ตัดรอบแล้ว',
+      member_delivery_province: filterMyMemberIDME[0].province,
+      member_delivery_level: filterMyMemberIDME[0].level,
+      receiver_delivery_member_id: filterMyDistrict[0].userId
+    };
+    await axios.post(
+      `${process.env.REACT_APP_WEB_BACKEND}/portDeliveryInProvice`,
+      setMemberDelivery
+    );
+    // console.log(setMemberDelivery);
+    const dataMemberDeliveryDetail = [];
+    DataFilterProductName.forEach(async (value) => {
+      console.log(value.order_product_id);
+      const setMemberDeliveryDetail = await {
+        member_delivery_id: createReportID,
+        member_delivery_detail_product_id: value.order_product_id,
+        member_delivery_detail_product_name: value.order_product_name,
+        member_delivery_detail_product_amoumt: value.order_product_amoumt,
+        member_delivery_detail_product_currency: value.currency
+      };
+      await axios.post(
+        `${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`,
+        setMemberDeliveryDetail
+      );
+      // dataMemberDeliveryDetail.push(setMemberDeliveryDetail);
+    });
+    // dataMemberDeliveryDetail.map(
+    // async (value) => console.log(value)
 
+    // eslint-disable-next-line no-return-await
+    // await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`, value)
+    // );
+
+    // console.log(dataMemberDeliveryDetail); ยิงได้เลย
+  };
   return (
     <>
       <RootStyle onClick={() => setShowModal(true)}>
@@ -122,7 +181,22 @@ export default function AppCardCutArount(props) {
         <div ref={(el) => (componentRef = el)}>
           <DialogTitle id="alert-dialog-title">
             อำเภอ: {props.props.order_product_district}
+            <div className="flex justify-end ...">
+              <Button
+                color="lightBlue"
+                buttonType="outline"
+                size="sm"
+                rounded={false}
+                block={false}
+                iconOnly={false}
+                ripple="dark"
+                onClick={() => CutArountOrderDistrict()}
+              >
+                ตัดรอบออเดอร์ของอำเภอนี้
+              </Button>
+            </div>
           </DialogTitle>
+
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <div className="flex flex-col">
@@ -215,5 +289,6 @@ export default function AppCardCutArount(props) {
   );
 }
 AppCardCutArount.propTypes = {
-  props: PropTypes.array.isRequired
+  props: PropTypes.array.isRequired,
+  GetAllMembers: PropTypes.array.isRequired
 };
