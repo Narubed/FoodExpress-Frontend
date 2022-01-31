@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 // material
-import { Container, Stack, Typography, Button } from '@mui/material';
+import { Container, Stack, Typography, Button, Input } from '@mui/material';
 // components
 import Page from '../../../components/Page';
 import {
@@ -26,6 +26,8 @@ export default function EcommerceShop() {
   const [count, setCount] = useState([]);
   const [Types, setTypes] = useState([]);
   const [number, setNumber] = useState();
+
+  const [showNum, setNum] = useState();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -99,6 +101,7 @@ export default function EcommerceShop() {
     setFilterProductsType(valueSort);
     setNumber(3);
   };
+
   return (
     <Page title="Products | NBA-Express">
       <Container>

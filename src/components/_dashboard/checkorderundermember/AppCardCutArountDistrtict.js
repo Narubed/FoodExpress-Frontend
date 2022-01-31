@@ -5,12 +5,12 @@ import { useEffect, useState, useRef, useReactToPrint } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Button from '@material-tailwind/react/Button';
-import Input from '@material-tailwind/react/Input';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import ReactToPrint from 'react-to-print';
+import Input from '@material-tailwind/react/Input';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -28,11 +28,11 @@ const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
   textAlign: 'center',
   padding: theme.spacing(5, 0),
-  color: theme.palette.info.darker,
-  backgroundColor: theme.palette.info.lighter,
+  color: theme.palette.error.darker,
+  backgroundColor: theme.palette.error.lighter,
   '&:hover': {
-    background: theme.palette.info.lighter,
-    boxShadow: '10px 10px 4px blue'
+    background: theme.palette.error.lighter,
+    boxShadow: '10px 10px 4px red'
   },
   '&:last-child': {
     borderRight: 'solid 1px #cccccc'
@@ -48,24 +48,23 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(8),
   justifyContent: 'center',
   marginBottom: theme.spacing(3),
-  color: theme.palette.info.dark,
-
+  color: theme.palette.error.dark,
   '&:hover': {
-    background: theme.palette.info.lighter,
-    boxShadow: '10px 10px 4px blue'
+    background: theme.palette.error.lighter,
+    boxShadow: '10px 10px 4px red'
   },
   '&:last-child': {
     borderRight: 'solid 1px #cccccc'
   },
-  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.info.dark, 0)} 0%, ${alpha(
-    theme.palette.info.dark,
+  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
+    theme.palette.error.dark,
     0.24
   )} 100%)`
 }));
-
 // ----------------------------------------------------------------------
 
-export default function AppCardCutArount(props) {
+export default function AppCardCutArountDistrtict(props) {
+  console.log(props);
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -73,27 +72,30 @@ export default function AppCardCutArount(props) {
   const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
   const [showNoProductINStock, setNoProductINStock] = useState([]);
   const [showValueNOTEnough, setValueNOTEnough] = useState([]);
+
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const result = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Detail`);
     const filterOrderStatus = result.data.data.filter((f) => f.order_status === 'รอจัดส่ง');
+    console.log(filterOrderStatus);
     const filterCompanyStatus = filterOrderStatus.filter(
       (f) => f.order_company_status === 'ตัดรอบการจัดส่งแล้ว'
     );
-    const filterStatusINProvince = filterCompanyStatus.filter(
-      (f) => f.order_status_in_province === 'จังหวัดยังไม่ได้จัดส่ง'
+    const filterProvince = filterCompanyStatus.filter(
+      (f) => f.order_product_subdistrict === props.props.order_product_subdistrict
     );
-
+    const filterStatusINProvince = filterProvince.filter(
+      (f) =>
+        f.order_status_in_province === 'จังหวัดยังไม่ได้จัดส่ง' ||
+        f.order_status_in_province === 'จังหวัดตัดรอบการจัดส่งแล้ว'
+    );
     const filterDeleteOrderMe = filterStatusINProvince.filter(
       (f) => f.order_member_id !== sessionStorage.getItem('user')
     );
-    const filterDistrict = filterDeleteOrderMe.filter(
-      (f) => f.order_product_district === props.props.order_product_district
-    );
 
     const filtereds = [];
-    await filterDistrict.forEach((item, index) => {
+    await filterDeleteOrderMe.forEach((item) => {
       const idx = filtereds.findIndex(
         (value) => value.order_product_name === item.order_product_name
       );
@@ -107,7 +109,8 @@ export default function AppCardCutArount(props) {
     });
     setDataFilterProductName(filtereds);
     setOrderlist(result.data.data);
-  }, [props.props.order_product_district]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.props.order_product_subdistrict]);
 
   const confirmAppCardCutArount = async () => {
     setShowModal(false);
@@ -136,10 +139,11 @@ export default function AppCardCutArount(props) {
     const alertValueNOTEnough = [];
     const valuesPutStockMember = [];
     const valueReportMember = [];
-    DataFilterProductName.forEach((value, index) => {
+    DataFilterProductName.forEach((value) => {
       const filterINStock = GetStockMe.data.data.filter(
         (f) => f.stock_product_id === parseInt(value.order_product_id, 10)
       );
+
       if (filterINStock.length === 0) {
         alertNoProductINStock.push(value);
       } else if (filterINStock[0].stock_product_amount < value.order_product_amoumt) {
@@ -152,6 +156,7 @@ export default function AppCardCutArount(props) {
         });
       }
     });
+
     setNoProductINStock(alertNoProductINStock);
     setValueNOTEnough(alertValueNOTEnough);
     if (alertNoProductINStock.length > 0) {
@@ -182,9 +187,9 @@ export default function AppCardCutArount(props) {
         );
         //-----
         const dataChangeOrderDetail = {
-          // เปลี่ยนเป็นยิงใน status จังหวัดแทน
+          // เปลี่ยนเป็นยิงใน status อำเภอแทน
           order_detail_id: value.order_detail_id,
-          order_status_in_province: 'จังหวัดตัดรอบการจัดส่งแล้ว'
+          order_status_in_province: 'อำเภอตัดรอบการจัดส่งแล้ว'
         };
         await axios.put(
           `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
@@ -196,16 +201,19 @@ export default function AppCardCutArount(props) {
         async (value) =>
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
       );
-      await CutArountOrderDistrict();
+      await CutArountOrderSubDistrict();
     }
   };
-  const CutArountOrderDistrict = async () => {
+
+  const CutArountOrderSubDistrict = async () => {
     const filterMyMemberIDME = props.GetAllMembers.filter(
       (f) => f.userId === sessionStorage.getItem('user')
     );
-    const filterMyDistrict = props.GetAllMembers.filter(
-      (f) => f.district === props.props.order_product_district && f.level === 'district'
+    const filterMySubDistrict = props.GetAllMembers.filter(
+      (f) => f.subdistrict === props.props.order_product_subdistrict && f.level === 'subdistrict'
     );
+    //
+    //
     const min = 1000;
     const max = 9999;
     const createReportID =
@@ -219,28 +227,29 @@ export default function AppCardCutArount(props) {
       member_delivery_status: 'ตัดรอบแล้ว',
       member_delivery_province: filterMyMemberIDME[0].province,
       member_delivery_level: filterMyMemberIDME[0].level,
-      receiver_delivery_member_id: filterMyDistrict[0].userId
+      receiver_delivery_member_id: filterMySubDistrict[0].userId
     };
     await axios.post(
       `${process.env.REACT_APP_WEB_BACKEND}/portDeliveryInProvice`,
       setMemberDelivery
     );
+
     const dataMemberDeliveryDetail = [];
-    await DataFilterProductName.forEach(async (value) => {
-      const setMemberDeliveryDetail = await {
+    DataFilterProductName.forEach((value) => {
+      const setMemberDeliveryDetail = {
         member_delivery_id: createReportID,
         member_delivery_detail_product_id: parseInt(value.order_product_id, 10),
         member_delivery_detail_product_name: value.order_product_name,
         member_delivery_detail_product_amoumt: value.order_product_amoumt,
         member_delivery_detail_product_currency: value.currency
       };
-
       dataMemberDeliveryDetail.push(setMemberDeliveryDetail);
     });
-    dataMemberDeliveryDetail.forEach(async (value) => {
-      await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`, value);
-    });
-
+    dataMemberDeliveryDetail.map(
+      async (value) =>
+        // eslint-disable-next-line no-return-await
+        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`, value)
+    );
     Swal.fire({
       position: '',
       icon: 'success',
@@ -252,7 +261,6 @@ export default function AppCardCutArount(props) {
       window.location.reload(false);
     }, 2500);
   };
-
   return (
     <>
       <RootStyle onClick={() => setShowModal(true)}>
@@ -260,9 +268,14 @@ export default function AppCardCutArount(props) {
           <CheckCircleOutlined style={{ fontSize: '28px' }} />
         </IconWrapperStyle>
         <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-          อำเภอ
+          ตำบล
         </Typography>
-        <Typography variant="h3">{props.props.order_product_district}</Typography>
+        <Typography variant="h3">{props.props.order_product_subdistrict}</Typography>
+        <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+          {/* {props.props.cut_arount_date
+            ? dayjs(props.props.cut_arount_date).locale('th').format('DD MMMM YYYY')
+            : null} */}
+        </Typography>
       </RootStyle>
       <Dialog
         open={showModal}
@@ -272,10 +285,10 @@ export default function AppCardCutArount(props) {
       >
         <div ref={(el) => (componentRef = el)}>
           <DialogTitle id="alert-dialog-title">
-            อำเภอ: {props.props.order_product_district}
+            ตำบล: {props.props.order_product_subdistrict}
             <div className="flex justify-end ...">
               <Button
-                color="lightBlue"
+                color="red"
                 buttonType="outline"
                 size="sm"
                 rounded={false}
@@ -284,11 +297,10 @@ export default function AppCardCutArount(props) {
                 ripple="dark"
                 onClick={() => confirmAppCardCutArount()}
               >
-                ตัดรอบออเดอร์ของอำเภอนี้
+                ตัดรอบออเดอร์ของตำบลนี้
               </Button>
             </div>
           </DialogTitle>
-
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <div className="flex flex-col">
@@ -352,7 +364,7 @@ export default function AppCardCutArount(props) {
           <Button
             color="red"
             buttonType="link"
-            onClick={(e) => setShowModal(false)}
+            onClick={() => setShowModal(false)}
             ripple="dark"
             danger
           >
@@ -447,7 +459,7 @@ export default function AppCardCutArount(props) {
     </>
   );
 }
-AppCardCutArount.propTypes = {
+AppCardCutArountDistrtict.propTypes = {
   props: PropTypes.array.isRequired,
   GetAllMembers: PropTypes.array.isRequired
 };

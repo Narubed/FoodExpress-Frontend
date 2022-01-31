@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 /* eslint-disable no-undef */
 import { Icon } from '@iconify/react';
 import { useEffect, useState, useRef, useReactToPrint } from 'react';
@@ -9,6 +10,7 @@ import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import ReactToPrint from 'react-to-print';
+import Input from '@material-tailwind/react/Input';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -65,6 +67,11 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showAlertNoProductINStock, setAlertNoProductINStock] = useState(false);
+  const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
+  const [showNoProductINStock, setNoProductINStock] = useState([]);
+  const [showValueNOTEnough, setValueNOTEnough] = useState([]);
+
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -76,9 +83,15 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     const filterProvince = filterCompanyStatus.filter(
       (f) => f.order_product_subdistrict === props.props.order_product_subdistrict
     );
+    const filterStatusINProvince = filterProvince.filter(
+      (f) => f.order_status_in_province === 'จังหวัดยังไม่ได้จัดส่ง'
+    );
+    const filterDeleteOrderMe = filterStatusINProvince.filter(
+      (f) => f.order_member_id !== sessionStorage.getItem('user')
+    );
 
     const filtereds = [];
-    await filterProvince.forEach((item, index) => {
+    await filterDeleteOrderMe.forEach((item, index) => {
       const idx = filtereds.findIndex(
         (value) => value.order_product_name === item.order_product_name
       );
@@ -95,6 +108,99 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.props.order_product_subdistrict]);
 
+  const confirmAppCardCutArount = async () => {
+    setShowModal(false);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการตัดรอบสินค้านี้หรือไม่!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ตกลง!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await CheckProductStock();
+      }
+    });
+  };
+  const CheckProductStock = async () => {
+    const GetStockMe = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${sessionStorage.getItem(
+        'user'
+      )}`
+    );
+
+    const alertNoProductINStock = [];
+    const alertValueNOTEnough = [];
+    const valuesPutStockMember = [];
+    const valueReportMember = [];
+    DataFilterProductName.forEach((value, index) => {
+      const filterINStock = GetStockMe.data.data.filter(
+        (f) => f.stock_product_id === parseInt(value.order_product_id, 10)
+      );
+
+      if (filterINStock.length === 0) {
+        alertNoProductINStock.push(value);
+      } else if (filterINStock[0].stock_product_amount < value.order_product_amoumt) {
+        alertValueNOTEnough.push(value);
+      } else {
+        valueReportMember.push(value);
+        valuesPutStockMember.push({
+          id_stock_product_member_id: filterINStock[0].id_stock_product_member_id,
+          stock_product_amount: filterINStock[0].stock_product_amount - value.order_product_amoumt
+        });
+      }
+    });
+
+    setNoProductINStock(alertNoProductINStock);
+    setValueNOTEnough(alertValueNOTEnough);
+    if (alertNoProductINStock.length > 0) {
+      setAlertNoProductINStock(true);
+      setShowModal(false);
+    }
+    if (alertValueNOTEnough.length > 0) {
+      setalertValueNOTEnough(true);
+      setShowModal(false);
+    }
+    if (alertNoProductINStock.length === 0 && alertValueNOTEnough.length === 0) {
+      valueReportMember.forEach(async (value, index) => {
+        const ID = Date.now() + value.order_member_id + index;
+        const dataReportMember = {
+          report_order_id: ID,
+          id_order_rider_id: ID,
+          report_order_member_userid: parseInt(sessionStorage.getItem('user'), 10),
+          report_order_product_id: parseInt(value.order_product_id, 10),
+          report_order_product_name: value.order_product_name,
+          report_order_product_amount_in: 0,
+          report_order_product_amount_out: parseInt(value.order_product_amoumt, 10),
+          report_order_status: 'จ่ายออก'
+        };
+        // ยิง --------
+        await axios.post(
+          `${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`,
+          dataReportMember
+        );
+        //-----
+        const dataChangeOrderDetail = {
+          // เปลี่ยนเป็นยิงใน status จังหวัดแทน
+          order_detail_id: value.order_detail_id,
+          order_status_in_province: 'จังหวัดตัดรอบการจัดส่งแล้ว'
+        };
+        await axios.put(
+          `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
+          dataChangeOrderDetail
+        );
+      });
+
+      valuesPutStockMember.map(
+        async (value) =>
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
+      );
+      await CutArountOrderSubDistrict();
+    }
+  };
+
   const CutArountOrderSubDistrict = async () => {
     const filterMyMemberIDME = props.GetAllMembers.filter(
       (f) => f.userId === sessionStorage.getItem('user')
@@ -102,10 +208,8 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     const filterMySubDistrict = props.GetAllMembers.filter(
       (f) => f.subdistrict === props.props.order_product_subdistrict && f.level === 'subdistrict'
     );
-    console.log(filterMySubDistrict);
     //
     //
-    console.log('ตัดรอบออเดอร์ของตำบลนี้', props.props.order_product_subdistrict);
     const min = 1000;
     const max = 9999;
     const createReportID =
@@ -130,8 +234,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     DataFilterProductName.forEach((value) => {
       const setMemberDeliveryDetail = {
         member_delivery_id: createReportID,
-        receiver_delivery_detail_member_id: filterMySubDistrict[0].userId,
-        member_delivery_detail_product_id: value.order_product_id,
+        member_delivery_detail_product_id: parseInt(value.order_product_id, 10),
         member_delivery_detail_product_name: value.order_product_name,
         member_delivery_detail_product_amoumt: value.order_product_amoumt,
         member_delivery_detail_product_currency: value.currency
@@ -143,7 +246,16 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
         // eslint-disable-next-line no-return-await
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portDeliveryDetailInProvice`, value)
     );
-    console.log(setMemberDelivery);
+    Swal.fire({
+      position: '',
+      icon: 'success',
+      title: 'คุณได้ทำการยืนยันการตัดรอบแล้ว ',
+      showConfirmButton: false,
+      timer: 2500
+    });
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 2500);
   };
   return (
     <>
@@ -179,7 +291,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
                 block={false}
                 iconOnly={false}
                 ripple="dark"
-                onClick={() => CutArountOrderSubDistrict()}
+                onClick={() => confirmAppCardCutArount()}
               >
                 ตัดรอบออเดอร์ของตำบลนี้
               </Button>
@@ -271,6 +383,73 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
             )}
             content={() => componentRef}
           />
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        open={showAlertNoProductINStock}
+        onClose={() => setAlertNoProductINStock(false)}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title"> {`ไม่มีสินค้าชิ้นนี้ในสต๊อก  `}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {showNoProductINStock.map((m) => (
+              <>
+                <br />
+                <Input
+                  disabled
+                  type="text"
+                  color="lightBlue"
+                  size="regular"
+                  outline={false}
+                  placeholder="ชื่อสินค้า"
+                  defaultValue={m.order_product_name}
+                />
+              </>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="pink" onClick={() => setAlertNoProductINStock(false)}>
+            ออก
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        open={showalertValueNOTEnough}
+        onClose={() => setalertValueNOTEnough(false)}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {' '}
+          {`สินค้าในสต๊อกมีไม่เพียงพอต่อการจำหน่าย  `}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {showValueNOTEnough.map((m) => (
+              <>
+                <br />
+                <Input
+                  disabled
+                  type="text"
+                  color="lightBlue"
+                  size="regular"
+                  outline={false}
+                  placeholder="ชื่อสินค้า"
+                  defaultValue={m.order_product_name}
+                />
+              </>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="pink" onClick={() => setalertValueNOTEnough(false)}>
+            ออก
+          </Button>
         </DialogActions>
       </Dialog>
     </>

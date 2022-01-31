@@ -32,20 +32,19 @@ import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 import {
-  TakesOrderListHead,
-  TakesOrderListToolbar,
-  TakesOrderInputBarCode
-} from '../../../components/_dashboard/takesorder';
+  TakesOrderInProvinceListHead,
+  TakesOrderInProvinceListToolbar,
+  TakesOrderInProvinceInputBarCode
+} from '../../../components/_dashboard/takesorderinprovince';
 //
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'order_rider_product_name', label: 'ชื่อสินค้า', alignRight: false },
-  { id: 'order_rider_Amount', label: 'จำนวน', alignRight: false },
-  { id: 'order_rider_status', label: 'สถานะ', alignRight: false },
-  { id: 'rider_first_name', label: 'ชื่อไรเดอร์', alignRight: false },
-  { id: 'rider_tel', label: 'เบอร์ไรเดอร์', alignRight: false },
+  { id: 'member_delivery_level', label: 'ระดับที่ส่งของให้', alignRight: false },
+  { id: 'member_delivery_status', label: 'สถานะ', alignRight: false },
+  { id: 'firstname', label: 'ชื่อคนส่งสินค้า', alignRight: false },
+  { id: 'tel', label: 'เบอร์ผู้ส่ง', alignRight: false },
   { id: '' }
 ];
 
@@ -86,8 +85,8 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function AdminTakesOrderDetail() {
-  const [Riderlist, setRiderlist] = useState([]);
+export default function TakeOrdersInProvinceApp() {
+  const [DeliveryList, setDeliverList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -98,16 +97,15 @@ export default function AdminTakesOrderDetail() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const user = sessionStorage.getItem('user');
-    const getOrderRider = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getAllOrderExpressJoinRider`
+
+    const getDeliveryDetail = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoinDeliveryProviceAndMemberDelivery`
     );
-    const filterOrder = getOrderRider.data.data.filter(
-      (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
+    const filterUserID = getDeliveryDetail.data.data.filter(
+      (f) => parseInt(f.receiver_delivery_member_id, 10) === parseInt(user, 10)
     );
-    const filterOrderStatus = filterOrder.filter(
-      (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
-    );
-    setRiderlist(filterOrderStatus);
+    const filterStatus = filterUserID.filter((f) => f.member_delivery_status === 'ตัดรอบแล้ว');
+    setDeliverList(filterStatus);
   }, []);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -117,8 +115,8 @@ export default function AdminTakesOrderDetail() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Riderlist.map((n) => n.rider_first_name);
-      const newSelectedsid = Riderlist.map((n) => n.rider_id);
+      const newSelecteds = DeliveryList.map((n) => n.rider_first_name);
+      const newSelectedsid = DeliveryList.map((n) => n.rider_id);
       setSelected(newSelecteds);
       setSelected_id(newSelectedsid);
       return;
@@ -140,8 +138,8 @@ export default function AdminTakesOrderDetail() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Riderlist.length) : 0;
-  const filteredUsers = applySortFilter(Riderlist, getComparator(order, orderBy), filterName);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DeliveryList.length) : 0;
+  const filteredUsers = applySortFilter(DeliveryList, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -150,12 +148,12 @@ export default function AdminTakesOrderDetail() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
           <Typography variant="h4" gutterBottom>
-            ออเดอร์ที่ต้องได้รับจากไรเดอร์โดยตรง
+            ออเดอร์ที่ต้องได้รับภายในจังหวัด
           </Typography>
-          <TakesOrderInputBarCode orderList={Riderlist} />
+          <TakesOrderInProvinceInputBarCode DeliveryList={DeliveryList} />
         </Stack>
         <Card>
-          <TakesOrderListToolbar
+          <TakesOrderInProvinceListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -166,11 +164,11 @@ export default function AdminTakesOrderDetail() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <TakesOrderListHead
+                <TakesOrderInProvinceListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={Riderlist.length}
+                  rowCount={DeliveryList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -180,19 +178,18 @@ export default function AdminTakesOrderDetail() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const {
-                        id_order_rider_id,
-                        order_rider_product_name,
-                        order_rider_Amount,
-                        order_rider_status,
-                        rider_first_name,
-                        rider_tel
+                        member_delivery_id,
+                        member_delivery_level,
+                        member_delivery_status,
+                        firstname,
+                        tel
                       } = row;
-                      const isItemSelected = selected.indexOf(id_order_rider_id) !== -1;
+                      const isItemSelected = selected.indexOf(member_delivery_id) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id_order_rider_id}
+                          key={member_delivery_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -204,18 +201,27 @@ export default function AdminTakesOrderDetail() {
                               onChange={(event) => handleClick(event, rider_first_name, rider_id)}
                             /> */}
                           </TableCell>
-
-                          <TableCell align="left">{order_rider_product_name}</TableCell>
-                          <TableCell align="left">{numeral(order_rider_Amount).format()}</TableCell>
                           <TableCell align="left">
-                            {order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (
-                              <Label color="pink">{order_rider_status}</Label>
+                            {member_delivery_level === 'province' ? (
+                              <Label color="pink"> ระดับจังหวัด</Label>
+                            ) : null}
+                            {member_delivery_level === 'district' ? (
+                              <Label color="lightBlue"> ระดับอำเภอ</Label>
+                            ) : null}
+                            {member_delivery_level === 'subdistrict' ? (
+                              <Label color="amber"> ระดับตำบล</Label>
+                            ) : null}
+                            {/* <Label color="blueGray"> {level}</Label> */}
+                          </TableCell>
+                          <TableCell align="left">
+                            {member_delivery_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (
+                              <Label color="pink">{member_delivery_status}</Label>
                             ) : (
-                              <Label color="green">{order_rider_status}</Label>
+                              <Label color="green">{member_delivery_status}</Label>
                             )}
                           </TableCell>
-                          <TableCell align="left">{rider_first_name}</TableCell>
-                          <TableCell align="left">{rider_tel}</TableCell>
+                          <TableCell align="left">{firstname}</TableCell>
+                          <TableCell align="left">{tel}</TableCell>
                         </TableRow>
                       );
                     })}

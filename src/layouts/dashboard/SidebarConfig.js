@@ -46,10 +46,17 @@ const sidebarConfig = [
   },
   {
     title: 'TakeOrdersMemberApp',
-    titleth: 'TakeOrders',
+    titleth: 'รับสินค้าโดยตรง',
     path: '/dashboard/TakeOrdersMemberApp',
+    icon: <Icon icon="emojione:delivery-truck" width={24} height={24} />
+  },
+  {
+    title: 'TakeOrdersMemberApp',
+    titleth: 'รับสินค้าภายในจังหวัด',
+    path: '/dashboard/TakeOrdersInProvinceApp',
     icon: <Icon icon="fa-solid:people-carry" width={24} height={24} />
   },
+
   {
     title: 'StockProductApp',
     titleth: 'สต๊อกสินค้า',

@@ -45,6 +45,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
         report_order_product_id: result.order_rider_product_id,
         report_order_product_name: result.order_rider_product_name,
         report_order_product_amount_in: result.order_rider_Amount,
+        report_order_product_amount_out: 0,
         report_order_status: 'รับเข้า'
       };
       await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`, reportOrder);

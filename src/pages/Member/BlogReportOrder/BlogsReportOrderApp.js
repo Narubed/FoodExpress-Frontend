@@ -24,10 +24,10 @@ export default function BlogsReportOrderApp() {
       `${process.env.REACT_APP_WEB_BACKEND}/getReportOrderMemberJoinProduct`
     );
     const filterUserID = ReportOrders.data.data.filter(
-      (value) => value.report_order_member_userid === parseInt(user, 10)
+      (value) => value.report_order_member_userid === user
     );
     const a = filterUserID.reverse();
-    console.log(a);
+    console.log(ReportOrders.data.data);
     setReportOrder(filterUserID);
   }, []);
   return (

@@ -1,0 +1,13 @@
+     <div>
+          <form action="https://api.globalprimepay.com/gbp/gateway/qrcode" method="POST">
+            <input
+              type="hidden"
+              name="token"
+              value="XIJUlredH9ygOmg6twOcupbIJZfMvYBrzWUFzc4TcMPOphcPYsXIBc6ZK0TO1rusQ8RHgV0LwKjkpq5fKhtp8WVkF1lMgx4IMy2q14TWJo4Dpa"
+            />
+            <input type="hidden" name="referenceNo" value="220128112907765" />
+            <input type="number" name="amount" maxLength="13" placeholder="Amount" value="1.00" />
+            <br />
+            <input id="button" type="submit" value="Pay Now" />
+          </form>
+        </div>

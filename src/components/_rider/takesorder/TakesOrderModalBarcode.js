@@ -20,11 +20,12 @@ import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import ButtonT from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 TakesOrderModalBarcode.propTypes = {
   props: PropTypes.array,
-  id_order_rider_id: PropTypes.string
+  id_order_rider_id: PropTypes.string,
+  order_rider_product_name: PropTypes.string
 };
 const IconWrapperStyle = styled('div')(({ theme }) => ({
   margin: 'auto',

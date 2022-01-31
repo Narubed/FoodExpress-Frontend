@@ -17,6 +17,8 @@ import TakeOrdersMemberApp from './pages/Member/TakeOrdersMember/TakeOrdersMembe
 import BlogReportOrderApp from './pages/Member/BlogReportOrder/BlogsReportOrderApp';
 import StockProductApp from './pages/Member/StockProduct/StockProductApp';
 import CheckOrderUnderMemberApp from './pages/Member/CheckOrderUnderMember/CheckOrderUnderMemberApp';
+import CheckOrderMemberCreatBarCodeApp from './pages/Member/CheckOrderUnderMember/CheckOrderMemberCreatBarCodeApp';
+import TakeOrdersInProvinceApp from './pages/Member/TakeOrdersInProvince/TakeOrdersInProvinceApp';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +39,11 @@ export default function Router() {
         { path: 'BlogsReportOrderApp', element: <BlogReportOrderApp /> },
         { path: 'StockProductApp', element: <StockProductApp /> },
         { path: 'CheckOrderUnderMemberApp', element: <CheckOrderUnderMemberApp /> },
+        {
+          path: 'CheckOrderUnderMemberApp/CheckOrderMemberCreatBarCodeApp',
+          element: <CheckOrderMemberCreatBarCodeApp />
+        },
+        { path: 'TakeOrdersInProvinceApp', element: <TakeOrdersInProvinceApp /> },
 
         { path: 'blog', element: <Blog /> }
       ]
