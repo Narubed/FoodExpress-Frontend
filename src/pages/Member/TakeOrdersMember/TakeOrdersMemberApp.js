@@ -152,7 +152,7 @@ export default function AdminTakesOrderDetail() {
           <Typography variant="h4" gutterBottom>
             ออเดอร์ที่ต้องได้รับจากไรเดอร์โดยตรง
           </Typography>
-          <TakesOrderInputBarCode orderList={Riderlist} />
+          <TakesOrderInputBarCode orderList={Riderlist} key={Riderlist.length} />
         </Stack>
         <Card>
           <TakesOrderListToolbar

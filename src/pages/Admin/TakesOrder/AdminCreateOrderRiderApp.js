@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -41,12 +41,20 @@ import {
   TableContainer,
   TablePagination,
   MenuItem,
-  Box
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
 } from '@mui/material';
 // companent
 import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
 // ----------------------------------------------------------------------
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -63,7 +71,9 @@ export default function RegisterForm() {
   const [SelectprovinceMember, setSelectprovinceMember] = useState([]); // ค่าที่ถูก Select แล้ว
 
   const [CutArountProvince, setCutArountProvince] = useState([]); // ตัดรอบของจังหวัดอะไร
-
+  const [open, setOpen] = useState(false);
+  const [IDCutArount, setIDCutArount] = useState();
+  const [dataPostExpress, setPostExpress] = useState();
   const RegisterSchema = Yup.object().shape({
     product_name: Yup.string()
       .min(2, 'Too Short!')
@@ -71,6 +81,7 @@ export default function RegisterForm() {
       .required('product_name is required'),
     product_amount: Yup.number().required('product_amount is required')
   });
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
@@ -101,27 +112,28 @@ export default function RegisterForm() {
       order_rider_company_company_address: SelectCompany.company_address,
       order_rider_member_userid: SelectMembers.userId,
       order_rider_member_address: SelectMembers.address,
-      order_rider_status: 'ไรเดอร์รับมอบหมายงานแล้ว',
-      order_rider_date_cut_arount: value,
-      order_rider_province_cut_arount: CutArountProvince
+      order_rider_status: 'ไรเดอร์รับมอบหมายงานแล้ว'
     };
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, data);
-        Swal.fire('Success!', 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
+    // set MOdal true
+    setPostExpress(data);
+    setOpen(true);
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่ !',
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#3085d6',
+    //   cancelButtonColor: '#d33',
+    //   confirmButtonText: 'Yes, need it!'
+    // }).then(async (result) => {
+    //   if (result.isConfirmed) {
+    //     await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, data);
+    //     Swal.fire('Success!', 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.', 'success');
+    //     setTimeout(() => {
+    //       window.location.reload(false);
+    //     }, 1500);
+    //   }
+    // });
   };
   const formik = useFormik({
     initialValues: {
@@ -144,8 +156,53 @@ export default function RegisterForm() {
     setSelectMembers(data);
     setModalSelectAddress(false);
   };
-  const handleChange = (newValue) => {
-    setValue(newValue);
+
+  const handleConfirmCutArountID = async () => {
+    const getDataCutArountByID = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getByOrderCutArountID/${IDCutArount}`
+    );
+    console.log(getDataCutArountByID.data.data);
+
+    if (getDataCutArountByID.data.data.length !== 0) {
+      const CutArountID = getDataCutArountByID.data.data;
+      const DataExpress = {
+        id_order_rider_id: dataPostExpress.id_order_rider_id,
+        order_rider_id: dataPostExpress.order_rider_id,
+        order_rider_product_id: dataPostExpress.order_rider_product_id,
+        order_rider_product_name: dataPostExpress.order_rider_product_name,
+        order_rider_Amount: dataPostExpress.order_rider_Amount,
+        order_rider_company_name: dataPostExpress.order_rider_company_name,
+        order_rider_company_company_address: dataPostExpress.order_rider_company_company_address,
+        order_rider_member_userid: dataPostExpress.order_rider_member_userid,
+        order_rider_member_address: dataPostExpress.order_rider_member_address,
+        order_rider_status: dataPostExpress.order_rider_status,
+        order_rider_cut_arount_id: parseInt(CutArountID[0].cut_arount_id, 10),
+        order_rider_date_cut_arount: CutArountID[0].cut_arount_date,
+        order_rider_province_cut_arount: CutArountID[0].cut_arount_province
+      };
+      console.log(DataExpress);
+      Swal.fire({
+        icon: 'success',
+        title: 'Confirm !',
+        text: 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, DataExpress);
+      setTimeout(() => {
+        window.location.reload(false);
+      }, 2000);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error !',
+        text: 'ค้นหา รหัสที่ถูกตัดรอบนี้ไม่เจอ.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    }
+
+    setOpen(false);
   };
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -259,52 +316,6 @@ export default function RegisterForm() {
                 </Stack>
 
                 {/* -------------------------------------------------------------------------------------------------------------------------- */}
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <Box
-                    component="form"
-                    sx={{
-                      '& .MuiTextField-root': { mr: 40, width: '100%' }
-                    }}
-                    noValidate
-                    autoComplete="off"
-                  >
-                    <TextField
-                      id="outlined-select-currency"
-                      select
-                      label="ตัดรอบของจังหวัด ?"
-                      value={CutArountProvince}
-                      // {...getFieldProps('company_name')}
-                      // onChange={(e) => setSelectCompany(e.target.value)}
-                      onChange={(e) => setCutArountProvince(e.target.value)}
-                      // error={Boolean(touched.company_name && errors.company_name)}
-                      // helperText={touched.company_name && errors.company_name}
-                    >
-                      {AllProvinceMember.map((value) => (
-                        <MenuItem key={value.province} value={value.province}>
-                          {value.province}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                  <Box
-                    component="form"
-                    sx={{
-                      '& .MuiTextField-root': { mr: 40, width: '100%' }
-                    }}
-                    noValidate
-                    autoComplete="off"
-                  >
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <MobileDatePicker
-                        label="วันที่ถูกตัดรอบ"
-                        inputFormat="MM/dd/yyyy"
-                        value={value}
-                        onChange={handleChange}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </Box>
-                </Stack>
 
                 <LoadingButton
                   fullWidth
@@ -427,13 +438,40 @@ export default function RegisterForm() {
           <ButtonT
             color="red"
             buttonType="link"
-            onClick={(e) => setModalSelectAddress(false)}
+            onClick={() => setModalSelectAddress(false)}
             ripple="dark"
           >
             Close
           </ButtonT>
         </ModalFooter>
       </Modal>
+      <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={Transition}>
+        <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            หากคุณต้องการเพิ่มงาน กรุณากรอกรหัสการตัดรอบเพื่อเก็บไว้ในรายการ
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="ID CutArount"
+            type="number"
+            fullWidth
+            variant="standard"
+            color="secondary"
+            onChange={(e) => setIDCutArount(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="secondary" onClick={() => handleConfirmCutArountID()}>
+            ยืนยัน
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

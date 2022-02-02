@@ -1,20 +1,22 @@
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import androidFilled from '@iconify/icons-ant-design/android-filled';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import Swal from 'sweetalert2';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import {
+  Card,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
+} from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 
@@ -58,6 +60,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   )} 100%)`
 }));
 
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 // ----------------------------------------------------------------------
 
 export default function AppCardProvince(props) {
@@ -93,6 +96,7 @@ export default function AppCardProvince(props) {
   }, [props.props.order_product_province]);
 
   const onClickCutArountOrder = () => {
+    setShowModal(false);
     const filterOrderStatus = Orderlist.filter((f) => f.order_status === 'รอจัดส่ง');
     const filterCompanyStatus = filterOrderStatus.filter(
       (f) => f.order_company_status === 'ยังไม่ได้จัดส่ง'
@@ -100,6 +104,10 @@ export default function AppCardProvince(props) {
     const filterProvince = filterCompanyStatus.filter(
       (f) => f.order_product_province === props.props.order_product_province
     );
+    const findDate = filterProvince.map((m) => m.order_product_date);
+    findDate.sort((a, b) => new Date(a) - new Date(b));
+    const firstDateOrder = findDate.shift();
+    const lastDateOrder = findDate.pop();
     const today = new Date();
     const date =
       today.getFullYear() +
@@ -110,7 +118,9 @@ export default function AppCardProvince(props) {
     const dataCutAroundOrder = {
       cut_arount_id: date,
       cut_arount_province: props.props.order_product_province,
-      cut_arount_status: 'ตัดรอบการจัดส่งแล้ว'
+      cut_arount_status: 'ตัดรอบการจัดส่งแล้ว',
+      cut_arount_first_date: firstDateOrder,
+      cut_arount_last_date: lastDateOrder === undefined ? firstDateOrder : lastDateOrder
     };
     Swal.fire({
       title: 'Are you sure?',
@@ -162,80 +172,81 @@ export default function AppCardProvince(props) {
           )} กิโลกรัม`}
         </Typography>
       </RootStyle>
-      <Modal size="lg" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>
-          จังหวัด: {props.props.order_product_province}
-        </ModalHeader>
-        <ModalBody>
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ชื่อสินค้า
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          จำนวนนับเป็นกิโล
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          {/* คลิ๊ก */}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {DataFilterProductName.map((data) => (
-                        <tr key={data.order_product_name}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{data.order_product_name}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {data.order_product_amoumt * data.unitkg}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
+
+      <Dialog
+        open={showModal}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setShowModal(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle> จังหวัด: {props.props.order_product_province}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <div className="flex flex-col">
+              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            ชื่อสินค้า
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            จำนวน
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            {/* คลิ๊ก */}
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {DataFilterProductName.map((data) => (
+                          <tr key={data.order_product_name}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{data.order_product_name}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {data.order_product_amoumt}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">{data.currency}</td>
+
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button
-            color="red"
-            buttonType="link"
-            onClick={(e) => setShowModal(false)}
+            color="purple"
+            buttonType="outline"
+            size="sm"
+            rounded
+            block={false}
+            iconOnly={false}
             ripple="dark"
-            danger
+            onClick={() => onClickCutArountOrder()}
           >
-            ยกเลิก
-          </Button>
-          <Button buttonType="outline" onClick={() => onClickCutArountOrder()}>
-            {' '}
             ยืนยันการตัดออเดอร์นี้
-            {/* <NavLink
-            to="/admin/AdminConfrimExpress/ShowDetailConfrimProvince"
-            // rel="noreferrer"
-            // className="flex items-center gap-4 text-sm font-light py-3"
-          >
-           
-          </NavLink> */}
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

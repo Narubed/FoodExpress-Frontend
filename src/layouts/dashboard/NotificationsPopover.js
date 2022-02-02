@@ -128,7 +128,6 @@ NotificationItem.propTypes = {
 };
 
 function NotificationItem({ notification }) {
-  console.log(notification);
   // const { avatar, title } = renderContent(notification);
   const title = `${notification.order_status} ${numeral(
     notification.order_product_total
@@ -150,11 +149,23 @@ function NotificationItem({ notification }) {
     >
       <ListItemAvatar>
         <Avatar sx={{ bgcolor: 'background.neutral' }}>
-          <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />
+          <Icon icon="emojione:shopping-bags" width="30" height="30" />
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={title}
+        primary={
+          <Typography
+            variant="button"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center'
+              // color: 'text.disabled'
+            }}
+          >
+            {title}
+          </Typography>
+        }
         secondary={
           <Typography
             variant="caption"
@@ -173,13 +184,134 @@ function NotificationItem({ notification }) {
     </ListItemButton>
   );
 }
+NotificationItemTakeOrder.propTypes = {
+  notification: PropTypes.object.isRequired,
+  order_rider_product_name: PropTypes.string
+};
+function NotificationItemTakeOrder({ notification }) {
+  // const { avatar, title } = renderContent(notification);
+  const title = `สิ่งที่คุณต้องได้รับจากไรเดอร์คือ ${notification.order_rider_product_name}`;
+  //
+  return (
+    <ListItemButton
+      to="/dashboard/TakeOrdersMemberApp"
+      disableGutters
+      component={RouterLink}
+      sx={{
+        py: 1.5,
+        px: 2.5,
+        mt: '1px',
+        ...(notification.isUnRead && {
+          bgcolor: 'action.selected'
+        })
+      }}
+    >
+      <ListItemAvatar>
+        <Avatar sx={{ bgcolor: 'background.neutral' }}>
+          <Icon icon="emojione:delivery-truck" width="30" height="30" />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Typography
+            variant="button"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center'
+              // color: 'text.disabled'
+            }}
+          >
+            {title}
+          </Typography>
+        }
+        secondary={
+          <Typography
+            variant="caption"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center',
+              color: 'text.disabled'
+            }}
+          >
+            <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
+            {formatDistanceToNow(new Date(notification.order_rider_date_cut_arount))}
+          </Typography>
+        }
+      />
+    </ListItemButton>
+  );
+}
 
+NotificationItemTakeOrderInProvince.propTypes = {
+  notification: PropTypes.object.isRequired,
+  member_delivery_level: PropTypes.string
+};
+function NotificationItemTakeOrderInProvince({ notification }) {
+  // const { avatar, title } = renderContent(notification);
+  const title = `คุณต้องได้รับของจากระดับ ${
+    notification.member_delivery_level === 'province' ? 'ระดับจังหวัด' : 'ระดับอำเภอ'
+  }`;
+  return (
+    <ListItemButton
+      to="/dashboard/TakeOrdersInProvinceApp"
+      disableGutters
+      component={RouterLink}
+      sx={{
+        py: 1.5,
+        px: 2.5,
+        mt: '1px',
+        ...(notification.isUnRead && {
+          bgcolor: 'action.selected'
+        })
+      }}
+    >
+      <ListItemAvatar>
+        <Avatar sx={{ bgcolor: 'background.neutral' }}>
+          <Icon icon="noto:shopping-bags" width="30" height="30" />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Typography
+            variant="button"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center'
+              // color: 'text.disabled'
+            }}
+          >
+            {title}
+          </Typography>
+        }
+        secondary={
+          <Typography
+            variant="caption"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center',
+              color: 'text.disabled'
+            }}
+          >
+            <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
+            {formatDistanceToNow(new Date(notification.member_delivery_date))}
+          </Typography>
+        }
+      />
+    </ListItemButton>
+  );
+}
 export default function NotificationsPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState();
   // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
   const [Total, setTotal] = useState([]);
+  const [showTakesOrderRider, setTakesOrderRider] = useState([]);
+  const [showTakesOrderINProvince, setTakesOrderINProvince] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const user = sessionStorage.getItem('user');
@@ -188,8 +320,30 @@ export default function NotificationsPopover() {
     );
     const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอชำระเงิน');
     setTotal(filterStatusOrder);
-    setNotifications(filterStatusOrder);
+
+    //--------------------------------------------------------------------------------------
+
+    const getOrderRider = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getAllOrderExpressJoinRider`
+    );
+    const filterOrder = getOrderRider.data.data.filter(
+      (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
+    );
+    const filterOrderStatus = filterOrder.filter(
+      (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
+    );
+    setTakesOrderRider(filterOrderStatus);
+    //----------------------------------------------------------------------------------------------
+    const getDeliveryDetail = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoinDeliveryProviceAndMemberDelivery`
+    );
+    const filterUserID = getDeliveryDetail.data.data.filter(
+      (f) => parseInt(f.receiver_delivery_member_id, 10) === parseInt(user, 10)
+    );
+    const filterStatus = filterUserID.filter((f) => f.member_delivery_status === 'ตัดรอบแล้ว');
+    setTakesOrderINProvince(filterStatus);
   }, []);
+
   function handleOpen() {
     setOpen(true);
   }
@@ -221,7 +375,10 @@ export default function NotificationsPopover() {
           })
         }}
       >
-        <Badge badgeContent={Total.length} color="error">
+        <Badge
+          badgeContent={Total.length + showTakesOrderRider.length + showTakesOrderINProvince.length}
+          color="error"
+        >
           <Icon icon={bellFill} width={20} height={20} />
         </Badge>
       </IconButton>
@@ -230,17 +387,31 @@ export default function NotificationsPopover() {
         open={open}
         onClose={handleClose}
         anchorEl={anchorRef.current}
-        sx={{ width: 360 }}
+        sx={{ width: 420 }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">Notifications</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              คุณมี {Total.length} รายการที่ต้องชำระเงิน
+              {showTakesOrderRider.length !== 0 ? (
+                <div>คุณมี {showTakesOrderRider.length} รายการที่ต้องได้รับของจากไรเดอร์ </div>
+              ) : null}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {showTakesOrderINProvince.length !== 0 ? (
+                <div>
+                  คุณมี {showTakesOrderINProvince.length} รายการที่ต้องได้รับของภายในจังหวัด
+                </div>
+              ) : null}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {Total.length !== 0 ? <div>คุณมี {Total.length} รายการที่ต้องชำระเงิน </div> : null}
             </Typography>
           </Box>
 
-          {Total.length > 0 && (
+          {(Total.length > 0 ||
+            showTakesOrderRider.length > 0 ||
+            showTakesOrderINProvince.length > 0) && (
             <Tooltip title=" Mark all as read">
               <IconButton color="primary" onClick={handleMarkAllAsRead}>
                 <Icon icon={doneAllFill} width={20} height={20} />
@@ -262,6 +433,18 @@ export default function NotificationsPopover() {
           >
             {Total.map((notification) => (
               <NotificationItem key={notification.order_id} notification={notification} />
+            ))}
+            {showTakesOrderRider.map((notification) => (
+              <NotificationItemTakeOrder
+                key={notification.id_order_rider_id}
+                notification={notification}
+              />
+            ))}
+            {showTakesOrderINProvince.map((notification) => (
+              <NotificationItemTakeOrderInProvince
+                key={notification.id}
+                notification={notification}
+              />
             ))}
           </List>
 

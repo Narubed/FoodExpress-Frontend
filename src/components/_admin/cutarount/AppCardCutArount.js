@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { Icon } from '@iconify/react';
-import { useEffect, useState, useRef, useReactToPrint } from 'react';
+import React, { useEffect, useState, useRef, useReactToPrint } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import androidFilled from '@iconify/icons-ant-design/android-filled';
@@ -16,7 +16,16 @@ import 'dayjs/locale/th';
 import ReactToPrint from 'react-to-print';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import {
+  Card,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
+} from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 
@@ -60,14 +69,15 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
     0.24
   )} 100%)`
 }));
-
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 // ----------------------------------------------------------------------
 
 // eslint-disable-next-line camelcase
 export default function AppCardCutArount(props) {
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
-  const [Orderlist, setOrderlist] = useState([]);
+
   const [showModal, setShowModal] = useState(false);
+  const [idCutArount, setidCutArount] = useState();
   let componentRef = useRef();
   // const handlePrint = useReactToPrint({
   //   content: () => componentRef.current
@@ -82,12 +92,13 @@ export default function AppCardCutArount(props) {
     const filterProvince = filterCompanyStatus.filter(
       (f) => f.order_product_province === props.props.order_product_province
     );
+
     const filterCutArountID = filterProvince.filter(
       (f) => f.cut_arount_id === props.props.cut_arount_id
     );
 
     const filtereds = [];
-    await filterCutArountID.forEach((item, index) => {
+    await filterCutArountID.forEach((item) => {
       const idx = filtereds.findIndex(
         (value) => value.order_product_name === item.order_product_name
       );
@@ -99,57 +110,9 @@ export default function AppCardCutArount(props) {
         filtereds.push(item);
       }
     });
+    setidCutArount(filtereds[0].cut_arount_id);
     setDataFilterProductName(filtereds);
-    setOrderlist(result.data.data);
   }, [props.props.order_product_province]);
-
-  const onClickCutArountOrder = () => {
-    const filterOrderStatus = Orderlist.filter((f) => f.order_status === 'รอจัดส่ง');
-    const filterCompanyStatus = filterOrderStatus.filter(
-      (f) => f.order_company_status === 'ยังไม่ได้จัดส่ง'
-    );
-    const filterProvince = filterCompanyStatus.filter(
-      (f) => f.order_product_province === props.props.order_product_province
-    );
-    const today = new Date();
-    const date =
-      today.getFullYear() +
-      (today.getMonth() + 1) +
-      today.getDate() +
-      today.getTime() +
-      sessionStorage.getItem('user');
-    const dataCutAroundOrder = {
-      cut_arount_id: date,
-      cut_arount_province: props.props.order_product_province,
-      cut_arount_status: 'ตัดรอบการจัดส่งแล้ว'
-    };
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการตัดรอบการส่งนี้หรือไหม ?!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cut arount it!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await axios.post('http://localhost:8000/CreateCutArount', dataCutAroundOrder);
-        // eslint-disable-next-line array-callback-return
-        await filterProvince.map(async (value) => {
-          const dataPutOrderDetail = {
-            order_detail_id: value.order_detail_id,
-            cut_arount_id: dataCutAroundOrder.cut_arount_id,
-            order_company_status: 'ตัดรอบการจัดส่งแล้ว'
-          };
-          await axios.put('http://localhost:8000/putCutArountStatus', dataPutOrderDetail);
-        });
-        Swal.fire('ยืนยัน!', 'ยืนยันการตัดรอบสินค้านี้แล้ว.', 'success');
-        // setTimeout(() => {
-        //   window.location.reload(false);
-        // }, 1000);
-      }
-    });
-  };
 
   return (
     <>
@@ -168,66 +131,77 @@ export default function AppCardCutArount(props) {
           )} กิโลกรัม`} */}
         </Typography>
       </RootStyle>
-      <Modal size="lg" active={showModal} toggler={() => setShowModal(false)}>
+
+      <Dialog
+        open={showModal}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setShowModal(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
         <div ref={(el) => (componentRef = el)}>
-          <div>
-            <ModalHeader toggler={() => setShowModal(false)}>
-              จังหวัด: {props.props.order_product_province}
-            </ModalHeader>
-          </div>
-          <ModalBody>
-            <div className="flex flex-col">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            ชื่อสินค้า
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            จำนวนนับเป็นกิโล
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            {/* คลิ๊ก */}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {DataFilterProductName.map((data) => (
-                          <tr key={data.order_product_name}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">{data.order_product_name}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              {data.order_product_amoumt * data.unitkg}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
+          <DialogTitle> รหัสการตัดรอบ : {idCutArount}</DialogTitle>
+          <DialogTitle> จังหวัด: {props.props.order_product_province}</DialogTitle>
+
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <div className="flex flex-col">
+                <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              ชื่อสินค้า
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              จำนวน
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              {/* คลิ๊ก */}
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {DataFilterProductName.map((data) => (
+                            <tr key={data.order_product_name}>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {data.order_product_name}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {data.order_product_amoumt}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">{data.currency}</td>
+
+                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </ModalBody>
+            </DialogContentText>
+          </DialogContent>
         </div>
-        <ModalFooter>
+        <DialogActions>
           <Button
             color="red"
             buttonType="link"
-            onClick={(e) => setShowModal(false)}
+            onClick={() => setShowModal(false)}
             ripple="dark"
             danger
           >
@@ -250,11 +224,12 @@ export default function AppCardCutArount(props) {
             )}
             content={() => componentRef}
           />
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
 AppCardCutArount.propTypes = {
-  props: PropTypes.array.isRequired
+  props: PropTypes.array.isRequired,
+  order_product_province: PropTypes.string.isRequired
 };

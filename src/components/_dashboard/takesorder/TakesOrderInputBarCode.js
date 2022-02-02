@@ -10,7 +10,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { now } from 'lodash';
+import TakesOrderCheckStock from './TakesOrderCheckStock';
+import TakesOrderCheckOrderDetail from './TakesOrderCheckOrderDetail';
+import TakesOrderCheckStatusOrder from './TakesOrderCheckStatusOrder';
 
 TakesOrderInputBarCode.propTypes = {
   orderList: PropTypes.array
@@ -37,7 +39,8 @@ export default function TakesOrderInputBarCode({ orderList }) {
     } else {
       const createReportID =
         Date.now() + result.order_rider_member_userid + result.order_rider_product_id;
-      await checkStockMember({ result });
+      await TakesOrderCheckStock({ result });
+
       const reportOrder = {
         report_order_id: createReportID,
         id_order_rider_id: result.id_order_rider_id,
@@ -55,6 +58,8 @@ export default function TakesOrderInputBarCode({ orderList }) {
       };
 
       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderRider`, data);
+      await TakesOrderCheckOrderDetail({ result });
+      await TakesOrderCheckStatusOrder({ result });
       Swal.fire({
         icon: 'success',
         title: 'คุณได้รับออเดอร์นี้เเล้ว',
@@ -68,37 +73,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
       setOpen(false);
     }
   };
-  const checkStockMember = async ({ result }) => {
-    const getStockMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.order_rider_member_userid}`
-    );
-    const filterStockOrderByProductID = getStockMember.data.data.filter(
-      (value) => value.stock_product_id === result.order_rider_product_id
-    );
-    if (filterStockOrderByProductID.length === 0) {
-      const createStockID =
-        Date.now() + result.order_rider_product_id + result.order_rider_member_userid;
-      const stockOrder = {
-        id_stock_product_member_id: createStockID,
-        stock_product_member_userid: result.order_rider_member_userid,
-        stock_product_id: result.order_rider_product_id,
-        stock_product_name: result.order_rider_product_name,
-        stock_product_amount: result.order_rider_Amount
-      };
-      await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postStockProductMember`, stockOrder);
-    } else {
-      const putStockOrder = {
-        id_stock_product_member_id: filterStockOrderByProductID[0].id_stock_product_member_id,
-        stock_product_amount:
-          parseInt(filterStockOrderByProductID[0].stock_product_amount, 10) +
-          parseInt(result.order_rider_Amount, 10)
-      };
-      await axios.put(
-        `${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`,
-        putStockOrder
-      );
-    }
-  };
+
   return (
     <div>
       <Button
