@@ -47,6 +47,7 @@ import Page from '../../../components/Page';
 // import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
+import checkStatusOrder from '../../../utils/checkStatusOrder';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'order_id', label: 'ID', alignRight: false },
@@ -166,6 +167,7 @@ function CheckOrderMemberApp() {
   const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
+    checkStatusOrder();
     const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     const filterMemberId = getOrdder.data.data.filter(
       (f) => f.order_member_id === sessionStorage.getItem('user')
@@ -190,6 +192,7 @@ function CheckOrderMemberApp() {
       // setSelected_id(newSelectedsid);
       return;
     }
+
     setSelected([]);
     setSelected_id([]);
   };

@@ -62,7 +62,7 @@ export default function AppTotalIncome(props) {
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(reduceOrder)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        รายได้ทั้งหมดของคุณ
+        ยอดขายทั้งหมดของคุณ
       </Typography>
     </RootStyle>
   );

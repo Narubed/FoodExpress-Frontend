@@ -69,7 +69,7 @@ export default function AppLastMonthIncome(props) {
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(reduceLastMonthOrder)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        รายได้ของเดือนที่ผ่านมา
+        ยอดขายของเดือนที่ผ่านมา
       </Typography>
     </RootStyle>
   );

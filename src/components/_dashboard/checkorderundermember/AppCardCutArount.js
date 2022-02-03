@@ -73,6 +73,7 @@ export default function AppCardCutArount(props) {
   const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
   const [showNoProductINStock, setNoProductINStock] = useState([]);
   const [showValueNOTEnough, setValueNOTEnough] = useState([]);
+
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -91,7 +92,7 @@ export default function AppCardCutArount(props) {
     const filterDistrict = filterDeleteOrderMe.filter(
       (f) => f.order_product_district === props.props.order_product_district
     );
-
+    setOrderlist(filterDistrict);
     const filtereds = [];
     await filterDistrict.forEach((item, index) => {
       const idx = filtereds.findIndex(
@@ -106,7 +107,6 @@ export default function AppCardCutArount(props) {
       }
     });
     setDataFilterProductName(filtereds);
-    setOrderlist(result.data.data);
   }, [props.props.order_product_district]);
 
   const confirmAppCardCutArount = async () => {
@@ -181,11 +181,7 @@ export default function AppCardCutArount(props) {
           dataReportMember
         );
         //-----
-        const dataChangeOrderDetail = {
-          // เปลี่ยนเป็นยิงใน status จังหวัดแทน
-          order_detail_id: value.order_detail_id,
-          order_status_in_province: 'จังหวัดตัดรอบการจัดส่งแล้ว'
-        };
+
         await axios.put(
           `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
           dataChangeOrderDetail
@@ -196,6 +192,17 @@ export default function AppCardCutArount(props) {
         async (value) =>
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
       );
+      Orderlist.map(async (value) => {
+        const dataChangeOrderDetail = {
+          // เปลี่ยนเป็นยิงใน status จังหวัดแทน
+          order_detail_id: value.order_detail_id,
+          order_status_in_province: 'จังหวัดตัดรอบการจัดส่งแล้ว'
+        };
+        await axios.put(
+          `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
+          dataChangeOrderDetail
+        );
+      });
       await CutArountOrderDistrict();
     }
   };
