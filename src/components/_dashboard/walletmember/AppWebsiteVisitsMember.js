@@ -34,145 +34,145 @@ export default function AppWebsiteVisits() {
     const setMonth1 = new Date();
     setMonth1.setMonth(1);
     const January = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth1.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth1.getMonth() - 1
     );
     const ReduceJanuary = January.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth2 = new Date();
     setMonth2.setMonth(2);
     const February = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth2.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth2.getMonth() - 1
     );
     const ReduceFebruary = February.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth3 = new Date();
     setMonth3.setMonth(3);
     const March = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth3.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth3.getMonth() - 1
     );
     const ReduceMarch = March.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth4 = new Date();
     setMonth4.setMonth(4);
     const April = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth4.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth4.getMonth() - 1
     );
     const ReduceApril = April.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth5 = new Date();
     setMonth5.setMonth(5);
     const May = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth5.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth5.getMonth() - 1
     );
     const ReduceMay = May.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth6 = new Date();
     setMonth6.setMonth(6);
     const June = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth6.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth6.getMonth() - 1
     );
     const ReduceJune = June.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth7 = new Date();
     setMonth7.setMonth(7);
     const July = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth7.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth7.getMonth() - 1
     );
     const ReduceJuly = July.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth8 = new Date();
     setMonth8.setMonth(8);
     const August = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth8.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth8.getMonth() - 1
     );
     const ReduceAugust = August.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth9 = new Date();
     setMonth9.setMonth(9);
     const September = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth9.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth9.getMonth() - 1
     );
     const ReduceSeptember = September.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth10 = new Date();
     setMonth10.setMonth(10);
     const October = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth10.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth10.getMonth() - 1
     );
     const ReduceOctober = October.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth11 = new Date();
     setMonth11.setMonth(11);
     const November = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth11.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth11.getMonth() - 1
     );
     const ReduceNovember = November.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const setMonth12 = new Date();
     setMonth12.setMonth(12);
     const December = Order.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth12.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth12.getMonth() - 1
     );
     const ReduceDecember = December.reduce((sum, b) => sum + b.order_product_total, 0);
     // ------------------------------------------------------------------------------------------------
 
     const January2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth1.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth1.getMonth() - 1
     );
     const ReduceJanuary2 = January2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const February2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth2.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth2.getMonth() - 1
     );
     const ReduceFebruary2 = February2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const March2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth3.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth3.getMonth() - 1
     );
     const ReduceMarch2 = March2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const April2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth4.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth4.getMonth() - 1
     );
     const ReduceApril2 = April2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const May2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth5.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth5.getMonth() - 1
     );
     const ReduceMay2 = May2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const June2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth6.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth6.getMonth() - 1
     );
     const ReduceJune2 = June2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const July2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth7.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth7.getMonth() - 1
     );
     const ReduceJuly2 = July2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const August2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth8.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth8.getMonth() - 1
     );
     const ReduceAugust2 = August2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const September2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth9.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth9.getMonth() - 1
     );
     const ReduceSeptember2 = September2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const October2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth10.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth10.getMonth() - 1
     );
     const ReduceOctober2 = October2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const November2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth11.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth11.getMonth() - 1
     );
     const ReduceNovember2 = November2.reduce((sum, b) => sum + b.order_product_total, 0);
 
     const December2 = OldOrder.filter(
-      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth12.getMonth()
+      (f) => new Date(f.order_product_date).getUTCMonth() === setMonth12.getMonth() - 1
     );
     const ReduceDecember2 = December2.reduce((sum, b) => sum + b.order_product_total, 0);
     // ------------------------------------------------------------------------------------------------

@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import TakesOrderCheckStock from './TakesOrderCheckStock';
 import TakesOrderCheckOrderDetail from './TakesOrderCheckOrderDetail';
-import TakesOrderCheckStatusOrder from './TakesOrderCheckStatusOrder';
+import checkStatusOrder from '../../../utils/checkStatusOrder';
 
 TakesOrderInputBarCode.propTypes = {
   orderList: PropTypes.array
@@ -59,7 +59,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
 
       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderRider`, data);
       await TakesOrderCheckOrderDetail({ result });
-      await TakesOrderCheckStatusOrder({ result });
+      await checkStatusOrder();
       Swal.fire({
         icon: 'success',
         title: 'คุณได้รับออเดอร์นี้เเล้ว',

@@ -13,6 +13,7 @@ import {
   ProductCartWidget,
   ProductFilterSidebar
 } from '../../../components/_dashboard/products';
+import checkStatusOrder from '../../../utils/checkStatusOrder';
 //
 
 // ----------------------------------------------------------------------
@@ -36,6 +37,7 @@ export default function EcommerceShop() {
       (f) => f.productStetus === 'สินค้าพร้อมจำหน่าย'
     );
     setProductsType(filterStatusProduct);
+    await checkStatusOrder();
   }, []);
   const onSubmitProduct = (e) => {
     setFilterProductsType([]);
