@@ -42,8 +42,14 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().required('id is reqired'),
-    password: Yup.string().required('Password is required')
+    username: Yup.string()
+      .min(1, 'เลขบัตรของท่านสั้นเกินไป!') // มาเปลี่ยนด้วย
+      .max(50, 'Too Long!')
+      .required('id is reqired'),
+    password: Yup.string()
+      .min(1, 'รหัสของท่านสั้นเกินไป!')
+      .max(50, 'Too Long!')
+      .required('Password is required')
   });
   const handleSubmits = async (e) => {
     const setUserNames = e.username;

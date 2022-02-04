@@ -19,6 +19,7 @@ import StockProductApp from './pages/Member/StockProduct/StockProductApp';
 import CheckOrderUnderMemberApp from './pages/Member/CheckOrderUnderMember/CheckOrderUnderMemberApp';
 import CheckOrderMemberCreatBarCodeApp from './pages/Member/CheckOrderUnderMember/CheckOrderMemberCreatBarCodeApp';
 import TakeOrdersInProvinceApp from './pages/Member/TakeOrdersInProvince/TakeOrdersInProvinceApp';
+import ChangePasswordApp from './pages/Member/ChangePassword/ChangePasswordApp';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ export default function Router() {
           element: <CheckOrderMemberCreatBarCodeApp />
         },
         { path: 'TakeOrdersInProvinceApp', element: <TakeOrdersInProvinceApp /> },
+        { path: 'ChangePasswordApp', element: <ChangePasswordApp /> },
 
         { path: 'blog', element: <Blog /> }
       ]

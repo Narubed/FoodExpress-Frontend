@@ -115,7 +115,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             target="_blank"
             variant="contained"
           >
-            ติดต่อได้ที่ NBA Digital
+            <div>ติดต่อได้ที่ NBA Digital</div>
           </Button>
         </Stack>
       </Box>

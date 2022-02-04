@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-distracting-elements */
 /* eslint-disable import/no-duplicates */
 import { useFormik } from 'formik';
 import { useState, useEffect, useMemo } from 'react';
@@ -108,7 +109,7 @@ export default function EcommerceShop() {
     <Page title="Products | NBA-Express">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          <h1>Products</h1>
         </Typography>
         <Stack
           direction="row"

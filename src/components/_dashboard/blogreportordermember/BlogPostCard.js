@@ -178,7 +178,7 @@ export default function BlogPostCard({ post, index, report }) {
               })
             }}
           >
-            {report_order_product_name}
+            <div>{report_order_product_name}</div>
           </TitleStyle>
 
           <InfoStyle>
