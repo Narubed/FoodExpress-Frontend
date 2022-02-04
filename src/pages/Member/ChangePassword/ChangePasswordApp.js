@@ -31,11 +31,11 @@ export default function RegisterForm() {
       .max(50, 'Too Long!')
       .required('First name required'),
     password: Yup.string()
-      .min(1, 'รหัสผ่านของท่านสั้นเกินไป!') // กลับมาเปลี่ยนเ้วย
+      .min(8, 'รหัสผ่านของท่านสั้นเกินไป!') // กลับมาเปลี่ยนเ้วย
       .max(50, 'Too Long!')
       .required('Password is required'),
     newpassword: Yup.string()
-      .min(1, 'รหัสผ่านของท่านสั้นเกินไป!')
+      .min(8, 'รหัสผ่านของท่านสั้นเกินไป!')
       .max(50, 'Too Long!')
       .required('Password is required')
   });

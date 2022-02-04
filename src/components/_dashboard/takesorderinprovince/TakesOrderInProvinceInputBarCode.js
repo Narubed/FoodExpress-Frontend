@@ -10,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 import TakesOrderInProvinceCheckStock from './TakesOrderInProvinceCheckStock';
 import TakesOrderInProvinceCheckOrderDetail from './TakesOrderInProvinceCheckOrderDetail';
 import checkStatusOrder from '../../../utils/checkStatusOrder';
@@ -19,6 +19,7 @@ TakesOrderInputBarCode.propTypes = {
   DeliveryList: PropTypes.array
 };
 export default function TakesOrderInputBarCode({ DeliveryList }) {
+  const navigate = useNavigate();
   console.log(DeliveryList);
   const [open, setOpen] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
@@ -80,7 +81,7 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
         timer: 1500
       });
       setTimeout(() => {
-        window.location.reload(false);
+        navigate('/dashboard/BlogsReportOrderApp', { replace: true });
       }, 1500);
 
       setOpen(false);

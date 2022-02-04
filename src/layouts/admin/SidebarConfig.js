@@ -16,14 +16,14 @@ const sidebarConfig = [
     title: 'admin',
     titleth: 'หน้าหลัก',
     path: '/admin/app',
-    icon: <Icon icon="twemoji:card-index" width={22} height={22} />
+    icon: <Icon icon="flat-color-icons:home" width={22} height={22} />
   },
 
   {
     title: 'checkorder',
     titleth: 'ตรวจสอบออเดอร์',
     path: '/admin/AdminCheckOrderApp',
-    icon: <Icon icon="jam:task-list-f" width={22} height={22} color="blue" />
+    icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
   },
   {
     title: 'percent',

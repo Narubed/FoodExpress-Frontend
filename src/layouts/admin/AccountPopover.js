@@ -11,17 +11,8 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 import axios from 'axios';
 import MenuPopover from '../../components/MenuPopover';
 //
-import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: homeFill,
-    linkTo: '/'
-  }
-];
 
 // ----------------------------------------------------------------------
 
@@ -83,27 +74,61 @@ export default function AccountPopover() {
 
         <Divider sx={{ my: 1 }} />
 
-        {MENU_OPTIONS.map((option) => (
-          <MenuItem
-            key={option.label}
-            to={option.linkTo}
-            component={RouterLink}
-            onClick={handleClose}
-            sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        <MenuItem
+          key={1}
+          to="/"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
           >
-            <Box
-              component={Icon}
-              icon={option.icon}
-              sx={{
-                mr: 2,
-                width: 24,
-                height: 24
-              }}
-            />
+            <Icon icon="flat-color-icons:home" width="24" height="24" />
+          </Box>
+          หน้าหลัก
+        </MenuItem>
+        <MenuItem
+          key={2}
+          to="/admin/AnnounceSlide"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          >
+            <Icon icon="emojione-v1:bull-horn-with-sound-waves" width="24" height="24" />
+          </Box>
+          เปลี่ยนประกาศ
+        </MenuItem>
 
-            {option.label}
-          </MenuItem>
-        ))}
+        <MenuItem
+          key={3}
+          to="/admin/AnnounceAdvert"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          >
+            <Icon icon="flat-color-icons:edit-image" width="24" height="24" />
+          </Box>
+          เปลี่ยนโฆษณา
+        </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button fullWidth color="inherit" variant="outlined" onClick={logout}>

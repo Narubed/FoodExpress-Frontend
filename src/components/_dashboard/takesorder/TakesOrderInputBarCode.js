@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { Icon } from '@iconify/react';
 import TextField from '@mui/material/TextField';
@@ -18,6 +19,7 @@ TakesOrderInputBarCode.propTypes = {
   orderList: PropTypes.array
 };
 export default function TakesOrderInputBarCode({ orderList }) {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
   const handleClickOpen = () => {
@@ -67,7 +69,8 @@ export default function TakesOrderInputBarCode({ orderList }) {
         timer: 1500
       });
       setTimeout(() => {
-        window.location.reload(false);
+        navigate('/dashboard/BlogsReportOrderApp', { replace: true });
+        // window.location.reload(false);
       }, 1500);
 
       setOpen(false);

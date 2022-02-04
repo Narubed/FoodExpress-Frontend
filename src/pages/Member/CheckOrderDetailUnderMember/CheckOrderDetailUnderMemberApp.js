@@ -38,7 +38,6 @@ import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import { styled } from '@mui/material/styles';
 import {
   CheckOrderDetailUnderMemberListHead,
-  CheckOrderDetailUnderMemberListToolbar,
   CheckOrderDetailUnderMemberMoreMenu
 } from '../../../components/_dashboard/checkorderdetailundermember';
 import Page from '../../../components/Page';
@@ -208,15 +207,6 @@ function CheckOrderDetailUnderMemberApp() {
             </Stack>
           </LocalizationProvider>
           <Card>
-            <CheckOrderDetailUnderMemberListToolbar
-              numSelected={selected.length}
-              filterName={filterName}
-              onFilterName={handleFilterByName}
-              selected={selected}
-              // eslint-disable-next-line camelcase
-              selected_id={selected_id}
-            />
-
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>

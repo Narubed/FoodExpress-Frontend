@@ -59,47 +59,6 @@ export default function UnderMemberListToolbar({
   selected,
   Memberlist
 }) {
-  const deleteMember = async () => {
-    const filteredsMember = [];
-    await selected_id.forEach((element) => {
-      const filteredsMembers = Memberlist.filter((value) => value.id === element);
-      filteredsMember.push(filteredsMembers[0]);
-    });
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการลบผู้ใช้ทั้งหมดนี้หรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete it!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        filteredsMember.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(
-              `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value.bookBankImg}`
-            )
-        );
-        filteredsMember.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value.cardImg}`)
-        );
-        filteredsMember.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${value.id}`)
-        );
-
-        Swal.fire('Success!', 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
-  };
   return (
     <RootStyle
       sx={{

@@ -26,6 +26,8 @@ import AdminCutArountApp from './pages/Admin/CutArount/AdminCutArountApp';
 import AdminTakesOrderApp from './pages/Admin/TakesOrder/AdminTakesOrderApp';
 import AdminTakesOrderDetail from './pages/Admin/TakesOrder/AdminTakesOrderDetail';
 import AdminCreateOrderRiderApp from './pages/Admin/TakesOrder/AdminCreateOrderRiderApp';
+import AnnounceSlide from './pages/Admin/Announce/AnnounceSlide';
+import AnnounceAdvert from './pages/Admin/Announce/AnnounceAdvert';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +60,9 @@ export default function Router() {
         {
           path: 'AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp',
           element: <AdminCreateOrderRiderApp />
-        }
+        },
+        { path: 'AnnounceSlide', element: <AnnounceSlide /> },
+        { path: 'AnnounceAdvert', element: <AnnounceAdvert /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

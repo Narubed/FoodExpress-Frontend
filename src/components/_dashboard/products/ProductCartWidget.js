@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
 import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 // material
@@ -61,6 +62,7 @@ export default function CartWidget({
   deleteProductShopCard,
   setNumberRereder
 }) {
+  const navigate = useNavigate();
   const onSubmit = async (e) => {
     const today = new Date();
     const date =
@@ -128,7 +130,7 @@ export default function CartWidget({
           timer: 1500
         });
         setTimeout(() => {
-          window.location.reload(false);
+          navigate('/dashboard/CheckOrderMemberApp', { replace: true });
         }, 1500);
       }
     });

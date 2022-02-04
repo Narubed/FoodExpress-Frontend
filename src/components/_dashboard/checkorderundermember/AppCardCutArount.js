@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import { Icon } from '@iconify/react';
 import { useEffect, useState, useRef, useReactToPrint } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Button from '@material-tailwind/react/Button';
@@ -66,6 +67,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppCardCutArount(props) {
+  const navigate = useNavigate();
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -256,7 +258,9 @@ export default function AppCardCutArount(props) {
       timer: 2500
     });
     setTimeout(() => {
-      window.location.reload(false);
+      navigate('/dashboard/CheckOrderUnderMemberApp/CheckOrderMemberCreatBarCodeApp', {
+        replace: true
+      });
     }, 2500);
   };
 
