@@ -37,10 +37,10 @@ function AdminConfirmExpressApp() {
     setOrder(filtereds);
   }, []);
   return (
-    <Page title="Confirm | admin NBA-Express">
+    <Page title="รวมยอดสินค้า | admin NBA-Express">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">ConfirmExpress</Typography>
+          <Typography variant="h4">รวมยอดรายการสินค้าแต่ละจังหวัด</Typography>
         </Box>
         <Input placeholder="ค้นหาตามจังหวัด" onChange={(event) => setQuery(event.target.value)} />
         <br />

@@ -46,17 +46,14 @@ export default function AdminEditProductApp() {
     setAnnounceAdvert(AnnounceAdverts.data.data[0].announve_advert_image);
   }, []);
   const handleInputChange = async (event) => {
-    console.log(event);
     setfile(event.target.files[0] ? event.target.files[0] : []);
     setfilepreview(event.target.files[0] ? URL.createObjectURL(event.target.files[0]) : null);
   };
   const handleSubmit = async () => {
-    console.log(file);
     if (file.length !== 0) {
       const formdata = new FormData();
       formdata.append('avatar', file);
       formdata.append('announve_advert_id', 1);
-      console.log(formdata);
       Swal.fire({
         title: 'คุณต้องการบันทึกรูปนี้หรือไม่ ?',
         text: 'หลังจากคุณบันทึกภาพที่แสดงหน้าแรกของผู้ใช้จะกลายเป็นภายนี้แทน !',
@@ -87,11 +84,11 @@ export default function AdminEditProductApp() {
     }
   };
   return (
-    <Page title="Product | FoodExpress">
+    <Page title="โฆษณา | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            แก้ไขภาพโฆษณา
+            <div>แก้ไขภาพโฆษณา</div>
           </Typography>
         </Stack>
         <Stack spacing={3}>
@@ -112,7 +109,7 @@ export default function AdminEditProductApp() {
             // loading={isSubmitting}
             onClick={() => handleSubmit()}
           >
-            ยืนยันการเพิ่มข้อมูล
+            <div>ยืนยันการเพิ่มข้อมูล</div>
           </LoadingButton>
           {filepreview !== null ? (
             <img className="previewimg" src={filepreview} alt="UploadImage" />

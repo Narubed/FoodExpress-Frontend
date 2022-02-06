@@ -161,7 +161,6 @@ export default function RegisterForm() {
     const getDataCutArountByID = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderCutArountID/${IDCutArount}`
     );
-    console.log(getDataCutArountByID.data.data);
 
     if (getDataCutArountByID.data.data.length !== 0) {
       const CutArountID = getDataCutArountByID.data.data;
@@ -180,7 +179,6 @@ export default function RegisterForm() {
         order_rider_date_cut_arount: CutArountID[0].cut_arount_date,
         order_rider_province_cut_arount: CutArountID[0].cut_arount_province
       };
-      console.log(DataExpress);
       Swal.fire({
         icon: 'success',
         title: 'Confirm !',
@@ -208,11 +206,11 @@ export default function RegisterForm() {
 
   return (
     <>
-      <Page title="CreateOrderRider | FoodExpress">
+      <Page title="เพิ่มงานให้ไรเดอร์ | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              Create Order Rider FoodExpress
+              เพิ่มงานให้ไรเดอร์
             </Typography>
           </Stack>
           <FormikProvider value={formik}>

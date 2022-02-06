@@ -154,7 +154,7 @@ function stringAvatar(name) {
 function CheckOrderMemberApp() {
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
+  const [OrderlistFilter, setOrderlistFilter] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -196,33 +196,14 @@ function CheckOrderMemberApp() {
     setSelected([]);
     setSelected_id([]);
   };
-
-  const handleClick = (event, name, order_id) => {
-    const selectedIndex = selected.indexOf(order_id);
-    // const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    // let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, order_id);
-      // newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      // newSelectedid = newSelectedid.concat(
-      //   selected_id.slice(0, selectedIndexid),
-      //   selected_id.slice(selectedIndexid + 1)
-      // );
+  const onChangeStatus = (e) => {
+    const filterStatus = Orderlist.filter((value) => value.order_status === e);
+    if (filterStatus.length !== 0) {
+      setOrderlistFilter(filterStatus);
     }
-    setSelected(newSelected);
-    // setSelected_id(newSelectedid);
+  };
+  const onResetFilter = () => {
+    setOrderlistFilter(null);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -238,16 +219,24 @@ function CheckOrderMemberApp() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Orderlist.length) : 0;
-
   const newOrderlist =
-    valueDate[0] && valueDate[1] !== null
+    OrderlistFilter !== null && valueDate[0] !== null && valueDate[1] !== null
+      ? OrderlistFilter.filter(
+          (f) =>
+            dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
+            dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
+        )
+      : OrderlistFilter === null && valueDate[0] !== null && valueDate[1] !== null
       ? Orderlist.filter(
           (f) =>
             dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
             dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
         )
+      : OrderlistFilter !== null && valueDate[0] === null && valueDate[1] === null
+      ? OrderlistFilter
       : Orderlist;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - newOrderlist.length) : 0;
+
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
@@ -284,6 +273,8 @@ function CheckOrderMemberApp() {
               filterName={filterName}
               onFilterName={handleFilterByName}
               selected={selected}
+              onChangeStatus={onChangeStatus}
+              onResetFilter={onResetFilter}
               // eslint-disable-next-line camelcase
               selected_id={selected_id}
             />

@@ -176,11 +176,11 @@ export default function AdminTakesOrderDetail() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="TakesOrderDetail | FoodExpress">
+    <Page title="รายงานที่ไรเดอร์คนนี้ได้รับ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Takes Order FoodExpress
+            รายงานที่ไรเดอร์คนนี้ได้รับ
           </Typography>
           <Button
             color="secondary"

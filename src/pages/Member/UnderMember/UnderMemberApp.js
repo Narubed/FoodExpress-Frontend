@@ -167,14 +167,14 @@ function AdminMemberApp() {
       const filterUser3 = filterMember.filter(
         (e) => e.province === getUser_id.data.data.province && e.level === 'province'
       );
-      const findUser = filterUser.find((e) => e === filterUser2[0]);
-      const findUser2 = filterUser.find((e) => e === filterUser3[0]);
-      if (findUser) {
+      if (filterUser2) {
         filterUser.push(filterUser2[0]);
       }
-      if (findUser2) {
+      if (filterUser3) {
         filterUser.push(filterUser3[0]);
       }
+      console.log(filterUser2);
+      console.log(filterUser3);
       setMemberlist(filterUser);
     }
   }, []);

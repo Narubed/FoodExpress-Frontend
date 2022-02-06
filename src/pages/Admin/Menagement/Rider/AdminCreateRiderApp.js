@@ -89,11 +89,11 @@ export default function RegisterForm() {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Page title="Rider | FoodExpress">
+    <Page title="เพิ่มไรเดอร์คนใหม่ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Create Rider FoodExpress
+            เพิ่มไรเดอร์คนใหม่
           </Typography>
         </Stack>
         <FormikProvider value={formik}>

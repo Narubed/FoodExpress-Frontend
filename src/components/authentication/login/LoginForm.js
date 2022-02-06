@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 // material
 import {
   Link,
@@ -60,19 +61,28 @@ export default function LoginForm() {
       setPasswords
     });
     if ('accessToken' in response) {
-      swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
-        buttons: false,
-        timer: 2000
-      }).then((value) => {
-        sessionStorage.setItem('accessToken', response.accessToken);
-        sessionStorage.setItem('user', response.data.userId);
-        sessionStorage.setItem('role', response.data.role);
-        sessionStorage.setItem('level', response.data.level);
-        sessionStorage.setItem('firstname', response.data.firstname);
-        sessionStorage.setItem('lastname', response.data.lastname);
-        // navigate('/dashboard', { replace: true });
-        window.location.href = '/';
-      });
+      if (response.data.status !== 'Active') {
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่สามารถเข้าสู่ระบบได้ ณ ขนาดนี้',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
+          buttons: false,
+          timer: 2000
+        }).then((value) => {
+          sessionStorage.setItem('accessToken', response.accessToken);
+          sessionStorage.setItem('user', response.data.userId);
+          sessionStorage.setItem('role', response.data.role);
+          sessionStorage.setItem('level', response.data.level);
+          sessionStorage.setItem('firstname', response.data.firstname);
+          sessionStorage.setItem('lastname', response.data.lastname);
+          // navigate('/dashboard', { replace: true });
+          window.location.href = '/';
+        });
+      }
     } else {
       response = await loginRider({
         setUserNames,

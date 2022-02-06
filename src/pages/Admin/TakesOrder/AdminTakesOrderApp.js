@@ -223,7 +223,7 @@ export default function AdminTakesOrderApp() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Takes Order FoodExpress
+            รายชื่อไรเดอร์ที่รับขอส่ง
           </Typography>
         </Stack>
         <Card>

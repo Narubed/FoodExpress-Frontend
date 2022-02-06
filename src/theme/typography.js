@@ -21,7 +21,7 @@ function responsiveFontSizes({ sm, md, lg }) {
 const FONT_PRIMARY = 'Public Sans, sans-serif';
 
 const typography = {
-  fontFamily: FONT_PRIMARY,
+  fontFamily: 'Sarabun',
   fontWeightRegular: 400,
   fontWeightMedium: 600,
   fontWeightBold: 700,

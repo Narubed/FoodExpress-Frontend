@@ -82,31 +82,7 @@ export default function CompanyListToolbar({
     ];
     setStatusOrder(statusOrder);
   }, []);
-  const deleteRider = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการลบบริษัทหรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ยืนยัน!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        selected_id.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteCompany/${value}`)
-        );
-        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบบริษัทเรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
-  };
+
   return (
     <RootStyle
       sx={{
@@ -133,24 +109,17 @@ export default function CompanyListToolbar({
         />
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} onClick={() => deleteRider()} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <Button
-            disableRipple
-            color="inherit"
-            endIcon={<Icon icon={roundFilterList} />}
-            onClick={() => setState(true)}
-          >
-            สถานะสินค้า&nbsp;
-          </Button>
-        </Tooltip>
-      )}
+      <Tooltip title="Filter list">
+        <Button
+          disableRipple
+          color="inherit"
+          endIcon={<Icon icon={roundFilterList} />}
+          onClick={() => setState(true)}
+        >
+          สถานะสินค้า&nbsp;
+        </Button>
+      </Tooltip>
+
       <Drawer
         PaperProps={{
           sx: { width: 280, border: 'none', overflow: 'hidden' }
@@ -175,13 +144,6 @@ export default function CompanyListToolbar({
                   label={item}
                 />
               ))}
-              {/* <FormControlLabel
-                key={1}
-                value={123}
-                control={<Radio />}
-                onChange={(e) => console.log(e.target.value)}
-                label={123}
-              /> */}
             </RadioGroup>
           </Stack>
         </Scrollbar>

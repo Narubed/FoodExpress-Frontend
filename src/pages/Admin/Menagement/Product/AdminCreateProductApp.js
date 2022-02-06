@@ -105,11 +105,11 @@ export default function AdminCreateProductApp() {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Page title="Product | FoodExpress">
+    <Page title="เพิ่มสินค้าใหม่ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Create Product FoodExpress
+            เพิ่มสินค้าใหม่
           </Typography>
         </Stack>
         <FormikProvider value={formik}>

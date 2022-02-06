@@ -92,11 +92,11 @@ export default function AdminCreateCompanyApp() {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Page title="Company | FoodExpress">
+    <Page title="เพิ่มบริษัทใหม่ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Create Company FoodExpress
+            เพิ่มบริษัทใหม่
           </Typography>
         </Stack>
         <FormikProvider value={formik}>

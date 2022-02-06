@@ -251,11 +251,11 @@ function AdminMemberApp() {
   const isUserNotFound = filteredProduct.length === 0;
   return (
     <>
-      <Page title="Member | FoodExpress">
+      <Page title="ผู้ใช้ระบบ | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              Member
+              ผู้ใช้ระบบ
             </Typography>
             <Button
               variant="contained"

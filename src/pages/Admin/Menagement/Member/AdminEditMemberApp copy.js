@@ -176,7 +176,6 @@ export default function AdminEditMemberApp() {
   };
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   const onChangeProvince = (res) => {
-    console.log(res);
     if (res === null) {
       setProvince(localStorage.getItem('province'));
     } else if (res !== null) {
@@ -186,11 +185,11 @@ export default function AdminEditMemberApp() {
     setApiProvinceId({ ApiProvinceId: res });
   };
   return (
-    <Page title="Member | FoodExpress">
+    <Page title="แก้ไขผู้ใช้ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Edit Member FoodExpress
+            แก้ไขผู้ใช้
           </Typography>
           <Button
             onClick={() => window.location.reload(false)}

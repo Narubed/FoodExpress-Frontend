@@ -132,7 +132,6 @@ function AdminCheckOrderApp() {
   useEffect(async () => {
     const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     const reverseData = getOrdder.data.data.reverse();
-    console.log(reverseData);
     setOrderlist(reverseData);
   }, []);
   const handleRequestSort = (event, property) => {
@@ -162,6 +161,7 @@ function AdminCheckOrderApp() {
   const onResetFilter = () => {
     setOrderlistFilter(null);
   };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

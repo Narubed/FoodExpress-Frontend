@@ -21,7 +21,7 @@ function AdminPercentApp() {
     <Page title="เปอร์เซ็น | admin NBA-Express">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Percent</Typography>
+          <Typography variant="h4">เปอร์เซ็นที่ศูนย์จะได้รับ</Typography>
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4}>

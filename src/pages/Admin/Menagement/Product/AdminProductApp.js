@@ -209,11 +209,11 @@ function AdminCompanyApp() {
   const isUserNotFound = filteredProduct.length === 0;
   return (
     <>
-      <Page title="Product | FoodExpress">
+      <Page title="สินค้าทั้งหมด | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              Product
+              สินค้าทั้งหมด
             </Typography>
             <Button
               variant="contained"

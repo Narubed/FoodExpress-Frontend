@@ -42,10 +42,10 @@ function AdminCutArountApp() {
     setOrder(filetereds);
   }, []);
   return (
-    <Page title="CutArount | admin NBA-Express">
+    <Page title="ตัดรอบสินค้า | admin NBA-Express">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">CutArount Order</Typography>
+          <Typography variant="h4">รายการสินค้าเเต่ละจังหวัดที่ถูกตัดรอบแล้ว</Typography>
         </Box>
         <Input placeholder="ค้นหาตามจังหวัด" onChange={(event) => setQuery(event.target.value)} />
         <br />

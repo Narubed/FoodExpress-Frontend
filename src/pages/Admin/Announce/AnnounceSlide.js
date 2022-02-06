@@ -73,7 +73,7 @@ export default function RegisterForm() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            แก้ไขประกาศ
+            <div>แก้ไขประกาศ</div>
           </Typography>
         </Stack>
 
@@ -95,7 +95,7 @@ export default function RegisterForm() {
           variant="contained"
           onClick={() => handleSubmits()}
         >
-          แก้ไข
+          <div>แก้ไข</div>
         </Button>
       </Container>
     </Page>

@@ -219,11 +219,11 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="Rider | FoodExpress">
+    <Page title="ไรเดอร์ทั้งหมด | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Rider FoodExpress
+            ไรเดอร์ทั้งหมด
           </Typography>
           <Button
             variant="contained"

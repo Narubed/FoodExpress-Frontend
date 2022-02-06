@@ -332,11 +332,11 @@ export default function AdminCreateMemberApp() {
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
-    <Page title="Member | FoodExpress">
+    <Page title="แก้ไขผู้ใช้ | FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Edit Member FoodExpress
+            แก้ไขผู้ใช้
           </Typography>
           <Button onClick={() => window.location.reload(false)}>เรียกช้อมูล</Button>
         </Stack>

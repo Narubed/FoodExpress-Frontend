@@ -1,21 +1,31 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import roundClearAll from '@iconify/icons-ic/round-clear-all';
 // material
 import { styled } from '@mui/material/styles';
 import {
   Box,
+  Radio,
   Toolbar,
   Tooltip,
+  Button,
+  Drawer,
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  FormControlLabel,
+  Stack,
+  RadioGroup
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
+import Scrollbar from '../../Scrollbar';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -40,46 +50,39 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-CheckOrderMemberListToolbar.propTypes = {
+CompanyListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  selected_id: PropTypes.array
+  selected_id: PropTypes.array,
+  onChangeStatus: PropTypes.string,
+  onResetFilter: PropTypes.func
 };
 
-// eslint-disable-next-line camelcase
-export default function CheckOrderMemberListToolbar({
+export default function CompanyListToolbar({
   numSelected,
   filterName,
   onFilterName,
+  onChangeStatus,
+  onResetFilter,
   // eslint-disable-next-line camelcase
   selected_id
 }) {
-  const deleteRider = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการลบบริษัทหรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ยืนยัน!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        selected_id.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteCompany/${value}`)
-        );
-        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบบริษัทเรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
-  };
+  const [state, setState] = useState(false);
+  const [statusOrder, setStatusOrder] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const statusOrder = [
+      'รอจัดส่ง',
+      'รอชำระเงิน',
+      'รอตรวจสอบ',
+      'จัดส่งสำเร็จ',
+      'ผู้ใช้ยกเลิก',
+      'ผู้ดูแลระบบยกเลิก'
+    ];
+    setStatusOrder(statusOrder);
+  }, []);
+
   return (
     <RootStyle
       sx={{
@@ -106,19 +109,58 @@ export default function CheckOrderMemberListToolbar({
         />
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} onClick={() => deleteRider()} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Tooltip title="Filter list">
+        <Button
+          disableRipple
+          color="inherit"
+          endIcon={<Icon icon={roundFilterList} />}
+          onClick={() => setState(true)}
+        >
+          สถานะสินค้า&nbsp;
+        </Button>
+      </Tooltip>
+
+      <Drawer
+        PaperProps={{
+          sx: { width: 280, border: 'none', overflow: 'hidden' }
+        }}
+        anchor="right"
+        open={state}
+        onClose={() => setState(false)}
+      >
+        <Scrollbar>
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              สถานะสินค้า
+            </Typography>
+
+            <RadioGroup>
+              {statusOrder.map((item) => (
+                <FormControlLabel
+                  key={item}
+                  value={item}
+                  control={<Radio />}
+                  onChange={(e) => onChangeStatus(e.target.value)}
+                  label={item}
+                />
+              ))}
+            </RadioGroup>
+          </Stack>
+        </Scrollbar>
+        <Box sx={{ p: 3 }}>
+          <Button
+            fullWidth
+            size="large"
+            type="submit"
+            color="inherit"
+            variant="outlined"
+            onClick={() => onResetFilter()}
+            startIcon={<Icon icon={roundClearAll} />}
+          >
+            Clear All
+          </Button>
+        </Box>
+      </Drawer>
     </RootStyle>
   );
 }
