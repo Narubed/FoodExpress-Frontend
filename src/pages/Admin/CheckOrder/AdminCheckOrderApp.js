@@ -1,24 +1,18 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
-import { Tag } from 'antd';
 import axios from 'axios';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -33,7 +27,6 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import { styled } from '@mui/material/styles';
 import {
   CheckOrderListHead,
@@ -120,38 +113,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
 function AdminCheckOrderApp() {
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
+  const [OrderlistFilter, setOrderlistFilter] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -166,6 +132,7 @@ function AdminCheckOrderApp() {
   useEffect(async () => {
     const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     const reverseData = getOrdder.data.data.reverse();
+    console.log(reverseData);
     setOrderlist(reverseData);
   }, []);
   const handleRequestSort = (event, property) => {
@@ -186,34 +153,15 @@ function AdminCheckOrderApp() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, order_id) => {
-    const selectedIndex = selected.indexOf(order_id);
-    // const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    // let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, order_id);
-      // newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      // newSelectedid = newSelectedid.concat(
-      //   selected_id.slice(0, selectedIndexid),
-      //   selected_id.slice(selectedIndexid + 1)
-      // );
+  const onChangeStatus = (e) => {
+    const filterStatus = Orderlist.filter((value) => value.order_status === e);
+    if (filterStatus.length !== 0) {
+      setOrderlistFilter(filterStatus);
     }
-    setSelected(newSelected);
-    // setSelected_id(newSelectedid);
   };
-
+  const onResetFilter = () => {
+    setOrderlistFilter(null);
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -227,26 +175,33 @@ function AdminCheckOrderApp() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Orderlist.length) : 0;
-
   const newOrderlist =
-    valueDate[0] && valueDate[1] !== null
+    OrderlistFilter !== null && valueDate[0] !== null && valueDate[1] !== null
+      ? OrderlistFilter.filter(
+          (f) =>
+            dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
+            dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
+        )
+      : OrderlistFilter === null && valueDate[0] !== null && valueDate[1] !== null
       ? Orderlist.filter(
           (f) =>
             dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
             dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
         )
+      : OrderlistFilter !== null && valueDate[0] === null && valueDate[1] === null
+      ? OrderlistFilter
       : Orderlist;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - newOrderlist.length) : 0;
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
   return (
     <>
-      <Page title="CheckOrder | FoodExpress">
+      <Page title="เช็คออเดอร์ | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              CheckOrder
+              <div>เช็คออเดอร์</div>
             </Typography>
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -273,6 +228,8 @@ function AdminCheckOrderApp() {
               filterName={filterName}
               onFilterName={handleFilterByName}
               selected={selected}
+              onChangeStatus={onChangeStatus}
+              onResetFilter={onResetFilter}
               // eslint-disable-next-line camelcase
               selected_id={selected_id}
             />

@@ -23,6 +23,7 @@ import {
   TablePagination,
   Badge
 } from '@mui/material';
+import Image from '@material-tailwind/react/Image';
 import { styled } from '@mui/material/styles';
 import {
   CompanyListHead,
@@ -293,7 +294,14 @@ function AdminCompanyApp() {
                                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                   variant="dot"
                                 >
-                                  <Avatar {...stringAvatar(`${company_name} ${company_tel}`)} />
+                                  <Image
+                                    className="h-10 w-10 rounded-full"
+                                    // eslint-disable-next-line react/jsx-curly-brace-presence
+                                    src={
+                                      'https://www.kindpng.com/picc/m/585-5854562_size-of-company-icon-hd-png-download.png'
+                                    }
+                                    alt=""
+                                  />
                                 </StyledBadge>
                                 <Typography variant="subtitle2" noWrap>
                                   {company_name}

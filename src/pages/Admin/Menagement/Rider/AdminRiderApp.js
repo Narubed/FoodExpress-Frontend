@@ -23,6 +23,7 @@ import {
   TablePagination,
   Badge
 } from '@mui/material';
+import Image from '@material-tailwind/react/Image';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../../../components/Page';
@@ -291,7 +292,14 @@ export default function User() {
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 variant="dot"
                               >
-                                <Avatar {...stringAvatar(`${rider_id_login} ${rider_pw_login}`)} />
+                                <Image
+                                  className="h-10 w-10 rounded-full"
+                                  // eslint-disable-next-line react/jsx-curly-brace-presence
+                                  src={
+                                    'https://production-rabbit-care-blog.imgix.net/2022/01/choose-motorcycle-for-the-rider-03.jpg?auto=compress%2Cformat&crop=faces%2Ccenter&fit=scale&h=768&q=30&w=1024'
+                                  }
+                                  alt=""
+                                />
                               </StyledBadge>
                               <Typography variant="subtitle2" noWrap>
                                 {rider_first_name}

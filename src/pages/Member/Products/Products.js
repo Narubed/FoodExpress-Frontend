@@ -106,10 +106,10 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Products | NBA-Express">
+    <Page title="สินค้าทั้งหมด | NBA-Express">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          <h1>Products</h1>
+          <div>สินค้าทั้งหมด</div>
         </Typography>
         <Stack
           direction="row"

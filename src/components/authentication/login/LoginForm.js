@@ -60,7 +60,7 @@ export default function LoginForm() {
       setPasswords
     });
     if ('accessToken' in response) {
-      swal('Success', response.message, 'success', {
+      swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
         buttons: false,
         timer: 2000
       }).then((value) => {
@@ -79,7 +79,7 @@ export default function LoginForm() {
         setPasswords
       });
       if ('accessToken' in response) {
-        swal('Success', response.message, 'success', {
+        swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
           buttons: false,
           timer: 2000
         }).then((value) => {
