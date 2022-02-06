@@ -128,11 +128,11 @@ function CheckOrderUnderMemberApp() {
     }
   }, []);
   return (
-    <Page title="เช็คออเดอร์ที่รอจัดส่ง | admin NBA-Express">
+    <Page title="ออเดอร์ที่รอจัดส่ง | NBA-Express">
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Rider FoodExpress
+            <div> ออเดอร์ที่รอจัดส่ง</div>
           </Typography>
           <Button
             variant="outlined"

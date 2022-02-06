@@ -129,7 +129,8 @@ export default function AppCardProvince(props) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cut arount it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.post(

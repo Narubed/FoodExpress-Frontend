@@ -35,7 +35,7 @@ export default function BlogsReportOrderApp() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            รายงานออเดอร์รับเข้าและส่งออก
+            <div>รายงานออเดอร์รับเข้าและส่งออก</div>
           </Typography>
         </Stack>
 

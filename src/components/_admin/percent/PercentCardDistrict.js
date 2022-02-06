@@ -22,42 +22,48 @@ export default function PercentCardProvice() {
   }, []);
 
   const handleSubmits = (e) => {
-    const data = {
-      percent_id: 2,
-      percent_name: 'district',
-      percent_subdistrict: 0,
-      percent_district: district_district / 100,
-      percent_provice: district_province / 100,
-      percent_nba: district_nba / 100
-    };
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการเเก้ไขข้อมูลอำเภอหรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, need it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
-        Swal.fire({
-          position: '',
-          icon: 'success',
-          title: 'คุณได้ทำการเเก้ไขข้อมูลระดับอำเภอเเล้ว',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
-      }
-    });
+    if (
+      parseFloat(district_district) + parseFloat(district_province) + parseFloat(district_nba) !==
+      100
+    ) {
+      Swal.fire('กำหนดค่าไม่ถูกต้อง?', 'ค่าเปอร์เซ็นทั้งหมดรวมกันเเล้วไม่ถึง 100 %', 'question');
+    } else {
+      const data = {
+        percent_id: 2,
+        percent_name: 'district',
+        percent_subdistrict: 0,
+        percent_district: parseFloat(district_district) / 100,
+        percent_provice: parseFloat(district_province) / 100,
+        percent_nba: parseFloat(district_nba) / 100
+      };
+      Swal.fire({
+        text: 'คุณต้องการเเก้ไขข้อมูลอำเภอหรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ตกลง!',
+        cancelButtonText: 'ยกเลิก!',
+        reverseButtons: true
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
+          Swal.fire({
+            position: '',
+            icon: 'success',
+            title: 'คุณได้ทำการเเก้ไขข้อมูลระดับอำเภอเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          Swal.fire('ยกเลิก', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
+        }
+      });
+    }
   };
 
   return (

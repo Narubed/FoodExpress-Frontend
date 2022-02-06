@@ -64,7 +64,9 @@ function RiderCreatBarCodeApp() {
     <Page title="RiderCreatBarCodeApp | admin NBA-Express">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">RiderCreatBarCodeApp</Typography>
+          <Typography variant="h4">
+            <div>RiderCreatBarCodeApp</div>
+          </Typography>
           <ReactToPrint
             trigger={() => (
               <Button

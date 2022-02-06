@@ -73,7 +73,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         >
           <Icon icon="emojione-v1:bull-horn-with-sound-waves" width="30" height="30" />{' '}
           <Icon icon="emojione-v1:bull-horn-with-sound-waves" width="30" height="30" />
-          ..{Announce}..
+          ..<div>{Announce}</div>..
           <Icon icon="emojione-v1:bull-horn-with-sound-waves" width="30" height="30" />{' '}
           <Icon icon="emojione-v1:bull-horn-with-sound-waves" width="30" height="30" />
         </Marquee>

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-dynamic-require */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 // material
 import Image from '@material-tailwind/react/Image';
 import Button from '@mui/material/Button';
@@ -10,13 +10,22 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { Icon } from '@iconify/react';
-
+import axios from 'axios';
 // components
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function PopUpAdvert() {
   const [open, setOpen] = useState(true);
+  const [AnnounceAdvert, setAnnounceAdvert] = useState(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const AnnounceAdverts = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getAnnounceAdvert`
+    );
+    console.log(AnnounceAdverts.data.data);
+    setAnnounceAdvert(AnnounceAdverts.data.data[0].announve_advert_image);
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -39,15 +48,18 @@ export default function PopUpAdvert() {
         {/* <DialogTitle>ประกาศจากเอ็นบีเอ</DialogTitle> */}
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Image
-              src={
-                // eslint-disable-next-line global-require
-                require(`../../assets/img/1635588136525-shape-testimonial.png`).default
-              }
-              rounded={false}
-              raised
-              alt="Rounded Image"
-            />
+            {AnnounceAdvert !== null ? (
+              <Image
+                rounded={false}
+                raised={false}
+                alt="Image"
+                className="previewimg"
+                src={
+                  // eslint-disable-next-line global-require
+                  require(`../../assets/img/${AnnounceAdvert}`).default
+                }
+              />
+            ) : null}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

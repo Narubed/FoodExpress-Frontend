@@ -23,7 +23,6 @@ import {
   Table
 } from '@mui/material';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';

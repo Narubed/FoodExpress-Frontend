@@ -39,7 +39,8 @@ export default function WalletPutSlip({ images, wallet_id }) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlipWallet`, formdata);

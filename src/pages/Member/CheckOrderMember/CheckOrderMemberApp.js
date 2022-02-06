@@ -257,7 +257,7 @@ function CheckOrderMemberApp() {
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              CheckOrder
+              <div> ออเดอร์ของท่าน</div>
             </Typography>
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

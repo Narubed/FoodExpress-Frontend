@@ -110,7 +110,8 @@ export default function CartWidget({
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'ใช่, ฉันต้องการ!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrder`, OrderFoodExpress);

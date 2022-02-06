@@ -76,8 +76,8 @@ export default function CheckOrderMemberMoreMenu(props) {
       text: 'คุณต้องการยกเลิกออเดอร์นี้หรือไม่ !',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, need it!',
-      cancelButtonText: 'No, cancel!',
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!',
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -116,7 +116,7 @@ export default function CheckOrderMemberMoreMenu(props) {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'ใช่, ฉันได้รับสินค้าเเล้ว!',
-      cancelButtonText: 'No, cancel!',
+      cancelButtonText: 'ยกเลิก!',
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {

@@ -42,7 +42,8 @@ export default function TakesOrderMoreMenu(props) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
@@ -69,7 +70,8 @@ export default function TakesOrderMoreMenu(props) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes !'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       const data = {
         rider_id: id,

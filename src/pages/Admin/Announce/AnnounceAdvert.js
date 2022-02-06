@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
@@ -36,16 +37,54 @@ import Page from '../../../components/Page';
 export default function AdminEditProductApp() {
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
-  const [ProductType, setProductType] = useState([]);
+  const [AnnounceAdverts, setAnnounceAdvert] = useState(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
-    setProductType(ProductType.data.data);
+    const AnnounceAdverts = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getAnnounceAdvert`
+    );
+    setAnnounceAdvert(AnnounceAdverts.data.data[0].announve_advert_image);
   }, []);
   const handleInputChange = async (event) => {
     console.log(event);
     setfile(event.target.files[0] ? event.target.files[0] : []);
     setfilepreview(event.target.files[0] ? URL.createObjectURL(event.target.files[0]) : null);
+  };
+  const handleSubmit = async () => {
+    console.log(file);
+    if (file.length !== 0) {
+      const formdata = new FormData();
+      formdata.append('avatar', file);
+      formdata.append('announve_advert_id', 1);
+      console.log(formdata);
+      Swal.fire({
+        title: 'คุณต้องการบันทึกรูปนี้หรือไม่ ?',
+        text: 'หลังจากคุณบันทึกภาพที่แสดงหน้าแรกของผู้ใช้จะกลายเป็นภายนี้แทน !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ยืนยันการเปลี่ยนแปลงภาพ!',
+        cancelButtonText: 'ยกเลิกการเปลี่ยนแปลง!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAnnounceAdvert`, formdata);
+          Swal.fire({
+            position: '',
+            icon: 'success',
+            title: 'คุณได้ทำการยืนยันการเปลี่ยนภาพโฆษณาเเล้ว ',
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        }
+      });
+    } else {
+      Swal.fire('คุณลืมเพิ่มรูปภาพ ?', 'กรุณาเลือกไฟล์ภาพสำหรับแสดงหน้าของผู้ใช้ด้วย?', 'question');
+    }
   };
   return (
     <Page title="Product | FoodExpress">
@@ -71,24 +110,22 @@ export default function AdminEditProductApp() {
             type="submit"
             variant="contained"
             // loading={isSubmitting}
-            onClick={() => console.log('เพิ่มรูปปปปปปปปปปปปปปปป')}
+            onClick={() => handleSubmit()}
           >
             ยืนยันการเพิ่มข้อมูล
           </LoadingButton>
-          {
-            filepreview !== null ? (
-              <img className="previewimg" src={filepreview} alt="UploadImage" />
-            ) : null
-
-            /* <img
-                  className="previewimg"
-                  src={
-                    // eslint-disable-next-line global-require
-                    require(`../../../../assets/img/${localStorage.getItem('productImg')}`).default
-                  }
-                  alt="UploadImage"
-                /> */
-          }
+          {filepreview !== null ? (
+            <img className="previewimg" src={filepreview} alt="UploadImage" />
+          ) : AnnounceAdverts !== null ? (
+            <img
+              className="previewimg"
+              src={
+                // eslint-disable-next-line global-require
+                require(`../../../assets/img/${AnnounceAdverts}`).default
+              }
+              alt="UploadImage"
+            />
+          ) : null}
         </Stack>
       </Container>
     </Page>

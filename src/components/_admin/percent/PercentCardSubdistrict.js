@@ -24,42 +24,51 @@ export default function PercentCardSubdistrict() {
   }, []);
 
   const handleSubmits = (e) => {
-    const dataSubdistric = {
-      percent_id: 1,
-      percent_name: 'subdistrict',
-      percent_subdistrict: subdistrict_subdistrict / 100,
-      percent_district: subdistrict_district / 100,
-      percent_provice: subdistrict_province / 100,
-      percent_nba: subdistrict_nba / 100
-    };
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการเเก้ไขข้อมูลตำบลนี้หรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, need it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, dataSubdistric);
-        Swal.fire({
-          position: '',
-          icon: 'success',
-          title: 'คุณได้ทำการเเก้ไขข้อมูลระดับตำบลเเล้ว @!',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
-      }
-    });
+    if (
+      parseFloat(subdistrict_subdistrict) +
+        parseFloat(subdistrict_district) +
+        parseFloat(subdistrict_province) +
+        parseFloat(subdistrict_nba) !==
+      100
+    ) {
+      Swal.fire('กำหนดค่าไม่ถูกต้อง?', 'ค่าเปอร์เซ็นทั้งหมดรวมกันเเล้วไม่ถึง 100 %', 'question');
+    } else {
+      const dataSubdistric = {
+        percent_id: 1,
+        percent_name: 'subdistrict',
+        percent_subdistrict: parseFloat(subdistrict_subdistrict) / 100,
+        percent_district: parseFloat(subdistrict_district) / 100,
+        percent_provice: parseFloat(subdistrict_province) / 100,
+        percent_nba: parseFloat(subdistrict_nba) / 100
+      };
+      Swal.fire({
+        text: 'คุณต้องการเเก้ไขข้อมูลตำบลนี้หรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'ตกลง!',
+        cancelButtonText: 'ยกเลิก!',
+        reverseButtons: true
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, dataSubdistric);
+          Swal.fire({
+            position: '',
+            icon: 'success',
+            title: 'คุณได้ทำการเเก้ไขข้อมูลระดับตำบลเเล้ว !',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          Swal.fire('ยกเลิก', 'คุณได้ทำการยกเลิกการเเก้ไขเเล้ว :)', 'error');
+        }
+      });
+    }
   };
 
   return (
@@ -112,7 +121,6 @@ export default function PercentCardSubdistrict() {
           />
         </CardBody>
         <CardFooter>
-          {' '}
           <div className="h-56 grid grid-cols-3 gap-4 content-between">
             <Button
               color="yellow"

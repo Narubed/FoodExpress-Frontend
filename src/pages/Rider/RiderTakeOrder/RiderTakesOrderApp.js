@@ -155,7 +155,7 @@ export default function AdminTakesOrderDetail() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Rider TakeOrder
+            <div>Rider TakeOrder</div>
           </Typography>
           <Button
             variant="contained"

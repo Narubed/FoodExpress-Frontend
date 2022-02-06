@@ -96,7 +96,9 @@ function CheckOrderMemberCreatBarCodeApp() {
       <Page title="RiderCreatBarCodeApp | admin NBA-Express">
         <Container maxWidth="xl">
           <Box sx={{ pb: 5 }}>
-            <Typography variant="h4">สร้างบาร์โค๊ตออเดอร์ที่ถูกตัดรอบแล้ว</Typography>
+            <Typography variant="h4">
+              <div>สร้างบาร์โค๊ตออเดอร์ที่ถูกตัดรอบแล้ว</div>
+            </Typography>
             <ReactToPrint
               trigger={() => (
                 <Button

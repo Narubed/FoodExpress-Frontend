@@ -68,7 +68,9 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {`${sessionStorage.getItem('firstname')}  ${sessionStorage.getItem('lastname')}`}
+                <div>
+                  {`${sessionStorage.getItem('firstname')}  ${sessionStorage.getItem('lastname')}`}
+                </div>
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {}

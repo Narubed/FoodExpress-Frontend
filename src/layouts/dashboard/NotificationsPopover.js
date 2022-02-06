@@ -465,7 +465,7 @@ export default function NotificationsPopover() {
         <Divider />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple component={RouterLink} to="/admin/AdminCheckOrderApp">
+          <Button fullWidth disableRipple component={RouterLink} to="/">
             View All
           </Button>
         </Box>

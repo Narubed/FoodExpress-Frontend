@@ -221,7 +221,7 @@ function AdminMemberApp() {
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              ผู้ใช้งานใต้สังกัต
+              <div>ผู้ใช้งานใต้สังกัต</div>
             </Typography>
           </Stack>
           <Card>

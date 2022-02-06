@@ -26,11 +26,11 @@ export default function StockProductApp() {
     setStock(filterUserID.reverse());
   }, []);
   return (
-    <Page title="StockProduct| NBA-Express">
+    <Page title="สต๊อกสินค้า | NBA-Express">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            StockProductApp
+            <div>สต๊อกสินค้า</div>
           </Typography>
         </Stack>
 

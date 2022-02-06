@@ -78,7 +78,7 @@ export default function ShopProductCard({ product, setCount, count }) {
     <>
       <Card>
         <Box sx={{ pt: '100%', position: 'relative' }}>
-          {productStetus && (
+          {/* {productStetus && (
             <Label
               variant="filled"
               color={(productStetus === 'สินค้ายังไม่พร้อมจำหน่าย' && 'error') || 'info'}
@@ -92,14 +92,14 @@ export default function ShopProductCard({ product, setCount, count }) {
             >
               {productStetus}
             </Label>
-          )}
+          )} */}
           <ProductImgStyle alt={name} src={ImageProduct} onClick={() => setShowModal(true)} />
         </Box>
 
         <Stack spacing={2} sx={{ p: 3 }}>
           <Link to="#" color="inherit" underline="hover" component={RouterLink}>
             <Typography variant="subtitle2" noWrap>
-              {productName}
+              <div>{productName}</div>
             </Typography>
           </Link>
 

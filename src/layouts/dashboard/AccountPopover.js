@@ -99,7 +99,7 @@ export default function AccountPopover() {
           >
             <Icon icon="flat-color-icons:home" width="24" height="24" />
           </Box>
-          หน้าหลัก
+          <div>หน้าหลัก</div>
         </MenuItem>
         <MenuItem
           key={2}
@@ -117,12 +117,12 @@ export default function AccountPopover() {
           >
             <Icon icon="openmoji:currency-exchange" width="24" height="24" />
           </Box>
-          เปลี่ยนรหัสผ่าน
+          <div>เปลี่ยนรหัสผ่าน</div>
         </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
           <Button fullWidth color="inherit" variant="outlined" onClick={logout}>
-            Logout
+            <div>Logout</div>
           </Button>
         </Box>
       </MenuPopover>

@@ -52,7 +52,7 @@ export default function Register() {
       <MHidden width="mdDown">
         <SectionStyle>
           <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            กรุณาติดต่อผู้ดูเเลระบบ
+            <div> กรุณาติดต่อผู้ดูเเลระบบ</div>
           </Typography>
           <img alt="register" src="/static/illustrations/illustration_register.png" />
         </SectionStyle>
@@ -62,7 +62,7 @@ export default function Register() {
         <ContentStyle>
           <Box sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              สามารถติดต่อสมัครสมาชิกผ่าน
+              <div>สามารถติดต่อสมัครสมาชิกผ่าน</div>
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
               <a href="https://nbadigitalworlds.com/2021/">https://nbadigitalworlds.com/2021/</a>

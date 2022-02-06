@@ -44,7 +44,8 @@ export default function ProductMoreMenu(props) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/product/${productid}`);

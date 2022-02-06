@@ -40,7 +40,8 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยันยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
@@ -73,18 +74,14 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
           alt="Rounded Image"
         />
       </button> */}
-      <Button
-        onClick={(e) => setShowModal(true)}
-        color="lightBlue"
-        buttonType="link"
-        size="regular"
-        rounded
-        block={false}
-        iconOnly
-        ripple="dark"
-      >
-        <Icon icon="flat-color-icons:add-image" width={22} height={22} />
-      </Button>
+      <button>
+        <Icon
+          onClick={(e) => setShowModal(true)}
+          icon="flat-color-icons:add-image"
+          width={22}
+          height={22}
+        />
+      </button>
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
         <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน</ModalHeader>
         <ModalBody>
