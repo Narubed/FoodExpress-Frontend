@@ -29,51 +29,49 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
     });
   };
   const submit = async () => {
-    const formdata = new FormData();
-    formdata.append('avatar', userInfo.file);
-    formdata.append('order_id', order_id);
-    formdata.append('order_status', 'รอตรวจสอบ');
-    Swal.fire({
-      title: 'คุณต้องการบันทึกสลิปหรือไม่ ?',
-      text: 'หลังจากคุณบันทึกสถานะของรายการนี้จะถูกเปลี่ยนเป็นรอตรวจสอบ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ยันยัน!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
-        Swal.fire({
-          position: '',
-          icon: 'success',
-          title: 'คุณได้ทำการยืนยันการจ่ายเงินเเล้ว ',
-          showConfirmButton: false,
-          timer: 1500
-        });
+    if (userInfo.file.length === 0) {
+      Swal.fire({
+        position: '',
+        icon: 'eooro',
+        title: 'คุณยังไม่ได้เพิ่มไฟล์สลิป ?',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    } else {
+      const formdata = new FormData();
+      formdata.append('avatar', userInfo.file);
+      formdata.append('order_id', order_id);
+      formdata.append('order_status', 'รอตรวจสอบ');
+      Swal.fire({
+        title: 'คุณต้องการบันทึกสลิปหรือไม่ ?',
+        text: 'หลังจากคุณบันทึกสถานะของรายการนี้จะถูกเปลี่ยนเป็นรอตรวจสอบ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ยันยัน!',
+        cancelButtonText: 'ยกเลิก!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
+          Swal.fire({
+            position: '',
+            icon: 'success',
+            title: 'คุณได้ทำการยืนยันการจ่ายเงินเเล้ว ',
+            showConfirmButton: false,
+            timer: 1500
+          });
 
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        }
+      });
+    }
   };
 
   return (
     <div>
-      {/* <button onClick={(e) => setShowModal(true)}>
-        <Image
-          className="h-5 w-5 rounded-full"
-          src={
-            // eslint-disable-next-line global-require
-            require(`../../../assets/img/${images}`).default
-          }
-          rounded={false}
-          raised
-          alt="Rounded Image"
-        />
-      </button> */}
       <button>
         <Icon
           onClick={(e) => setShowModal(true)}

@@ -1,21 +1,31 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import roundClearAll from '@iconify/icons-ic/round-clear-all';
 // material
 import { styled } from '@mui/material/styles';
 import {
   Box,
+  Radio,
   Toolbar,
   Tooltip,
+  Button,
+  Drawer,
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  FormControlLabel,
+  Stack,
+  RadioGroup
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
+import Scrollbar from '../../Scrollbar';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -44,11 +54,34 @@ CompanyListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  selected_id: PropTypes.array
+  selected_id: PropTypes.array,
+  onChangeStatus: PropTypes.string,
+  onResetFilter: PropTypes.func
 };
 
-// eslint-disable-next-line camelcase
-export default function CompanyListToolbar({ numSelected, filterName, onFilterName, selected_id }) {
+export default function CompanyListToolbar({
+  numSelected,
+  filterName,
+  onFilterName,
+  onChangeStatus,
+  onResetFilter,
+  // eslint-disable-next-line camelcase
+  selected_id
+}) {
+  const [state, setState] = useState(false);
+  const [statusOrder, setStatusOrder] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const statusOrder = [
+      'รอจัดส่ง',
+      'รอชำระเงิน',
+      'รอตรวจสอบ',
+      'จัดส่งสำเร็จ',
+      'ผู้ใช้ยกเลิก',
+      'ผู้ดูแลระบบยกเลิก'
+    ];
+    setStatusOrder(statusOrder);
+  }, []);
   const deleteRider = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -108,11 +141,64 @@ export default function CompanyListToolbar({ numSelected, filterName, onFilterNa
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
+          <Button
+            disableRipple
+            color="inherit"
+            endIcon={<Icon icon={roundFilterList} />}
+            onClick={() => setState(true)}
+          >
+            สถานะสินค้า&nbsp;
+          </Button>
         </Tooltip>
       )}
+      <Drawer
+        PaperProps={{
+          sx: { width: 280, border: 'none', overflow: 'hidden' }
+        }}
+        anchor="right"
+        open={state}
+        onClose={() => setState(false)}
+      >
+        <Scrollbar>
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              สถานะสินค้า
+            </Typography>
+
+            <RadioGroup>
+              {statusOrder.map((item) => (
+                <FormControlLabel
+                  key={item}
+                  value={item}
+                  control={<Radio />}
+                  onChange={(e) => onChangeStatus(e.target.value)}
+                  label={item}
+                />
+              ))}
+              {/* <FormControlLabel
+                key={1}
+                value={123}
+                control={<Radio />}
+                onChange={(e) => console.log(e.target.value)}
+                label={123}
+              /> */}
+            </RadioGroup>
+          </Stack>
+        </Scrollbar>
+        <Box sx={{ p: 3 }}>
+          <Button
+            fullWidth
+            size="large"
+            type="submit"
+            color="inherit"
+            variant="outlined"
+            onClick={() => onResetFilter()}
+            startIcon={<Icon icon={roundClearAll} />}
+          >
+            Clear All
+          </Button>
+        </Box>
+      </Drawer>
     </RootStyle>
   );
 }
