@@ -27,24 +27,25 @@ export default function Page404() {
           <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
             <motion.div variants={varBounceIn}>
               <Typography variant="h3" paragraph>
-                Sorry, page not found!
+                เว็ปนี้ไม่มีหน้าที่คุณต้องการค้นหา
               </Typography>
             </motion.div>
             <Typography sx={{ color: 'text.secondary' }}>
-              Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL?
-              Be sure to check your spelling.
+              หน้าที่ท่านต้องการค้นหานั้นไม่มีอยู่ใน เว็ปของเรา
+              กรุณาติดต่อทางบริษัทหรือตัวเเทนในเรื่องนี้เพื่อสอบถามข้อมูลเพิ่มเติม
             </Typography>
 
             <motion.div variants={varBounceIn}>
               <Box
                 component="img"
-                src="/static/illustrations/illustration_404.svg"
+                // src="/static/illustrations/illustration_404.svg"
+                src="https://nbadigitalworlds.com/2021/assets/img/phone.png"
                 sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
               />
             </motion.div>
 
             <Button to="/" size="large" variant="contained" component={RouterLink}>
-              Go to Home
+              กลับสู่หน้าหลัก
             </Button>
           </Box>
         </MotionContainer>
