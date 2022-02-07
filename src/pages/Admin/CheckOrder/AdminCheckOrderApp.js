@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
@@ -115,6 +116,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function AdminCheckOrderApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
   const [OrderlistFilter, setOrderlistFilter] = useState(null);
@@ -134,6 +137,7 @@ function AdminCheckOrderApp() {
     const reverseData = getOrdder.data.data.reverse();
     setOrderlist(reverseData);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -174,7 +178,7 @@ function AdminCheckOrderApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  dispatch({ type: 'OPEN' });
   const newOrderlist =
     OrderlistFilter !== null && valueDate[0] !== null && valueDate[1] !== null
       ? OrderlistFilter.filter(
@@ -195,6 +199,7 @@ function AdminCheckOrderApp() {
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="เช็คออเดอร์ | FoodExpress">

@@ -9,7 +9,7 @@ const combineReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  console.log('test');
+  // console.log('test');
   if (action.type === 'RESET_APP_STORE') {
     state = undefined;
   }

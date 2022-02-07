@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import { useDispatch } from 'react-redux';
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 import axios from 'axios';
@@ -12,13 +12,15 @@ import {
 } from '../../../components/_admin/percent';
 // ----------------------------------------------------------------------
 function AdminPercentApp() {
+  const dispatch = useDispatch();
   const [Percent, setPercent] = useState([]);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
     setPercent(getAllPrecent.data.data);
   }, []);
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="เปอร์เซ็น | admin NBA-Express">
       <Container maxWidth="xl">

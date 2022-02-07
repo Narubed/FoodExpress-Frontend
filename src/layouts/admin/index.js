@@ -42,17 +42,17 @@ export default function DashboardLayout() {
     <RootStyle>
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
       <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      {/* <button
+      <button
         onClick={() =>
           dispatch({
-            type: 'TRUE'
+            type: 'OPEN'
           })
         }
       >
-        123
-      </button> */}
+        .
+      </button>
 
-      <MainStyle>{!counter.reducer ? <PageLoader /> : <Outlet />}</MainStyle>
+      <MainStyle>{counter.reducer === true ? <PageLoader /> : <Outlet />}</MainStyle>
       {/* <button
         onClick={() =>
           dispatch({

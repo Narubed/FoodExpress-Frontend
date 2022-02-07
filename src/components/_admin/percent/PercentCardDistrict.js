@@ -15,6 +15,7 @@ export default function PercentCardProvice() {
   const [district_district, setDistrict_district] = useState([]);
   const [district_province, setDistrict_province] = useState([]);
   const [district_nba, setDistrict_nba] = useState([]);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
@@ -22,6 +23,7 @@ export default function PercentCardProvice() {
     setDistrict_province(getAllPrecent.data.data[1].percent_provice * 100);
     setDistrict_nba(getAllPrecent.data.data[1].percent_nba * 100);
   }, []);
+  dispatch({ type: 'TURNOFF' });
 
   const handleSubmits = (e) => {
     if (
@@ -47,9 +49,10 @@ export default function PercentCardProvice() {
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
-          dispatch({ type: 'TRUE' });
+          dispatch({ type: 'OPEN' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
-          dispatch({ type: 'FALSE' });
+          dispatch({ type: 'TURNOFF' });
+
           Swal.fire({
             position: '',
             icon: 'success',
@@ -57,9 +60,9 @@ export default function PercentCardProvice() {
             showConfirmButton: false,
             timer: 1500
           });
-          setTimeout(() => {
-            window.location.reload(false);
-          }, 1500);
+          // setTimeout(() => {
+          //   window.location.reload(false);
+          // }, 1500);
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -70,6 +73,7 @@ export default function PercentCardProvice() {
     }
   };
 
+  // dispatch({ type: 'FALSE' });
   return (
     <div>
       {' '}

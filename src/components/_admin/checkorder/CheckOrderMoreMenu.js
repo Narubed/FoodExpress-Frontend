@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import numeral from 'numeral';
 import { Link as RouterLink } from 'react-router-dom';
@@ -39,6 +40,7 @@ CheckOrderMoreMenu.propTypes = {
   order_status: PropTypes.string
 };
 export default function CheckOrderMoreMenu(props) {
+  const dispatch = useDispatch();
   // eslint-disable-next-line camelcase
   const { order_id, Orderlist, row, order_product_total, order_status, order_member_id } = props;
   const [showModal, setShowModal] = useState(false);
@@ -69,7 +71,9 @@ export default function CheckOrderMoreMenu(props) {
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
           icon: 'success',
@@ -77,9 +81,6 @@ export default function CheckOrderMoreMenu(props) {
           showConfirmButton: false,
           timer: 1500
         });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
@@ -103,8 +104,10 @@ export default function CheckOrderMoreMenu(props) {
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await CheckTabelWallet();
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
           icon: 'success',
@@ -112,9 +115,6 @@ export default function CheckOrderMoreMenu(props) {
           showConfirmButton: false,
           timer: 1500
         });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelled', 'คุณทำการยกเลิกการยืนยันการโอนเงิน :)', 'error');
       }
@@ -166,7 +166,7 @@ export default function CheckOrderMoreMenu(props) {
       0
     );
     const summery = reduce11 - reduce22;
-    console.log(summery);
+
     // จบการทำงานเเล้ว ไม่ต้องเช็คกระเป๋าเงิน
     if (getMemberByID.data.data.level === 'province') {
       const filterWallet = filterDateOwner.filter(

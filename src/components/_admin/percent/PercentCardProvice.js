@@ -14,13 +14,14 @@ export default function PercentCardProvice() {
   const dispatch = useDispatch();
   const [province_province, setProvince_province] = useState([]);
   const [province_nba, setProvince_nba] = useState([]);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
     setProvince_province(getAllPrecent.data.data[2].percent_provice * 100);
     setProvince_nba(getAllPrecent.data.data[2].percent_nba * 100);
   }, []);
-
+  dispatch({ type: 'TURNOFF' });
   const handleSubmits = (e) => {
     if (parseFloat(province_province) + parseFloat(province_nba) !== 100) {
       Swal.fire('กำหนดค่าไม่ถูกต้อง?', 'ค่าเปอร์เซ็นทั้งหมดรวมกันเเล้วไม่ถึง 100 %', 'question');
@@ -42,9 +43,9 @@ export default function PercentCardProvice() {
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
-          dispatch({ type: 'TRUE' });
+          dispatch({ type: 'OPEN' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
-          dispatch({ type: 'FALSE' });
+          dispatch({ type: 'TURNOFF' });
           Swal.fire({
             position: '',
             icon: 'success',
@@ -52,9 +53,9 @@ export default function PercentCardProvice() {
             showConfirmButton: false,
             timer: 1500
           });
-          setTimeout(() => {
-            window.location.reload(false);
-          }, 1500);
+          // setTimeout(() => {
+          //   window.location.reload(false);
+          // }, 1500);
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel

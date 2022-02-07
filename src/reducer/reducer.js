@@ -1,8 +1,8 @@
-function reducer(state = true, action) {
+function reducer(state = false, action) {
   switch (action.type) {
-    case 'TRUE':
+    case 'OPEN':
       return true;
-    case 'FALSE':
+    case 'TURNOFF':
       return false;
     default:
       return state;
