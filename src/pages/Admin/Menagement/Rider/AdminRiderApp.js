@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
@@ -27,7 +27,6 @@ import Image from '@material-tailwind/react/Image';
 import { styled } from '@mui/material/styles';
 // components
 import Page from '../../../../components/Page';
-import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 import {
@@ -36,8 +35,6 @@ import {
   RiderMoreMenu
 } from '../../../../components/_admin/rider';
 //
-import USERLIST from '../../../../_mocks_/user';
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -111,35 +108,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
 export default function User() {
+  const dispatch = useDispatch();
   const [Riderlist, setRiderlist] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -148,11 +119,13 @@ export default function User() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRider`);
     setRiderlist(getRider.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -211,13 +184,13 @@ export default function User() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Riderlist.length) : 0;
 
   const filteredUsers = applySortFilter(Riderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="ไรเดอร์ทั้งหมด | FoodExpress">
       <Container>

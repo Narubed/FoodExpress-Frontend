@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 import { useEffect, useState, useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
+import { useDispatch } from 'react-redux';
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 import axios from 'axios';
@@ -11,12 +11,10 @@ import Page from '../../../components/Page';
 import AppCardCutArount from '../../../components/_admin/cutarount/AppCardCutArount';
 // ----------------------------------------------------------------------
 function AdminCutArountApp() {
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current
-  });
+  const dispatch = useDispatch();
   const [Order, setOrder] = useState([]);
   const [Query, setQuery] = useState('');
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     // eslint-disable-next-line camelcase
@@ -41,6 +39,7 @@ function AdminCutArountApp() {
     });
     setOrder(filetereds);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="ตัดรอบสินค้า | admin NBA-Express">
       <Container maxWidth="xl">
@@ -63,9 +62,7 @@ function AdminCutArountApp() {
           }).map((m) => (
             // eslint-disable-next-line react/jsx-key
             <Grid item xs={12} sm={6} md={3}>
-              {/* {m.cut_arount_province} */}
               <AppCardCutArount props={m} />
-              {/* <PercentCardSubdistrict Percent={Percent} /> */}
             </Grid>
           ))}
         </Grid>

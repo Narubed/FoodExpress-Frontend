@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import { useDispatch } from 'react-redux';
 // material
 import { styled } from '@mui/material/styles';
 import {
@@ -49,6 +50,7 @@ RiderListToolbar.propTypes = {
 
 // eslint-disable-next-line camelcase
 export default function RiderListToolbar({ numSelected, filterName, onFilterName, selected_id }) {
+  const dispatch = useDispatch();
   const deleteRider = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -61,15 +63,20 @@ export default function RiderListToolbar({ numSelected, filterName, onFilterName
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         selected_id.map(
           async (value) =>
             // eslint-disable-next-line no-return-await
             await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${value}`)
         );
-        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });

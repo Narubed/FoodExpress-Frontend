@@ -3,6 +3,8 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable import/no-dynamic-require */
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import Image from '@material-tailwind/react/Image';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -13,8 +15,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
 
+WalletPutSlip.propTypes = {
+  wallet_id: PropTypes.string
+};
+
 // eslint-disable-next-line camelcase
-export default function WalletPutSlip({ images, wallet_id }) {
+export default function WalletPutSlip({ wallet_id }) {
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
   const [userInfo, setuserInfo] = React.useState({
     file: [],
@@ -43,7 +50,9 @@ export default function WalletPutSlip({ images, wallet_id }) {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlipWallet`, formdata);
+        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
           icon: 'success',
@@ -51,7 +60,6 @@ export default function WalletPutSlip({ images, wallet_id }) {
           showConfirmButton: false,
           timer: 1500
         });
-
         setTimeout(() => {
           window.location.reload(false);
         }, 1500);
@@ -60,20 +68,8 @@ export default function WalletPutSlip({ images, wallet_id }) {
   };
   return (
     <div>
-      {/* <button onClick={(e) => setShowModal(true)}>
-        <Image
-          className="h-5 w-5 rounded-full"
-          src={
-            // eslint-disable-next-line global-require
-            require(`../../../assets/img/${images}`).default
-          }
-          rounded={false}
-          raised
-          alt="Rounded Image"
-        />
-      </button> */}
       <Button
-        onClick={(e) => setShowModal(true)}
+        onClick={() => setShowModal(true)}
         color="lightBlue"
         buttonType="link"
         size="regular"
@@ -87,7 +83,6 @@ export default function WalletPutSlip({ images, wallet_id }) {
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
         <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน</ModalHeader>
         <ModalBody>
-          {' '}
           <div className="form-row">
             <label className="text-white">หลักฐานการโอน :</label>
             <input type="file" name="upload_file" onChange={handleInputChange} />
@@ -102,12 +97,11 @@ export default function WalletPutSlip({ images, wallet_id }) {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
+          <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
             Close
           </Button>
           <Button type="submit" className="btn" onClick={() => submit()}>
-            {' '}
-            Save{' '}
+            Save
           </Button>
         </ModalFooter>
       </Modal>

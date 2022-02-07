@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Button from '@material-tailwind/react/Button';
@@ -18,7 +19,6 @@ import {
   Slide
 } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +64,8 @@ const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={r
 // ----------------------------------------------------------------------
 
 export default function AppCardProvince(props) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -94,7 +96,7 @@ export default function AppCardProvince(props) {
     setDataFilterProductName(filtereds);
     setOrderlist(result.data.data);
   }, [props.props.order_product_province]);
-
+  dispatch({ type: 'TURNOFF' });
   const onClickCutArountOrder = () => {
     setShowModal(false);
     const filterOrderStatus = Orderlist.filter((f) => f.order_status === 'รอจัดส่ง');
@@ -133,11 +135,11 @@ export default function AppCardProvince(props) {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.post(
           `${process.env.REACT_APP_WEB_BACKEND}/CreateCutArount`,
           dataCutAroundOrder
         );
-
         // eslint-disable-next-line array-callback-return
         filterProvince.map(async (value) => {
           const dataPutOrderDetail = await {
@@ -151,10 +153,19 @@ export default function AppCardProvince(props) {
             dataPutOrderDetail
           );
         });
-        Swal.fire('ยืนยัน!', 'ยืนยันการตัดรอบสินค้านี้แล้ว.', 'success');
+
+        Swal.fire({
+          icon: 'success',
+          title: 'ยืนยันการตัดรอบสินค้านี้แล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
+
+        dispatch({ type: 'TURNOFF' });
+
         setTimeout(() => {
           window.location.reload(false);
-        }, 1000);
+        }, 1500);
       }
     });
   };

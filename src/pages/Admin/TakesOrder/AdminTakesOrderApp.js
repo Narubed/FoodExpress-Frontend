@@ -3,6 +3,7 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // import Button from '@material-tailwind/react/Button';
@@ -111,35 +112,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
 export default function AdminTakesOrderApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Riderlist, setRiderlist] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -153,6 +129,7 @@ export default function AdminTakesOrderApp() {
     const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRider`);
     setRiderlist(getRider.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -171,34 +148,6 @@ export default function AdminTakesOrderApp() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, id) => {
-    const selectedIndex = selected.indexOf(name);
-    const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-      newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      newSelectedid = newSelectedid.concat(
-        selected_id.slice(0, selectedIndexid),
-        selected_id.slice(selectedIndexid + 1)
-      );
-    }
-    setSelected(newSelected);
-    setSelected_id(newSelectedid);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -211,13 +160,13 @@ export default function AdminTakesOrderApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Riderlist.length) : 0;
 
   const filteredUsers = applySortFilter(Riderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="TakesOrder | FoodExpress">
       <Container>

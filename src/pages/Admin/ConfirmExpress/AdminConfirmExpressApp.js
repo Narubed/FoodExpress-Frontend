@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 import axios from 'axios';
@@ -10,6 +11,8 @@ import Page from '../../../components/Page';
 import AppCardProvince from '../../../components/_admin/confirmexpress/AppCardProvince';
 // ----------------------------------------------------------------------
 function AdminConfirmExpressApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Order, setOrder] = useState([]);
   const [Query, setQuery] = useState('');
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,6 +39,7 @@ function AdminConfirmExpressApp() {
     });
     setOrder(filtereds);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="รวมยอดสินค้า | admin NBA-Express">
       <Container maxWidth="xl">

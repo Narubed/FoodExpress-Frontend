@@ -1,29 +1,18 @@
 import PropTypes from 'prop-types';
 // material
 import { visuallyHidden } from '@mui/utils';
-import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 WalletListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
-  rowCount: PropTypes.number,
   headLabel: PropTypes.array,
-  numSelected: PropTypes.number,
-  onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func
+  onRequestSort: PropTypes.func
 };
 
-export default function WalletListHead({
-  order,
-  orderBy,
-  rowCount,
-  headLabel,
-  numSelected,
-  onRequestSort,
-  onSelectAllClick
-}) {
+export default function WalletListHead({ order, orderBy, headLabel, onRequestSort }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -31,13 +20,7 @@ export default function WalletListHead({
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          {/* <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          /> */}
-        </TableCell>
+        <TableCell padding="checkbox" />
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}

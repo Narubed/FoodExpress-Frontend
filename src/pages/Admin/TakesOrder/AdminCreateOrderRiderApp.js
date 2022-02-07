@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -57,8 +58,7 @@ import Scrollbar from '../../../components/Scrollbar';
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
-  const [value, setValue] = useState(new Date());
+  const dispatch = useDispatch();
   const [showModalSelectAddress, setModalSelectAddress] = useState(false);
   const [ProductType, setProductType] = useState([]);
   const [Company, setCompany] = useState([]);
@@ -70,7 +70,6 @@ export default function RegisterForm() {
   const [provinceMember, setprovinceMember] = useState([]); // จังหวัดทั้งหมด
   const [SelectprovinceMember, setSelectprovinceMember] = useState([]); // ค่าที่ถูก Select แล้ว
 
-  const [CutArountProvince, setCutArountProvince] = useState([]); // ตัดรอบของจังหวัดอะไร
   const [open, setOpen] = useState(false);
   const [IDCutArount, setIDCutArount] = useState();
   const [dataPostExpress, setPostExpress] = useState();
@@ -81,7 +80,7 @@ export default function RegisterForm() {
       .required('product_name is required'),
     product_amount: Yup.number().required('product_amount is required')
   });
-
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
@@ -99,6 +98,7 @@ export default function RegisterForm() {
     setCompany(Company.data.data);
     setMembers(Members.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleSubmits = async (e) => {
     const orderRiderId = Date.now() + localStorage.getItem('rider_id') + SelectCompany.company_id;
     const filterProductID = ProductType.filter((f) => f.productName === e.product_name);
@@ -114,26 +114,8 @@ export default function RegisterForm() {
       order_rider_member_address: SelectMembers.address,
       order_rider_status: 'ไรเดอร์รับมอบหมายงานแล้ว'
     };
-    // set MOdal true
     setPostExpress(data);
     setOpen(true);
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่ !',
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Yes, need it!'
-    // }).then(async (result) => {
-    //   if (result.isConfirmed) {
-    //     await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, data);
-    //     Swal.fire('Success!', 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.', 'success');
-    //     setTimeout(() => {
-    //       window.location.reload(false);
-    //     }, 1500);
-    //   }
-    // });
   };
   const formik = useFormik({
     initialValues: {
@@ -158,10 +140,11 @@ export default function RegisterForm() {
   };
 
   const handleConfirmCutArountID = async () => {
+    dispatch({ type: 'OPEN' });
     const getDataCutArountByID = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderCutArountID/${IDCutArount}`
     );
-
+    dispatch({ type: 'TURNOFF' });
     if (getDataCutArountByID.data.data.length !== 0) {
       const CutArountID = getDataCutArountByID.data.data;
       const DataExpress = {
@@ -186,9 +169,11 @@ export default function RegisterForm() {
         timer: 2000,
         showConfirmButton: false
       });
+      dispatch({ type: 'OPEN' });
       await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, DataExpress);
+
       setTimeout(() => {
-        window.location.reload(false);
+        dispatch({ type: 'TURNOFF' });
       }, 2000);
     } else {
       Swal.fire({
@@ -199,7 +184,6 @@ export default function RegisterForm() {
         showConfirmButton: false
       });
     }
-
     setOpen(false);
   };
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;

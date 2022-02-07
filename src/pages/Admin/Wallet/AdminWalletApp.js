@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
@@ -17,8 +18,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -32,14 +31,11 @@ import {
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { styled } from '@mui/material/styles';
 import {
   WalletListHead,
   WalletListToolbar,
-  WalletMoreMenu,
   WalletImage,
   WalletPutSlip
 } from '../../../components/_admin/wallet';
@@ -130,30 +126,12 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
 
 function AdminWalletApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [WalletMemberlist, setWalletMemberlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -164,7 +142,6 @@ function AdminWalletApp() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [value, setValue] = React.useState(null);
-  const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const WalletMember = await axios.get(
@@ -173,6 +150,7 @@ function AdminWalletApp() {
     const reverseData = WalletMember.data.data.reverse();
     setWalletMemberlist(reverseData);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -191,34 +169,6 @@ function AdminWalletApp() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, order_id) => {
-    const selectedIndex = selected.indexOf(order_id);
-    // const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    // let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, order_id);
-      // newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      // newSelectedid = newSelectedid.concat(
-      //   selected_id.slice(0, selectedIndexid),
-      //   selected_id.slice(selectedIndexid + 1)
-      // );
-    }
-    setSelected(newSelected);
-    // setSelected_id(newSelectedid);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -231,6 +181,7 @@ function AdminWalletApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
+  dispatch({ type: 'OPEN' });
   const newWalletMemberlist =
     value === null
       ? WalletMemberlist
@@ -245,6 +196,7 @@ function AdminWalletApp() {
   );
 
   const isUserNotFound = filteredWallet.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="Commission | FoodExpress">

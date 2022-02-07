@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
@@ -9,7 +10,19 @@ import PropTypes from 'prop-types';
 import '@material-tailwind/react/tailwind.css';
 import Input from '@material-tailwind/react/Input';
 // material
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Menu,
+  MenuItem,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Slide,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Modal from '@material-tailwind/react/Modal';
@@ -19,9 +32,18 @@ import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 RiderMoreMenu.propTypes = {
-  id: PropTypes.number
+  id: PropTypes.number,
+  rider_first_name: PropTypes.string,
+  rider_last_name: PropTypes.string,
+  rider_id_login: PropTypes.string,
+  rider_pw_login: PropTypes.string,
+  rider_tel: PropTypes.string
 };
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+
 export default function RiderMoreMenu(props) {
+  const dispatch = useDispatch();
   // eslint-disable-next-line camelcase
   const { id, rider_first_name, rider_last_name, rider_id_login, rider_pw_login, rider_tel } =
     props;
@@ -46,10 +68,16 @@ export default function RiderMoreMenu(props) {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });
@@ -63,6 +91,7 @@ export default function RiderMoreMenu(props) {
     setShowModalCode(true);
   };
   const handleOk = async () => {
+    setShowModalCode(false);
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณยืนยันที่จะเเก้ไขหรือไม่!',
@@ -82,11 +111,16 @@ export default function RiderMoreMenu(props) {
         rider_last_name: onChangeLastName
       };
       if (result.isConfirmed) {
-        Swal.fire('ยืนยันการเเก้ไข!', 'คุณได้ทำการเเก้ไขสำเร็จ', 'success');
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putRider`, data);
-        setShowModalCode(false);
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ทำการเเก้ไขสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 2000);
       }
     });
@@ -131,74 +165,85 @@ export default function RiderMoreMenu(props) {
             />
           </MenuItem>
         </Menu>
-        <Modal size="sm" active={showModal} toggler={() => setShowModalCode(false)}>
-          <ModalHeader toggler={() => setShowModalCode(false)}>{onChangeFirstname}</ModalHeader>
-          <ModalBody>
-            <Input
-              type="text"
-              color="lightBlue"
-              size="regular"
-              outline
-              placeholder="ID"
-              defaultValue={onChangeIDLogin}
-              onChange={(e) => setonChangeIDLogin(e.target.value)}
-            />
-            <br />
-            <Input
-              type="text"
-              color="lightBlue"
-              size="regular"
-              outline
-              placeholder="Password"
-              defaultValue={onChangePWLogin}
-              onChange={(e) => setonChangePWLogin(e.target.value)}
-            />
-            <br />
-            <Input
-              type="text"
-              color="lightBlue"
-              size="regular"
-              outline
-              placeholder="เบอร์โทรศัพท์"
-              defaultValue={onChangeTel}
-              onChange={(e) => setonChangeTel(e.target.value)}
-            />
-            <br />
-            <Input
-              type="text"
-              color="lightBlue"
-              size="regular"
-              outline
-              placeholder="ชื่อ"
-              defaultValue={onChangeFirstname}
-              onChange={(e) => setonChangeFirstname(e.target.value)}
-            />
-            <br />
-            <Input
-              type="text"
-              color="lightBlue"
-              size="regular"
-              outline
-              placeholder="นามสกุล"
-              defaultValue={onChangeLastName}
-              onChange={(e) => setonChangeLastName(e.target.value)}
-            />
-          </ModalBody>
-          <ModalFooter>
+
+        <Dialog
+          fullWidth="fullWidth"
+          maxWidth="sm"
+          open={showModal}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => setShowModalCode(false)}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{onChangeFirstname}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="ID"
+                defaultValue={onChangeIDLogin}
+                onChange={(e) => setonChangeIDLogin(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="Password"
+                defaultValue={onChangePWLogin}
+                onChange={(e) => setonChangePWLogin(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="เบอร์โทรศัพท์"
+                defaultValue={onChangeTel}
+                onChange={(e) => setonChangeTel(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="ชื่อ"
+                defaultValue={onChangeFirstname}
+                onChange={(e) => setonChangeFirstname(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="นามสกุล"
+                defaultValue={onChangeLastName}
+                onChange={(e) => setonChangeLastName(e.target.value)}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
             <Button
               color="red"
               buttonType="link"
-              onClick={(e) => setShowModalCode(false)}
+              onClick={() => setShowModalCode(false)}
               ripple="dark"
             >
-              Close
+              ยกเลิก
             </Button>
-
             <Button color="green" onClick={(e) => handleOk(e)} ripple="light">
-              Save
+              ตกลง
             </Button>
-          </ModalFooter>
-        </Modal>
+          </DialogActions>
+        </Dialog>
       </>
     </>
   );
