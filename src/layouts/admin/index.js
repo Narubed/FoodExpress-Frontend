@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import ReactLoading from 'react-loading';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 //
 import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
-
+import PageLoader from './PageLoader';
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -40,7 +41,7 @@ export default function DashboardLayout() {
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
       <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
       <MainStyle>
-        <Outlet />
+        {/* <Outlet /> */} <PageLoader />
       </MainStyle>
     </RootStyle>
   );
