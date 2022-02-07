@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { PointSpreadLoading } from 'react-loadingg';
-
+import ReactLoading from 'react-loading';
 import { styled } from '@mui/material/styles';
 
 const RootStyle = styled('div')({
@@ -19,7 +17,7 @@ export default function PageLoader() {
 
   return (
     <RootStyle>
-      <PointSpreadLoading type="cylon" color="#FF00FF" height={50} width={50} />
+      <ReactLoading type="cylon" color="#FF00FF" height={50} width={50} />
     </RootStyle>
   );
 }

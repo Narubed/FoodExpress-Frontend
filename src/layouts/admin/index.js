@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ReactLoading from 'react-loading';
+import { useSelector, useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -35,14 +36,32 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
-
+  const counter = useSelector((state) => state);
+  const dispatch = useDispatch();
   return (
     <RootStyle>
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
       <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle>
-        {/* <Outlet /> */} <PageLoader />
-      </MainStyle>
+      <button
+        onClick={() =>
+          dispatch({
+            type: 'TRUE'
+          })
+        }
+      >
+        123
+      </button>
+
+      <MainStyle>{!counter.reducer ? <PageLoader /> : <Outlet />}</MainStyle>
+      <button
+        onClick={() =>
+          dispatch({
+            type: 'FALSE'
+          })
+        }
+      >
+        123
+      </button>
     </RootStyle>
   );
 }

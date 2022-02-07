@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import Card from '@material-tailwind/react/Card';
 import CardHeader from '@material-tailwind/react/CardHeader';
@@ -10,6 +11,7 @@ import Button from '@material-tailwind/react/Button';
 import Swal from 'sweetalert2';
 
 export default function PercentCardSubdistrict() {
+  const dispatch = useDispatch();
   const [subdistrict_subdistrict, setSubdistrict_subdistrict] = useState([]);
   const [subdistrict_district, setSubdistrict_district] = useState([]);
   const [subdistrict_province, setSubdistrict_province] = useState([]);
@@ -50,7 +52,9 @@ export default function PercentCardSubdistrict() {
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'TRUE' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, dataSubdistric);
+
           Swal.fire({
             position: '',
             icon: 'success',
@@ -58,6 +62,7 @@ export default function PercentCardSubdistrict() {
             showConfirmButton: false,
             timer: 1500
           });
+          dispatch({ type: 'FALSE' });
           setTimeout(() => {
             window.location.reload(false);
           }, 1500);

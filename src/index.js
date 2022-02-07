@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './main-reducer';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -12,10 +15,16 @@ import reportWebVitals from './reportWebVitals';
 
 // ----------------------------------------------------------------------
 
+const store = createStore(rootReducer);
+
+const rootElement = document.getElementById('root');
+
 ReactDOM.render(
   <HelmetProvider>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </HelmetProvider>,
   document.getElementById('root')
