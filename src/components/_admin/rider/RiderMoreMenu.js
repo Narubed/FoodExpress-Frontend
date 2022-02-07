@@ -25,10 +25,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
+
 import Button from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 RiderMoreMenu.propTypes = {

@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
@@ -11,7 +11,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -31,7 +30,6 @@ import {
   CompanyMoreMenu
 } from '../../../../components/_admin/company';
 import Page from '../../../../components/Page';
-import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
@@ -112,6 +110,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function AdminCompanyApp() {
+  const dispatch = useDispatch();
+
   // eslint-disable-next-line no-undef
   const [Companylist, setCompanylist] = useState([]);
   const [page, setPage] = useState(0);
@@ -122,11 +122,14 @@ function AdminCompanyApp() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getCompany = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllCompany`);
     setCompanylist(getCompany.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -186,12 +189,14 @@ function AdminCompanyApp() {
     setFilterName(event.target.value);
   };
 
+  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Companylist.length) : 0;
 
   // eslint-disable-next-line no-undef
   const filteredCompany = applySortFilter(Companylist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredCompany.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="บริษัท | FoodExpress">
