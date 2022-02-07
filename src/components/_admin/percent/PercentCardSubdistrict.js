@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Card from '@material-tailwind/react/Card';
 import CardHeader from '@material-tailwind/react/CardHeader';
@@ -25,7 +25,7 @@ export default function PercentCardSubdistrict() {
     setSubdistrict_nba(getAllPrecent.data.data[0].percent_nba * 100);
   }, []);
 
-  const handleSubmits = (e) => {
+  const handleSubmits = () => {
     if (
       parseFloat(subdistrict_subdistrict) +
         parseFloat(subdistrict_district) +

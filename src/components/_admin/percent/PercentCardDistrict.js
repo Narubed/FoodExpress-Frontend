@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Card from '@material-tailwind/react/Card';
 import CardHeader from '@material-tailwind/react/CardHeader';
@@ -10,6 +11,7 @@ import Button from '@material-tailwind/react/Button';
 import Swal from 'sweetalert2';
 
 export default function PercentCardProvice() {
+  const dispatch = useDispatch();
   const [district_district, setDistrict_district] = useState([]);
   const [district_province, setDistrict_province] = useState([]);
   const [district_nba, setDistrict_nba] = useState([]);
@@ -45,7 +47,9 @@ export default function PercentCardProvice() {
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'TRUE' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putPercent`, data);
+          dispatch({ type: 'FALSE' });
           Swal.fire({
             position: '',
             icon: 'success',

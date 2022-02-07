@@ -13,11 +13,9 @@ const RootStyle = styled('div')({
 // ----------------------------------------------------------------------
 
 export default function PageLoader() {
-  const [open, setOpen] = useState(false);
-
   return (
     <RootStyle>
-      <ReactLoading type="cylon" color="#FF00FF" height={50} width={50} />
+      <ReactLoading type="spinningBubbles" color="#FF00FF" height={50} width={50} />
     </RootStyle>
   );
 }

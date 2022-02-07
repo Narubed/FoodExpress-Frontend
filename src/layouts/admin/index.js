@@ -42,7 +42,7 @@ export default function DashboardLayout() {
     <RootStyle>
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
       <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <button
+      {/* <button
         onClick={() =>
           dispatch({
             type: 'TRUE'
@@ -50,10 +50,10 @@ export default function DashboardLayout() {
         }
       >
         123
-      </button>
+      </button> */}
 
       <MainStyle>{!counter.reducer ? <PageLoader /> : <Outlet />}</MainStyle>
-      <button
+      {/* <button
         onClick={() =>
           dispatch({
             type: 'FALSE'
@@ -61,7 +61,7 @@ export default function DashboardLayout() {
         }
       >
         123
-      </button>
+      </button> */}
     </RootStyle>
   );
 }
