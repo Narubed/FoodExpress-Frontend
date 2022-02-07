@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { PointSpreadLoading } from 'react-loading';
+// eslint-disable-next-line import/no-unresolved
+import { PointSpreadLoading } from 'react-loadingg';
+
 import { styled } from '@mui/material/styles';
 
 const RootStyle = styled('div')({
