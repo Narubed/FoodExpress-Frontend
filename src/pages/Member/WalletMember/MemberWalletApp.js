@@ -40,7 +40,6 @@ import { styled } from '@mui/material/styles';
 import {
   WalletListHead,
   WalletListToolbar,
-  WalletMoreMenu,
   WalletImage,
   WalletPutSlip
 } from '../../../components/_admin/wallet';
