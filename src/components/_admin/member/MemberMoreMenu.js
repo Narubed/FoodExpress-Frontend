@@ -68,10 +68,10 @@ export default function MemberMoreMenu(props) {
 
     const filterProvince = getApi.data.filter((e) => e.province_name === MemberlistID.province);
     const filterDistrict = getApiAmphure.data.filter(
-      async (e) => (await e.amphur_name) === (await MemberlistID.district)
+      (e) => e.amphur_name === MemberlistID.district
     );
     const filterSubdistrict = getApitombon.data.filter(
-      async (e) => (await e.district_name) === (await MemberlistID.subdistrict)
+      (e) => e.district_name === MemberlistID.subdistrict
     );
     localStorage.setItem('id', MemberlistID.id);
     localStorage.setItem('password', MemberlistID.password);

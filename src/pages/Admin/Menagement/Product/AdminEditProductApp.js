@@ -2,34 +2,12 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 // material
 import { LoadingButton } from '@mui/lab';
-import {
-  Stack,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination,
-  MenuItem
-} from '@mui/material';
+import { Stack, TextField, Container, Typography, MenuItem } from '@mui/material';
 // companent
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------

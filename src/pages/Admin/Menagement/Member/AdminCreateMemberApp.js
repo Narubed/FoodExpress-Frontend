@@ -126,7 +126,8 @@ export default function AdminCreateMemberApp() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ใช่ ฉันต้องการเเก้ไข!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (fileUserId.length === 0 || fileBook.length === 0) {
         Swal.fire(
@@ -136,7 +137,12 @@ export default function AdminCreateMemberApp() {
         );
       } else if (result.isConfirmed) {
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
-        Swal.fire('Success!', 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
           window.location.reload(false);
         }, 1500);

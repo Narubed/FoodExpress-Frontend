@@ -237,7 +237,12 @@ export default function AdminCreateMemberApp() {
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
           );
-          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
           setTimeout(() => {
             window.localStorage.clear();
             window.history.back();
@@ -271,7 +276,8 @@ export default function AdminCreateMemberApp() {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, need it!'
+        confirmButtonText: 'ใช่ ฉันต้องการเเก้ไข!',
+        cancelButtonText: 'ยกเลิก!'
       }).then(async (result) => {
         if (fileUserId.length === 0 || fileBook.length === 0) {
           Swal.fire(
@@ -288,10 +294,16 @@ export default function AdminCreateMemberApp() {
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('bookBankImg')}`
           );
-          Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
-          // setTimeout(() => {
-          //   window.location.reload(false);
-          // }, 1500);
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            window.localStorage.clear();
+            window.history.back();
+          }, 1500);
         }
       });
     }
