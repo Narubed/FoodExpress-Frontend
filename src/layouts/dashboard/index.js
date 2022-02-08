@@ -41,9 +41,7 @@ export default function DashboardLayout() {
     <RootStyle>
       <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
       <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle>
-        <MainStyle>{counter.reducer === true ? <PageLoader /> : <Outlet />}</MainStyle>
-      </MainStyle>
+      <MainStyle>{counter.reducer === true ? <PageLoader /> : <Outlet />}</MainStyle>
     </RootStyle>
   );
 }
