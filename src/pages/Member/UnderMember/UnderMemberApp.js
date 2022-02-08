@@ -1,27 +1,19 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import Image from '@material-tailwind/react/Image';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Label from '@material-tailwind/react/Label';
-import numeral from 'numeral';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -40,7 +32,6 @@ import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 // utils
-import { fNumber } from '../../../utils/formatNumber';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
   { id: 'level', label: 'ระดับ', alignRight: false },
@@ -124,12 +115,12 @@ function applySortFilter(array, comparator, query) {
 }
 
 function AdminMemberApp() {
-  // eslint-disable-next-line no-undef
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Memberlist, setMemberlist] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  // eslint-disable-next-line camelcase
   const [selected_id, setSelected_id] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
@@ -211,10 +202,10 @@ function AdminMemberApp() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Memberlist.length) : 0;
 
-  // eslint-disable-next-line no-undef
   const filteredProduct = applySortFilter(Memberlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredProduct.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="underMember | FoodExpress">
@@ -254,23 +245,14 @@ function AdminMemberApp() {
                       .map((row) => {
                         const {
                           id,
-                          password,
                           email,
                           firstname,
-                          lastname,
-                          bookname,
-                          booknumber,
                           role,
                           tel,
                           address,
-                          subdistrict,
-                          district,
-                          province,
                           map,
                           userId,
                           status,
-                          bookBankImg,
-                          cardImg,
                           level
                         } = row;
                         const isItemSelected = selected.indexOf(userId) !== -1;
@@ -284,12 +266,7 @@ function AdminMemberApp() {
                             selected={isItemSelected}
                             aria-checked={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
-                              {/* <Checkbox
-                                checked={isItemSelected}
-                                onChange={(event) => handleClick(event, userId, id)}
-                              /> */}
-                            </TableCell>
+                            <TableCell padding="checkbox" />
                             <TableCell align="left">
                               {role === 'Member' ? (
                                 <Label color="">
@@ -361,10 +338,7 @@ function AdminMemberApp() {
                                 <Icon icon="emojione:world-map" width="32" height="32" />
                               </Button>
                             </TableCell>
-                            <TableCell align="left">
-                              {' '}
-                              {/* <MemberMoreMenu bookBankImg={bookBankImg} cardImg={cardImg} id={id} /> */}
-                            </TableCell>
+                            <TableCell align="left" />
                           </TableRow>
                         );
                       })}

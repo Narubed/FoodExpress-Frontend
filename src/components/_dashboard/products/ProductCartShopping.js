@@ -6,9 +6,7 @@ import numeral from 'numeral';
 import PropTypes from 'prop-types';
 // material
 import { TextField, Button } from '@mui/material';
-import Image from '@material-tailwind/react/Image';
 import { Icon } from '@iconify/react';
-import ShopProductCard from './ProductCard';
 
 // ----------------------------------------------------------------------
 
@@ -51,6 +49,7 @@ export default function ProductCartShopping({ product, deleteProductShopCard, se
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
           <TextField
+            size="string"
             type="number"
             id="outlined-basic"
             label={product.currency}

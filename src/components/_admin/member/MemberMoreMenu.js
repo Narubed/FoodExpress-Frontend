@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink, NavLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
@@ -19,6 +20,7 @@ MemberMoreMenu.propTypes = {
   bookBankImg: PropTypes.string
 };
 export default function MemberMoreMenu(props) {
+  const dispatch = useDispatch();
   const { id, cardImg, bookBankImg } = props;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -35,12 +37,18 @@ export default function MemberMoreMenu(props) {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${id}`);
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${cardImg}`);
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${bookBankImg}`);
-        Swal.fire('Success!', 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });

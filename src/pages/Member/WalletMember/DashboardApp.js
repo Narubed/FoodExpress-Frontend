@@ -1,7 +1,9 @@
 // material
-import { Box, Grid, Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { Box, Grid, Container, Typography } from '@mui/material';
+
 // components
 import Page from '../../../components/Page';
 import {
@@ -17,6 +19,8 @@ import MemberWalletApp from './MemberWalletApp';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Total, setTotal] = useState([]);
   const user = sessionStorage.getItem('user');
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,6 +30,7 @@ export default function DashboardApp() {
     );
     setTotal(getAllOrder.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="Wallet | NBA-Express">
       <Container maxWidth="xl">

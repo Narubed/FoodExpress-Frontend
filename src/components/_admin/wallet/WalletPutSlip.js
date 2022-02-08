@@ -3,8 +3,8 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable import/no-dynamic-require */
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import Image from '@material-tailwind/react/Image';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';

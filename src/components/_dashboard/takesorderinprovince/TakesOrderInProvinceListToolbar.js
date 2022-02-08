@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
@@ -54,6 +55,7 @@ export default function TakesOrderListToolbar({
   // eslint-disable-next-line camelcase
   selected_id
 }) {
+  const dispatch = useDispatch();
   const deleteRider = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -66,6 +68,7 @@ export default function TakesOrderListToolbar({
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         selected_id.map(
           async (value) =>
             // eslint-disable-next-line no-return-await
@@ -74,7 +77,7 @@ export default function TakesOrderListToolbar({
         // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
         Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });

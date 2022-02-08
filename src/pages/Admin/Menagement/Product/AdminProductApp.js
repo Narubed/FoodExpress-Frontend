@@ -1,9 +1,9 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
@@ -13,7 +13,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -33,11 +32,9 @@ import {
   ProductImage
 } from '../../../../components/_admin/product';
 import Page from '../../../../components/Page';
-import Label from '../../../../components/Label';
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
 // utils
-import { fNumber } from '../../../../utils/formatNumber';
 import AdminProductTypeApp from './AdminProductTypeApp';
 
 // ----------------------------------------------------------------------
@@ -115,6 +112,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 function AdminCompanyApp() {
+  const dispatch = useDispatch();
   // eslint-disable-next-line no-undef
   const [Productlist, setProductlist] = useState([]);
   const [page, setPage] = useState(0);
@@ -126,12 +124,13 @@ function AdminCompanyApp() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getProduct = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
     setProductlist(getProduct.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -200,13 +199,13 @@ function AdminCompanyApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Productlist.length) : 0;
 
-  // eslint-disable-next-line no-undef
   const filteredProduct = applySortFilter(Productlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredProduct.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="สินค้าทั้งหมด | FoodExpress">

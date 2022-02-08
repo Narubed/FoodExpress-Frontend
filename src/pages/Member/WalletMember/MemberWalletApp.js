@@ -1,16 +1,13 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
-import { Tag } from 'antd';
 import axios from 'axios';
 // material
 import {
@@ -18,8 +15,6 @@ import {
   CardHeader,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -28,23 +23,14 @@ import {
   TableContainer,
   TablePagination,
   Badge,
-  TextField,
-  Box
+  TextField
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { styled } from '@mui/material/styles';
-import {
-  WalletListHead,
-  WalletListToolbar,
-  WalletImage,
-  WalletPutSlip
-} from '../../../components/_admin/wallet';
+import { WalletListHead, WalletImage } from '../../../components/_admin/wallet';
 import Page from '../../../components/Page';
-// import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
@@ -89,11 +75,9 @@ function applySortFilter(array, comparator, query) {
       (_user) =>
         _user.level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        // _user.wallet_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
@@ -129,20 +113,18 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   }
 }));
 function AdminWalletApp() {
-  // eslint-disable-next-line no-undef
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [WalletMemberlist, setWalletMemberlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  // eslint-disable-next-line camelcase
   const [selected_id, setSelected_id] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [value, setValue] = React.useState(null);
-  const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const user = sessionStorage.getItem('user');
@@ -162,41 +144,11 @@ function AdminWalletApp() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = WalletMemberlist.map((n) => n.wallet_id);
-      // const newSelectedsid = Orderlist.map((n) => n.order_id);
       setSelected(newSelecteds);
-      // setSelected_id(newSelectedsid);
       return;
     }
     setSelected([]);
     setSelected_id([]);
-  };
-
-  const handleClick = (event, name, order_id) => {
-    const selectedIndex = selected.indexOf(order_id);
-    // const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    // let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, order_id);
-      // newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      // newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      // newSelectedid = newSelectedid.concat(
-      //   selected_id.slice(0, selectedIndexid),
-      //   selected_id.slice(selectedIndexid + 1)
-      // );
-    }
-    setSelected(newSelected);
-    // setSelected_id(newSelectedid);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -208,9 +160,6 @@ function AdminWalletApp() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
   const newWalletMemberlist =
     value === null
       ? WalletMemberlist
@@ -223,28 +172,15 @@ function AdminWalletApp() {
     getComparator(order, orderBy),
     filterName
   );
-
   const isUserNotFound = filteredWallet.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="Commission | FoodExpress">
         <Container>
-          {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}></Stack> */}
-
           <Card>
-            {/* <WalletListToolbar
-              numSelected={selected.length}
-              filterName={filterName}
-              onFilterName={handleFilterByName}
-              selected={selected}
-              // eslint-disable-next-line camelcase
-              selected_id={selected_id}
-            /> */}
             <CardHeader
-              avatar={
-                // eslint-disable-next-line no-undef
-                <Icon icon="emojione:money-with-wings" width="38" height="38" />
-              }
+              avatar={<Icon icon="emojione:money-with-wings" width="38" height="38" />}
               color="orange"
               contentPosition="left"
               title="Commistion"
@@ -288,9 +224,6 @@ function AdminWalletApp() {
                           wallet_slip,
                           wallet_total,
                           wallet_status,
-                          subdistrict,
-                          district,
-                          province,
                           wallet_date
                         } = row;
                         const isItemSelected = selected.indexOf(wallet_id) !== -1;
@@ -304,12 +237,7 @@ function AdminWalletApp() {
                             selected={isItemSelected}
                             aria-checked={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
-                              {/* <Checkbox
-                                checked={isItemSelected}
-                                onChange={(event) => handleClick(event, company_name, company_id)}
-                              /> */}
-                            </TableCell>
+                            <TableCell padding="checkbox" />
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
                                 <Typography variant="subtitle2" noWrap>
@@ -322,7 +250,6 @@ function AdminWalletApp() {
                                   {level === 'subdistrict' ? (
                                     <Label color="amber"> ระดับตำบล</Label>
                                   ) : null}
-                                  {/* <Label color="blueGray"> {level}</Label> */}
                                 </Typography>
                               </Stack>
                             </TableCell>

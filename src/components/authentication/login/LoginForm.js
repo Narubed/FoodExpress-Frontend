@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -39,7 +40,7 @@ async function loginRider(credentials) {
   }).then((data) => data.json());
 }
 export default function LoginForm() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -56,10 +57,12 @@ export default function LoginForm() {
     const setUserNames = e.username;
     const setPasswords = e.password;
     // console.log(setUserNames);
+    dispatch({ type: 'OPEN' });
     let response = await loginUser({
       setUserNames,
       setPasswords
     });
+    dispatch({ type: 'TURNOFF' });
     if ('accessToken' in response) {
       if (response.data.status !== 'Active') {
         Swal.fire({
@@ -72,7 +75,7 @@ export default function LoginForm() {
         swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
           buttons: false,
           timer: 2000
-        }).then((value) => {
+        }).then(() => {
           sessionStorage.setItem('accessToken', response.accessToken);
           sessionStorage.setItem('user', response.data.userId);
           sessionStorage.setItem('role', response.data.role);
@@ -84,15 +87,17 @@ export default function LoginForm() {
         });
       }
     } else {
+      dispatch({ type: 'OPEN' });
       response = await loginRider({
         setUserNames,
         setPasswords
       });
+      dispatch({ type: 'TURNOFF' });
       if ('accessToken' in response) {
         swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
           buttons: false,
           timer: 2000
-        }).then((value) => {
+        }).then(() => {
           sessionStorage.setItem('accessToken', response.accessToken);
           sessionStorage.setItem('user', response.data.rider_id);
           sessionStorage.setItem('firstname', response.data.rider_first_name);
@@ -115,11 +120,7 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: (e) => handleSubmits(e)
-    //  {
-    //   navigate('/dashboard', { replace: true });
-    // }
   });
-  // console.log(formik);
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {

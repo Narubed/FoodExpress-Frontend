@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { styled } from '@mui/material/styles';
@@ -14,8 +13,6 @@ import {
   OutlinedInput,
   InputAdornment
 } from '@mui/material';
-import axios from 'axios';
-import Swal from 'sweetalert2';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -43,42 +40,10 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 TakesOrderListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
-  selected_id: PropTypes.array
+  onFilterName: PropTypes.func
 };
 
-export default function TakesOrderListToolbar({
-  numSelected,
-  filterName,
-  onFilterName,
-  // eslint-disable-next-line camelcase
-  selected_id
-}) {
-  const deleteRider = () => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการลบไรเดอร์หรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ยืนยัน!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        selected_id.map(
-          async (value) =>
-            // eslint-disable-next-line no-return-await
-            await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${value}`)
-        );
-        // await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteRider/${id}`);
-        Swal.fire('Success!', 'คุณได้ลบไรเดอร์เรียบร้อยเเล้ว.', 'success');
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
-  };
+export default function TakesOrderListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <RootStyle
       sx={{
@@ -105,19 +70,11 @@ export default function TakesOrderListToolbar({
         />
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} onClick={() => deleteRider()} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Tooltip title="Filter list">
+        <IconButton>
+          <Icon icon={roundFilterList} />
+        </IconButton>
+      </Tooltip>
     </RootStyle>
   );
 }

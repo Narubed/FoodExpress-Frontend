@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -14,6 +15,8 @@ import Swal from 'sweetalert2';
 
 export default function RegisterForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [showPassword, setShowPassword] = useState(false);
   const [showMember, setMember] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,6 +25,7 @@ export default function RegisterForm() {
     const getUser = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${user}`);
     setMember(getUser.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const RegisterSchema = Yup.object().shape({
     email: Yup.string()
       .email('Email must be a valid email address')
@@ -64,11 +68,13 @@ export default function RegisterForm() {
     } else if (e.password !== showMember.password) {
       Swal.fire('ท่านกรอกรหัสเดิมผิดหรือไม่ ?', 'กรุณาตรวจสอบรหัสเดิมอีกครั้ง !?', 'question');
     } else {
+      dispatch({ type: 'OPEN' });
       const data = {
         userId: sessionStorage.getItem('user'),
         password: e.newpassword
       };
       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putChangePassword`, data);
+
       Swal.fire({
         icon: 'success',
         title: 'ยืนยันการเปลี่ยนรหัสผ่านแล้ว !',
@@ -76,6 +82,7 @@ export default function RegisterForm() {
         timer: 2000
       });
       setTimeout(() => {
+        dispatch({ type: 'TURNOFF' });
         navigate('/dashboard', { replace: true });
       }, 2000);
     }

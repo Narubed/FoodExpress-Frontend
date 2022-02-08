@@ -2,16 +2,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 // material
-import { visuallyHidden } from '@mui/utils';
-import {
-  Box,
-  Checkbox,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableSortLabel,
-  Button
-} from '@mui/material';
+import { TableRow, TableCell, TableHead } from '@mui/material';
 import Barcode from 'react-barcode';
 import { Icon } from '@iconify/react';
 import Modal from '@material-tailwind/react/Modal';
@@ -39,7 +30,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 export default function TakesOrderModalBarcode({ props }) {
   const [showModal, setShowModal] = useState(false);
-  console.log(props);
   return (
     <>
       <TableHead>
@@ -81,18 +71,6 @@ export default function TakesOrderModalBarcode({ props }) {
           >
             ยกเลิก
           </ButtonT>
-          {/* <Button onClick={handlePrint}> oss</Button> */}
-          {/* <Button
-            color="lightBlue"
-            buttonType="link"
-            size="regular"
-            rounded
-            block={false}
-            iconOnly
-            ripple="dark"
-          >
-            <Icon icon="flat-color-icons:print" width={32} height={32} />
-          </Button> */}
         </ModalFooter>
       </Modal>
     </>

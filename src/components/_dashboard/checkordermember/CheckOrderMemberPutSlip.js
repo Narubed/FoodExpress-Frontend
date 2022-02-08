@@ -3,6 +3,8 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable import/no-dynamic-require */
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import Image from '@material-tailwind/react/Image';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -13,9 +15,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
 
+CheckOrderMemberPutSlip.propTypes = {
+  order_id: PropTypes.number
+};
 // eslint-disable-next-line camelcase
 export default function CheckOrderMemberPutSlip({ order_id }) {
-  console.log(order_id);
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [showModal, setShowModal] = React.useState(false);
   const [userInfo, setuserInfo] = React.useState({
     file: [],
@@ -53,6 +59,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
         cancelButtonText: 'ยกเลิก!'
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
           Swal.fire({
             position: '',
@@ -61,7 +68,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
             showConfirmButton: false,
             timer: 1500
           });
-
+          dispatch({ type: 'TURNOFF' });
           setTimeout(() => {
             window.location.reload(false);
           }, 1500);
@@ -69,7 +76,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
       });
     }
   };
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <div>
       <button>

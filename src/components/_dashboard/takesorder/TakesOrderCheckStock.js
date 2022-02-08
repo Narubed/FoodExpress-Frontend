@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 TakesOrderCheckStock.propTypes = {
   orderList: PropTypes.array
 };
 export default async function TakesOrderCheckStock({ result }) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const getStockMember = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.order_rider_member_userid}`
   );
@@ -35,4 +37,5 @@ export default async function TakesOrderCheckStock({ result }) {
       putStockOrder
     );
   }
+  dispatch({ type: 'TURNOFF' });
 }

@@ -1,40 +1,17 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
-import { Icon } from '@iconify/react';
+import { useDispatch } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 // material
 import { LoadingButton } from '@mui/lab';
-import {
-  Stack,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination
-} from '@mui/material';
+import { Stack, TextField, Container, Typography } from '@mui/material';
 // companent
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function AdminCreateCompanyApp() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-
+  const dispatch = useDispatch();
   const RegisterSchema = Yup.object().shape({
     company_name: Yup.string()
       .min(2, 'Too Short!')
@@ -66,13 +43,20 @@ export default function AdminCreateCompanyApp() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postCompany`, data);
-        Swal.fire('Success!', 'คุณได้เพิ่มบริษัทเรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้เพิ่มบริษัทเรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });

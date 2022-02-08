@@ -1,6 +1,7 @@
 /* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -34,14 +35,17 @@ import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function AdminEditProductApp() {
+  const dispatch = useDispatch();
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [ProductType, setProductType] = useState([]);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
     setProductType(ProductType.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const RegisterSchema = Yup.object().shape({
     Typeid: Yup.number().required('product price is required'),
     productName: Yup.string()
@@ -83,16 +87,18 @@ export default function AdminEditProductApp() {
     formdata.append('currency', e.currency);
     Swal.fire({
       title: 'Are you sure?',
-      text: 'คุณต้องการเพิ่มบริษัทหรือไม่ !',
+      text: 'คุณต้องการแก้ไขสินค้าหรือไม่ !',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         if (file.length === 0) {
-          const a = await axios
+          dispatch({ type: 'OPEN' });
+          await axios
             .put(`${process.env.REACT_APP_WEB_BACKEND}/product`, data)
             .then((response) => {
               console.log('response: ', response);
@@ -101,12 +107,19 @@ export default function AdminEditProductApp() {
             .catch((err) => {
               console.error(err);
             });
-          Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
           setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
         } else {
+          dispatch({ type: 'OPEN' });
           await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem('productImg')}`
@@ -114,8 +127,14 @@ export default function AdminEditProductApp() {
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
           );
-          Swal.fire('Success!', 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว.', 'success');
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
           setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);

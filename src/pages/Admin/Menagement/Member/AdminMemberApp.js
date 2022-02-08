@@ -163,7 +163,6 @@ function AdminMemberApp() {
   const [selected, setSelected] = useState([]);
   // eslint-disable-next-line camelcase
   const [selected_id, setSelected_id] = useState([]);
-  const [selected_productImg, setSelected_productImg] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -192,25 +191,20 @@ function AdminMemberApp() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, userId, id, productImg) => {
+  const handleClick = (event, userId, id) => {
     const selectedIndex = selected.indexOf(userId);
     const selectedIndexid = selected_id.indexOf(id);
-    // const selectedproductImg = selected_productImg.indexOf(productImg);
     let newSelected = [];
     let newSelectedid = [];
-    // let newselectedproductImg = [];
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, userId);
       newSelectedid = newSelectedid.concat(selected_id, id);
-      // newselectedproductImg = newselectedproductImg.concat(selected_productImg, productImg);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
       newSelectedid = newSelectedid.concat(selected_id.slice(1));
-      // newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
       newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-      // newselectedproductImg = newselectedproductImg.concat(selected_productImg.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
@@ -220,14 +214,9 @@ function AdminMemberApp() {
         selected_id.slice(0, selectedIndexid),
         selected_id.slice(selectedIndexid + 1)
       );
-      // newselectedproductImg = newselectedproductImg.concat(
-      //   selected_productImg.slice(0, selectedproductImg),
-      //   selected_productImg.slice(selectedproductImg + 1)
-      // );
     }
     setSelected(newSelected);
     setSelected_id(newSelectedid);
-    // setSelected_productImg(newselectedproductImg);
   };
 
   const handleChangePage = (event, newPage) => {

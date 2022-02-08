@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -11,14 +12,17 @@ import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function AdminCreateProductApp() {
+  const dispatch = useDispatch();
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [ProductType, setProductType] = useState([]);
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/producttypes`);
     setProductType(ProductType.data.data);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const RegisterSchema = Yup.object().shape({
     Typeid: Yup.number().required('product price is required'),
     productName: Yup.string()
@@ -38,18 +42,6 @@ export default function AdminCreateProductApp() {
       .required('product name required')
   });
   const handleSubmits = async (e) => {
-    const data = {
-      productName: e.productName,
-      productPrice: e.productPrice,
-      productCost: e.productCost,
-      productStetus: e.productStetus,
-      selectTypeId: e.Typeid,
-      file,
-      filepreview,
-      unitkg: e.unitkg,
-      currency: e.currency
-    };
-
     const formdata = new FormData();
     formdata.append('avatar', file);
     formdata.append('productName', e.productName);
@@ -66,7 +58,8 @@ export default function AdminCreateProductApp() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (file.length === 0) {
         Swal.fire(
@@ -75,10 +68,16 @@ export default function AdminCreateProductApp() {
           'question'
         );
       } else if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
-        Swal.fire('Success!', 'คุณได้เพิ่มสินค้ารียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้เพิ่มสินค้ารียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });
@@ -177,8 +176,6 @@ export default function AdminCreateProductApp() {
                 id="outlined-select-currency"
                 select
                 label="สถานะสินค้า"
-                // value={selectTypeId}
-                // onChange={handleChange}
                 {...getFieldProps('productStetus')}
                 error={Boolean(touched.productStetus && errors.productStetus)}
                 helperText={touched.productStetus && errors.productStetus}
@@ -193,14 +190,6 @@ export default function AdminCreateProductApp() {
                   สินค้ามีไม่พอจำหน่าย
                 </MenuItem>
               </TextField>
-              {/*  <TextField
-                fullWidth
-                autoComplete="company_address"
-                label="ที่อยู่"
-                {...getFieldProps('company_address')}
-                error={Boolean(touched.company_address && errors.company_address)}
-                helperText={touched.company_address && errors.company_address}
-              /> */}
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   type="file"

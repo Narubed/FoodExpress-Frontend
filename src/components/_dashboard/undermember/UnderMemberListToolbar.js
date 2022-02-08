@@ -1,22 +1,9 @@
-import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
-import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { styled } from '@mui/material/styles';
-import {
-  Box,
-  Toolbar,
-  Tooltip,
-  IconButton,
-  Typography,
-  OutlinedInput,
-  InputAdornment
-} from '@mui/material';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { Box, Toolbar, Typography, OutlinedInput, InputAdornment } from '@mui/material';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Toolbar)(({ theme }) => ({
@@ -44,21 +31,10 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 UnderMemberListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
-  selected_id: PropTypes.array,
-  selected: PropTypes.array,
-  Memberlist: PropTypes.array
+  onFilterName: PropTypes.func
 };
 
-export default function UnderMemberListToolbar({
-  numSelected,
-  filterName,
-  onFilterName,
-  // eslint-disable-next-line camelcase
-  selected_id,
-  selected,
-  Memberlist
-}) {
+export default function UnderMemberListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <RootStyle
       sx={{
@@ -84,20 +60,6 @@ export default function UnderMemberListToolbar({
           }
         />
       )}
-
-      {/* {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} onClick={() => deleteMember()} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
-      )} */}
     </RootStyle>
   );
 }

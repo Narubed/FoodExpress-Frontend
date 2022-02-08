@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
+import { useDispatch } from 'react-redux';
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
@@ -16,6 +17,8 @@ import {
 // ----------------------------------------------------------------------
 
 export default function BlogsReportOrderApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [ReportOrder, setReportOrder] = useState([]);
   const user = sessionStorage.getItem('user');
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,10 +29,10 @@ export default function BlogsReportOrderApp() {
     const filterUserID = ReportOrders.data.data.filter(
       (value) => value.report_order_member_userid === user
     );
-    const a = filterUserID.reverse();
-    console.log(ReportOrders.data.data);
+    filterUserID.reverse();
     setReportOrder(filterUserID);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="Blog | NBA-Express">
       <Container>

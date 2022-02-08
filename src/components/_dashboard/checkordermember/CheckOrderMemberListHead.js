@@ -8,22 +8,11 @@ import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@
 CheckOrderMemberListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
-  rowCount: PropTypes.number,
   headLabel: PropTypes.array,
-  numSelected: PropTypes.number,
-  onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func
+  onRequestSort: PropTypes.func
 };
 
-export default function CheckOrderMemberListHead({
-  order,
-  orderBy,
-  rowCount,
-  headLabel,
-  numSelected,
-  onRequestSort,
-  onSelectAllClick
-}) {
+export default function CheckOrderMemberListHead({ order, orderBy, headLabel, onRequestSort }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -31,13 +20,7 @@ export default function CheckOrderMemberListHead({
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          {/* <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          /> */}
-        </TableCell>
+        <TableCell padding="checkbox" />
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}

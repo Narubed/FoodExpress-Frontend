@@ -2,6 +2,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 import { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Icon } from '@iconify/react';
@@ -16,6 +17,8 @@ import AppCardCutArountDistrtict from '../../../components/_dashboard/checkorder
 
 // ----------------------------------------------------------------------
 function CheckOrderUnderMemberApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Order, setOrder] = useState([]);
   const [OrderDontHaveDistrict, setOrderDontHaveDistrict] = useState([]);
   const [Query, setQuery] = useState('');
@@ -84,7 +87,6 @@ function CheckOrderUnderMemberApp() {
               fileterDontHaveDistrict.push(element);
             }
           });
-          console.log(fileterDontHaveDistrict);
           setOrderDontHaveDistrict(fileterDontHaveDistrict);
         }
       }
@@ -127,6 +129,7 @@ function CheckOrderUnderMemberApp() {
       setMyMemberMe(MyMember.data.data);
     }
   }, []);
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="ออเดอร์ที่รอจัดส่ง | NBA-Express">
       <Container maxWidth="xl">

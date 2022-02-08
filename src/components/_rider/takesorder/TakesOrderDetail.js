@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 // material
-import { visuallyHidden } from '@mui/utils';
 import { Grid, Card, TableRow, TableCell, TableHead, Typography, Button } from '@mui/material';
 import { Icon } from '@iconify/react';
 import Modal from '@material-tailwind/react/Modal';
@@ -37,8 +36,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   borderRadius: '50%',
   alignItems: 'center',
-  // width: theme.spacing(8),
-  // height: theme.spacing(8),
   justifyContent: 'center',
   marginBottom: theme.spacing(3)
 }));

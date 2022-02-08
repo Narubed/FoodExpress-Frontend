@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 TakesOrderInProvinceCheckOrderDetail.propTypes = {
   orderList: PropTypes.array
 };
 export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const userID = sessionStorage.getItem('user');
   const getAllOrderJoinDetailJoinCutArount = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
@@ -74,4 +76,5 @@ export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
       }
     });
   });
+  dispatch({ type: 'TURNOFF' });
 }

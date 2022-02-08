@@ -1,15 +1,14 @@
 /* eslint-disable no-return-await */
 /* eslint-disable no-undef */
 import { Icon } from '@iconify/react';
-import { useEffect, useState, useRef, useReactToPrint } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import Button from '@material-tailwind/react/Button';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import Swal from 'sweetalert2';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 import ReactToPrint from 'react-to-print';
 import Input from '@material-tailwind/react/Input';
 import Dialog from '@mui/material/Dialog';
@@ -21,7 +20,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +63,9 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppCardCutArountDonthaveDistrtict(props) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  dispatch({ type: 'OPEN' });
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -180,6 +180,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
           report_order_status: 'จ่ายออก'
         };
         // ยิง --------
+        dispatch({ type: 'OPEN' });
         await axios.post(
           `${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`,
           dataReportMember
@@ -200,6 +201,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
         async (value) =>
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
       );
+      dispatch({ type: 'TURNOFF' });
       await CutArountOrderSubDistrict();
     }
   };
@@ -213,6 +215,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
     );
     //
     //
+    dispatch({ type: 'OPEN' });
     const min = 1000;
     const max = 9999;
     const createReportID =
@@ -257,11 +260,13 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
       timer: 2500
     });
     setTimeout(() => {
+      dispatch({ type: 'TURNOFF' });
       navigate('/dashboard/CheckOrderUnderMemberApp/CheckOrderMemberCreatBarCodeApp', {
         replace: true
       });
     }, 2500);
   };
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <RootStyle onClick={() => setShowModal(true)}>

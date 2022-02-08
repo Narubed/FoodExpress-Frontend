@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -19,6 +20,7 @@ TakesOrderInputBarCode.propTypes = {
   orderList: PropTypes.array
 };
 export default function TakesOrderInputBarCode({ orderList }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
@@ -39,6 +41,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
       );
       setOpen(false);
     } else {
+      dispatch({ type: 'OPEN' });
       const createReportID =
         Date.now() + result.order_rider_member_userid + result.order_rider_product_id;
       await TakesOrderCheckStock({ result });
@@ -69,10 +72,10 @@ export default function TakesOrderInputBarCode({ orderList }) {
         timer: 1500
       });
       setTimeout(() => {
+        dispatch({ type: 'TURNOFF' });
         navigate('/dashboard/BlogsReportOrderApp', { replace: true });
         // window.location.reload(false);
       }, 1500);
-
       setOpen(false);
     }
   };

@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-import React, { useEffect, useState, useRef, useReactToPrint } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import ReactToPrint from 'react-to-print';
 import { Icon } from '@iconify/react';
 import dayjs from 'dayjs';
@@ -12,8 +13,6 @@ import {
   Container,
   Typography,
   Card,
-  CardMedia,
-  CardTitle,
   Slide,
   Dialog,
   DialogTitle,
@@ -22,16 +21,11 @@ import {
   DialogActions
 } from '@mui/material';
 import Button from '@material-tailwind/react/Button';
-import { CalendarOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import Barcode from 'react-barcode';
-import Input from '@material-tailwind/react/Input';
-// components
-import { alpha, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Page from '../../../components/Page';
 // utils
-import { fNumber } from '../../../utils/formatNumber';
-import AppCardProvince from '../../../components/_admin/confirmexpress/AppCardProvince';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -63,6 +57,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 function CheckOrderMemberCreatBarCodeApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [Order, setOrder] = useState([]);
   const [showDeliveryDetail, setDeliveryDetail] = useState([]);
   const [open, setOpen] = useState(false);
@@ -91,6 +87,7 @@ function CheckOrderMemberCreatBarCodeApp() {
     setDeliveryDetail(getDeliverDetail.data.data);
     setOpen(true);
   };
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="RiderCreatBarCodeApp | admin NBA-Express">

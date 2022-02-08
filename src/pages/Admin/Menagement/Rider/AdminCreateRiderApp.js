@@ -46,7 +46,8 @@ export default function RegisterForm() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });

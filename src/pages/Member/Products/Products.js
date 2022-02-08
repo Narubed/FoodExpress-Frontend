@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/no-distracting-elements */
 /* eslint-disable import/no-duplicates */
 import { useFormik } from 'formik';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 // material
-import { Container, Stack, Typography, Button, Input } from '@mui/material';
+import { Container, Stack, Typography } from '@mui/material';
 // components
 import Page from '../../../components/Page';
 import {
@@ -20,6 +21,8 @@ import checkStatusOrder from '../../../utils/checkStatusOrder';
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [openFilter, setOpenFilter] = useState(false);
   const [openShopCard, setOpenShopCard] = useState(false);
 
@@ -28,8 +31,6 @@ export default function EcommerceShop() {
   const [count, setCount] = useState([]);
   const [Types, setTypes] = useState([]);
   const [number, setNumber] = useState();
-
-  const [showNum, setNum] = useState();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -40,7 +41,7 @@ export default function EcommerceShop() {
     setProductsType(filterStatusProduct);
     await checkStatusOrder();
   }, []);
-  const onSubmitProduct = (e) => {
+  const onSubmitProduct = () => {
     setFilterProductsType([]);
     setOpenFilter(false);
   };
@@ -104,7 +105,7 @@ export default function EcommerceShop() {
     setFilterProductsType(valueSort);
     setNumber(3);
   };
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="สินค้าทั้งหมด | NBA-Express">
       <Container>

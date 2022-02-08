@@ -1,25 +1,19 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
-import { Tag } from 'antd';
 import axios from 'axios';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -27,15 +21,12 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Badge,
   TextField,
   Box
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
-import { styled } from '@mui/material/styles';
 import {
   CheckOrderDetailUnderMemberListHead,
   CheckOrderDetailUnderMemberMoreMenu
@@ -84,7 +75,6 @@ function applySortFilter(array, comparator, query) {
       (_user) =>
         _user.order_status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.order_id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.order_product_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
@@ -92,9 +82,10 @@ function applySortFilter(array, comparator, query) {
 }
 
 function CheckOrderDetailUnderMemberApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
-  const [OrderlistFilter, setOrderlistFilter] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -137,6 +128,7 @@ function CheckOrderDetailUnderMemberApp() {
 
     setOrderlist(filterData);
   }, []);
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -161,11 +153,7 @@ function CheckOrderDetailUnderMemberApp() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
-
+  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Orderlist.length) : 0;
 
   const newOrderlist =
@@ -179,6 +167,7 @@ function CheckOrderDetailUnderMemberApp() {
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="CheckOrder | FoodExpress">
@@ -228,7 +217,6 @@ function CheckOrderDetailUnderMemberApp() {
                           order_id,
                           order_member_id,
                           order_status,
-                          order_slip,
                           order_product_total,
                           order_product_date
                         } = row;

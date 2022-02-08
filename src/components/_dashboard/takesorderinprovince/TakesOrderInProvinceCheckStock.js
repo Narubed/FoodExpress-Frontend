@@ -1,21 +1,13 @@
-import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
-import { Icon } from '@iconify/react';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Swal from 'sweetalert2';
 import axios from 'axios';
-import { now } from 'lodash';
 
 TakesOrderInProvinceCheckStock.propTypes = {
   DeliveryList: PropTypes.array
 };
 export default async function TakesOrderInProvinceCheckStock({ result, getDeliveryDetail }) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const getStockMember = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.receiver_delivery_member_id}`
   );
@@ -46,4 +38,5 @@ export default async function TakesOrderInProvinceCheckStock({ result, getDelive
       );
     }
   });
+  dispatch({ type: 'TURNOFF' });
 }

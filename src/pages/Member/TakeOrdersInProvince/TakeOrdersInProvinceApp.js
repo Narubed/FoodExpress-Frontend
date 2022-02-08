@@ -1,12 +1,9 @@
 /* eslint-disable camelcase */
 import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
+import { useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import numeral from 'numeral';
 // import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 // material
@@ -14,19 +11,14 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
   Container,
   Typography,
   TableContainer,
-  TablePagination,
-  Button,
-  Badge
+  TablePagination
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 // components
 import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
@@ -86,6 +78,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function TakeOrdersInProvinceApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const [DeliveryList, setDeliverList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -142,7 +136,7 @@ export default function TakeOrdersInProvinceApp() {
   const filteredUsers = applySortFilter(DeliveryList, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="ออเดอร์ที่ต้องได้รับภายในจังหวัด | FoodExpress">
       <Container>

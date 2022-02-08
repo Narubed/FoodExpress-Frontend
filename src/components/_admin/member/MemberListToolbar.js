@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
@@ -46,7 +47,6 @@ MemberListToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   selected_id: PropTypes.array,
-  selected: PropTypes.array,
   Memberlist: PropTypes.array
 };
 
@@ -56,9 +56,9 @@ export default function MemberListToolbar({
   onFilterName,
   // eslint-disable-next-line camelcase
   selected_id,
-  selected,
   Memberlist
 }) {
+  const dispatch = useDispatch();
   const deleteMember = async () => {
     const filteredsMember = [];
     await selected_id.forEach((element) => {
@@ -76,6 +76,7 @@ export default function MemberListToolbar({
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         filteredsMember.map(
           async (value) =>
             // eslint-disable-next-line no-return-await
@@ -93,10 +94,14 @@ export default function MemberListToolbar({
             // eslint-disable-next-line no-return-await
             await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${value.id}`)
         );
-
-        Swal.fire('Success!', 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });

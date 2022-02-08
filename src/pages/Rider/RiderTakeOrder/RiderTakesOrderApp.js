@@ -7,15 +7,12 @@ import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
 import numeral from 'numeral';
-// import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -23,10 +20,8 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  Button,
-  Badge
+  Button
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 // components
 import Page from '../../../components/Page';
 import Scrollbar from '../../../components/Scrollbar';
@@ -46,10 +41,6 @@ const TABLE_HEAD = [
   { id: 'order_rider_product_name', label: 'ชื่อสินค้า', alignRight: false },
   { id: 'order_rider_Amount', label: 'จำนวน/กิโลกรัม', alignRight: false },
   { id: 'order_rider_status', label: 'สถานะ', alignRight: false },
-  // { id: 'order_rider_company_name', label: 'ชื่อบริษัท', alignRight: false },
-  // { id: 'order_rider_company_company_address', label: 'ที่อยู่บริษัท', alignRight: false },
-  // { id: 'firstname', label: 'firstname', alignRight: false },
-  // { id: 'address', label: 'ที่อยู่ที่ต้องจัดส่ง', alignRight: false },
   { id: '', label: 'รายระเอียด', alignRight: false },
   { id: '', label: 'บาร์โค๊ต', alignRight: false },
   { id: '' }
@@ -208,12 +199,7 @@ export default function AdminTakesOrderDetail() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            {/* <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, rider_first_name, rider_id)}
-                            /> */}
-                          </TableCell>
+                          <TableCell padding="checkbox" />
                           <TableCell align="left">
                             <Label color="blueGray">{id_order_rider_id}</Label>
                           </TableCell>

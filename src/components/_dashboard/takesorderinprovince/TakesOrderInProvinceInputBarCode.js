@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import { Icon } from '@iconify/react';
@@ -19,8 +20,8 @@ TakesOrderInputBarCode.propTypes = {
   DeliveryList: PropTypes.array
 };
 export default function TakesOrderInputBarCode({ DeliveryList }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(DeliveryList);
   const [open, setOpen] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
 
@@ -46,6 +47,7 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
       );
       TakesOrderInProvinceCheckStock({ result, getDeliveryDetail });
       const DeliveryDetail = getDeliveryDetail.data.data;
+      dispatch({ type: 'OPEN' });
       DeliveryDetail.forEach(async (value, index) => {
         const ID = Date.now() + value.report_delivery_detail_id + index;
         const dataReportMember = {
@@ -81,6 +83,7 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
         timer: 1500
       });
       setTimeout(() => {
+        dispatch({ type: 'TURNOFF' });
         navigate('/dashboard/BlogsReportOrderApp', { replace: true });
       }, 1500);
 

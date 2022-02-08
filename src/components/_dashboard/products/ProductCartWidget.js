@@ -1,24 +1,19 @@
+/* eslint-disable react/prop-types */
 import { Icon } from '@iconify/react';
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
-import shoppingCartFill from '@iconify/icons-eva/shopping-cart-fill';
 // material
 import { styled } from '@mui/material/styles';
 import {
-  Box,
-  Radio,
-  Stack,
-  Drawer,
-  Rating,
-  Divider,
-  Checkbox,
-  FormGroup,
-  IconButton,
-  Typography,
-  RadioGroup,
-  FormControlLabel,
-  Badge
+  Badge,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
 } from '@mui/material';
 import Modal from '@material-tailwind/react/Modal';
 import ModalHeader from '@material-tailwind/react/ModalHeader';
@@ -28,7 +23,6 @@ import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ProductCartShopping from './ProductCartShopping';
-import Scrollbar from '../../Scrollbar';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -54,6 +48,8 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+
 export default function CartWidget({
   count,
   isOpenShopCard,
@@ -62,8 +58,10 @@ export default function CartWidget({
   deleteProductShopCard,
   setNumberRereder
 }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onSubmit = async (e) => {
+
+  const onSubmit = async () => {
     const today = new Date();
     const date =
       today.getFullYear() +
@@ -114,6 +112,7 @@ export default function CartWidget({
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrder`, OrderFoodExpress);
 
         Order_Detail_FoodExpress.map(
@@ -131,6 +130,7 @@ export default function CartWidget({
           timer: 1500
         });
         setTimeout(() => {
+          dispatch({ type: 'TURNOFF' });
           navigate('/dashboard/CheckOrderMemberApp', { replace: true });
         }, 1500);
       }
@@ -142,6 +142,7 @@ export default function CartWidget({
       <RootStyle>
         <Badge
           showZero
+          // eslint-disable-next-line react/prop-types
           badgeContent={count.length}
           color="error"
           max={99}
@@ -151,73 +152,83 @@ export default function CartWidget({
         </Badge>
       </RootStyle>
 
-      <Modal size="regular" active={isOpenShopCard} toggler={() => onCloseShopCard()}>
-        <ModalHeader toggler={() => onCloseShopCard()}>
+      <Dialog
+        fullWidth="fullWidth"
+        maxWidth="md"
+        open={isOpenShopCard}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => onCloseShopCard()}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>
           <Icon icon="emojione:shopping-cart" width={32} height={32} />
-        </ModalHeader>
-        <ModalBody>
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          สินค้า
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ราคา
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          จำนวน
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ราคารวม
-                        </th>
-                        <th scope="col" className="relative px-6 py-3">
-                          {/* <span className="sr-only">Edit</span> */}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {count.map((m) => (
-                        <ProductCartShopping
-                          product={m}
-                          key={m.productid}
-                          deleteProductShopCard={deleteProductShopCard}
-                          setNumberRereder={setNumberRereder}
-                        />
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="text-right">
-                    ผลรวม {numeral(count.reduce((sum, value) => sum + value.value, 0)).format()} บาท
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <div className="flex flex-col">
+              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                  <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            สินค้า
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            ราคา
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            จำนวน
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            ราคารวม
+                          </th>
+                          <th scope="col" className="relative px-6 py-3">
+                            {/* <span className="sr-only">Edit</span> */}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {count.map((m) => (
+                          <ProductCartShopping
+                            product={m}
+                            key={m.productid}
+                            deleteProductShopCard={deleteProductShopCard}
+                            setNumberRereder={setNumberRereder}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                    <div className="text-right">
+                      ผลรวม {numeral(count.reduce((sum, value) => sum + value.value, 0)).format()}{' '}
+                      บาท
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ModalBody>
-
-        <ModalFooter>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
             ยืนยันรายการสั่งซื้อ
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

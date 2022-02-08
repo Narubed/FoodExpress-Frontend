@@ -1,17 +1,13 @@
 /* eslint-disable camelcase */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
-import editFill from '@iconify/icons-eva/edit-fill';
+import { useDispatch } from 'react-redux';
 import numeral from 'numeral';
 import { Link as RouterLink } from 'react-router-dom';
-import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 // material-tailwind
 import '@material-tailwind/react/tailwind.css';
-import Input from '@material-tailwind/react/Input';
 // material
 import {
   Menu,
@@ -19,7 +15,6 @@ import {
   IconButton,
   ListItemIcon,
   ListItemText,
-  TableContainer,
   Dialog,
   DialogActions,
   DialogContent,
@@ -39,8 +34,10 @@ CheckOrderMemberMoreMenu.propTypes = {
   order_status: PropTypes.string
 };
 export default function CheckOrderMemberMoreMenu(props) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line camelcase
-  const { order_id, Orderlist, row, order_product_total, order_status, order_member_id } = props;
+  const { order_id, Orderlist, row, order_product_total, order_status } = props;
   const [showModal, setShowModal] = useState(false);
   const [orderDetail, setOrderDetail] = useState([]);
   const ref = useRef(null);
@@ -81,6 +78,7 @@ export default function CheckOrderMemberMoreMenu(props) {
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
         Swal.fire({
           position: '',
@@ -90,7 +88,7 @@ export default function CheckOrderMemberMoreMenu(props) {
           timer: 1500
         });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       } else if (
         /* Read more about handling dismissals below */
@@ -120,6 +118,7 @@ export default function CheckOrderMemberMoreMenu(props) {
       reverseButtons: true
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, dataConfirmExpress);
         Swal.fire({
           icon: 'success',
@@ -128,14 +127,14 @@ export default function CheckOrderMemberMoreMenu(props) {
           timer: 1500
         });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelled', 'คุณได้ทำการยกเลิกการยืนยันสินค้าเเล้ว :)', 'error');
       }
     });
   };
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <>
@@ -335,7 +334,7 @@ export default function CheckOrderMemberMoreMenu(props) {
             <Button
               color="red"
               buttonType="link"
-              onClick={(e) => setShowModal(false)}
+              onClick={() => setShowModal(false)}
               ripple="dark"
               danger
             >

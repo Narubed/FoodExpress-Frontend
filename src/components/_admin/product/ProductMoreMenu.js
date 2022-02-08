@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
@@ -16,9 +17,19 @@ import Swal from 'sweetalert2';
 import Button from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 ProductMoreMenu.propTypes = {
-  id: PropTypes.number
+  id: PropTypes.number,
+  productid: PropTypes.string,
+  productName: PropTypes.string,
+  productPrice: PropTypes.number,
+  productCost: PropTypes.number,
+  productImg: PropTypes.string,
+  productStetus: PropTypes.string,
+  unitkg: PropTypes.number,
+  currency: PropTypes.string,
+  nameproducttype: PropTypes.string
 };
 export default function ProductMoreMenu(props) {
+  const dispatch = useDispatch();
   // eslint-disable-next-line camelcase
   const {
     id,
@@ -48,11 +59,17 @@ export default function ProductMoreMenu(props) {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/product/${productid}`);
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${productImg}`);
-        Swal.fire('Success!', 'คุณได้ลบสินค้าเรียบร้อยเเล้ว.', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'คุณได้ลบสินค้าเรียบร้อยเเล้ว',
+          showConfirmButton: false,
+          timer: 1500
+        });
         setTimeout(() => {
-          window.location.reload(false);
+          dispatch({ type: 'TURNOFF' });
         }, 1500);
       }
     });
@@ -69,34 +86,6 @@ export default function ProductMoreMenu(props) {
     localStorage.setItem('currency', currency);
     localStorage.setItem('nameproducttype', nameproducttype);
   };
-  // const handleOk = async () => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: 'คุณยืนยันที่จะเเก้ไขหรือไม่!',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes !'
-  //   }).then(async (result) => {
-  //     const data = {
-  //       company_id: id,
-  //       company_name: onChangeCompanyName,
-  //       company_tel: onChangeTel,
-  //       book_name: onChangeBookName,
-  //       book_number: onChangeBookNumber,
-  //       company_address: onChangeAddress
-  //     };
-  //     if (result.isConfirmed) {
-  //       Swal.fire('ยืนยันการเเก้ไข!', 'คุณได้ทำการเเก้ไขสำเร็จ', 'success');
-  //       await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putCompany`, data);
-  //       setShowModalCode(false);
-  //       setTimeout(() => {
-  //         window.location.reload(false);
-  //       }, 2000);
-  //     }
-  //   });
-  // };
 
   return (
     <>

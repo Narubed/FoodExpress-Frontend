@@ -1,25 +1,19 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
-import { Tag } from 'antd';
 import axios from 'axios';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -34,7 +28,6 @@ import {
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import { styled } from '@mui/material/styles';
 import {
   CheckOrderMemberListHead,
@@ -123,35 +116,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     }
   }
 }));
-function stringToColor(string) {
-  let hash = 0;
-  let i;
 
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name)
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
-  };
-}
 function CheckOrderMemberApp() {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
   const [OrderlistFilter, setOrderlistFilter] = useState(null);
@@ -178,6 +146,7 @@ function CheckOrderMemberApp() {
     );
     setOrderlist(sortData);
   }, []);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -240,6 +209,7 @@ function CheckOrderMemberApp() {
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="CheckOrder | FoodExpress">

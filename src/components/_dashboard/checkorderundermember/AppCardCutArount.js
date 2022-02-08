@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import { Icon } from '@iconify/react';
 import { useEffect, useState, useRef, useReactToPrint } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -67,6 +68,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppCardCutArount(props) {
+  const dispatch = useDispatch();
+  dispatch({ type: 'OPEN' });
   const navigate = useNavigate();
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
@@ -179,6 +182,7 @@ export default function AppCardCutArount(props) {
           report_order_status: 'จ่ายออก'
         };
         // ยิง --------
+        dispatch({ type: 'OPEN' });
         await axios.post(
           `${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`,
           dataReportMember
@@ -206,6 +210,7 @@ export default function AppCardCutArount(props) {
           dataChangeOrderDetail
         );
       });
+      dispatch({ type: 'TURNOFF' });
       await CutArountOrderDistrict();
     }
   };
@@ -216,6 +221,7 @@ export default function AppCardCutArount(props) {
     const filterMyDistrict = props.GetAllMembers.filter(
       (f) => f.district === props.props.order_product_district && f.level === 'district'
     );
+    dispatch({ type: 'OPEN' });
     const min = 1000;
     const max = 9999;
     const createReportID =
@@ -259,12 +265,13 @@ export default function AppCardCutArount(props) {
       timer: 2500
     });
     setTimeout(() => {
+      dispatch({ type: 'TURNOFF' });
       navigate('/dashboard/CheckOrderUnderMemberApp/CheckOrderMemberCreatBarCodeApp', {
         replace: true
       });
     }, 2500);
   };
-
+  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <RootStyle onClick={() => setShowModal(true)}>
