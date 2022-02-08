@@ -34,104 +34,15 @@ import MenuPopover from '../../components/MenuPopover';
 
 // ----------------------------------------------------------------------
 
-const NOTIFICATIONS = [
-  {
-    id: faker.datatype.uuid(),
-    title: 'Your order is placed',
-    description: 'waiting for shipping',
-    avatar: null,
-    type: 'order_placed',
-    createdAt: set(new Date(), { hours: 10, minutes: 30 }),
-    isUnRead: true
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: faker.name.findName(),
-    description: 'answered to your comment on the Minimal',
-    avatar: mockImgAvatar(2),
-    type: 'friend_interactive',
-    createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new message',
-    description: '5 unread messages',
-    avatar: null,
-    type: 'chat_message',
-    createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new mail',
-    description: 'sent from Guido Padberg',
-    avatar: null,
-    type: 'mail',
-    createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'Delivery processing',
-    description: 'Your order is being shipped',
-    avatar: null,
-    type: 'order_shipped',
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
-    isUnRead: false
-  }
-];
-
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
-
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_package.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_shipping.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_mail.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />,
-      title
-    };
-  }
-  return {
-    avatar: <img alt={notification.title} src={notification.avatar} />,
-    title
-  };
-}
-
 NotificationItem.propTypes = {
   notification: PropTypes.object.isRequired
 };
 
 function NotificationItem({ notification }) {
-  // const { avatar, title } = renderContent(notification);
-  const title = `${notification.order_status} ${notification.province}`;
+  const title = ` ชื่อสินค้า ${notification.order_rider_product_name} จากบริษัท ${notification.order_rider_company_name}`;
   return (
     <ListItemButton
-      to="/admin/AdminCheckOrderApp"
+      to="/rider/RiderTakesOrderApp"
       disableGutters
       component={RouterLink}
       sx={{
@@ -145,11 +56,23 @@ function NotificationItem({ notification }) {
     >
       <ListItemAvatar>
         <Avatar sx={{ bgcolor: 'background.neutral' }}>
-          <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />
+          <Icon icon="emojione:new-button" width="30" height="30" />
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={title}
+        primary={
+          <Typography
+            variant="button"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center'
+              // color: 'text.disabled'
+            }}
+          >
+            {title}
+          </Typography>
+        }
         secondary={
           <Typography
             variant="caption"
@@ -161,7 +84,7 @@ function NotificationItem({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.order_product_date))}
+            {formatDistanceToNow(new Date(notification.order_rider_time_stamp))}
           </Typography>
         }
       />
@@ -177,10 +100,19 @@ export default function NotificationsPopover() {
   const [Total, setTotal] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`);
-    const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
-    setTotal(filterStatusOrder);
-    setNotifications(filterStatusOrder);
+    const rider = sessionStorage.getItem('user');
+    const getRider = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrderExpressJoinMember`
+    );
+    const filterRiderid = getRider.data.data.filter(
+      (f) => f.order_rider_id === parseInt(rider, 10)
+    );
+    const filterStatus = filterRiderid.filter(
+      (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
+    );
+    filterStatus.reverse();
+    setTotal(filterStatus);
+    setNotifications(filterStatus);
   }, []);
   function handleOpen() {
     setOpen(true);
@@ -228,7 +160,7 @@ export default function NotificationsPopover() {
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">Notifications</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              คุณมี {Total.length} รายการที่ต้องตรวจสอบ
+              คุณมี {Total.length} รายการที่ต้องจัดส่ง
             </Typography>
           </Box>
 
@@ -256,19 +188,6 @@ export default function NotificationsPopover() {
               <NotificationItem key={notification.order_id} notification={notification} />
             ))}
           </List>
-
-          {/* <List
-            disablePadding
-            subheader={
-              <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                Before that
-              </ListSubheader>
-            }
-          >
-            {notifications.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
-            ))}
-          </List> */}
         </Scrollbar>
 
         <Divider />

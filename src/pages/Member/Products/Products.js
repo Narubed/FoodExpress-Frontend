@@ -22,7 +22,6 @@ import checkStatusOrder from '../../../utils/checkStatusOrder';
 
 export default function EcommerceShop() {
   const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   const [openFilter, setOpenFilter] = useState(false);
   const [openShopCard, setOpenShopCard] = useState(false);
 
@@ -105,7 +104,6 @@ export default function EcommerceShop() {
     setFilterProductsType(valueSort);
     setNumber(3);
   };
-  dispatch({ type: 'TURNOFF' });
   return (
     <Page title="สินค้าทั้งหมด | NBA-Express">
       <Container>

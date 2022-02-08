@@ -83,52 +83,11 @@ const NOTIFICATIONS = [
   }
 ];
 
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
-
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_package.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_shipping.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_mail.svg" />,
-      title
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />,
-      title
-    };
-  }
-  return {
-    avatar: <img alt={notification.title} src={notification.avatar} />,
-    title
-  };
-}
-
 NotificationItem.propTypes = {
   notification: PropTypes.object.isRequired
 };
 
 function NotificationItem({ notification }) {
-  // const { avatar, title } = renderContent(notification);
   const title = `${notification.order_status} ${numeral(
     notification.order_product_total
   ).format()} บาท`;

@@ -44,7 +44,6 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product, setCount, count }) {
   const [showModal, setShowModal] = React.useState(false);
   const [showButton, setButton] = React.useState(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(async () => {}, [count]);
   const { name, productStetus, productName, productImg, productPrice, productid } = product;
   // eslint-disable-next-line global-require
@@ -56,7 +55,11 @@ export default function ShopProductCard({ product, setCount, count }) {
       const idx = filtereds.findIndex((value) => value.productid === item.productid);
       if (idx !== -1) {
         console.log('ซ้ำ');
-
+        // eslint-disable-next-line operator-assignment
+        // filtereds[idx].value = item.productPrice;
+        // filtereds[idx].amount = 1;
+        //   filtereds[idx].order_product_amoumt + item.order_product_amoumt;
+      } else {
         const value = {
           amount: 1,
           value: item.productPrice
@@ -109,8 +112,11 @@ export default function ShopProductCard({ product, setCount, count }) {
                   color: 'text.disabled',
                   textDecoration: 'line-through'
                 }}
-              />
+              >
+                {/* {priceSale && fCurrency(priceSale)} */}
+              </Typography>
               &nbsp;
+              {/* {fCurrency(price)} */}
               <div className="row">{numeral(productPrice).format()}฿</div>
             </Typography>
           </Stack>
