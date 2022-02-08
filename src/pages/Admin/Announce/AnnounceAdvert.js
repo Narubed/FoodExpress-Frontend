@@ -7,7 +7,6 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { useNavigate } from 'react-router-dom';
-import ReactLoading from 'react-loading';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
@@ -90,7 +89,6 @@ export default function AdminEditProductApp() {
   return (
     <Page title="โฆษณา | FoodExpress">
       <Container>
-        <ReactLoading type="spin" color="#03fc4e" height={500} width={500} />
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             <div>แก้ไขภาพโฆษณา</div>

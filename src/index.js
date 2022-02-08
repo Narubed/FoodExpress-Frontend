@@ -17,8 +17,6 @@ import reportWebVitals from './reportWebVitals';
 
 const store = createStore(rootReducer);
 
-const rootElement = document.getElementById('root');
-
 ReactDOM.render(
   <HelmetProvider>
     <BrowserRouter>
