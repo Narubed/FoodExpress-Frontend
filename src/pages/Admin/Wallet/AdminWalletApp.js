@@ -160,9 +160,7 @@ function AdminWalletApp() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = WalletMemberlist.map((n) => n.wallet_id);
-      // const newSelectedsid = Orderlist.map((n) => n.order_id);
       setSelected(newSelecteds);
-      // setSelected_id(newSelectedsid);
       return;
     }
     setSelected([]);
