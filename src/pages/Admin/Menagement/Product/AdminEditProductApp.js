@@ -85,6 +85,7 @@ export default function AdminEditProductApp() {
             .catch((err) => {
               console.error(err);
             });
+          dispatch({ type: 'TURNOFF' });
           Swal.fire({
             icon: 'success',
             title: 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว',
@@ -92,7 +93,6 @@ export default function AdminEditProductApp() {
             timer: 1500
           });
           setTimeout(() => {
-            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
@@ -105,6 +105,7 @@ export default function AdminEditProductApp() {
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
           );
+          dispatch({ type: 'TURNOFF' });
           Swal.fire({
             icon: 'success',
             title: 'คุณได้แก้ไขสินค้าเรียบร้อยเเล้ว',
@@ -112,7 +113,6 @@ export default function AdminEditProductApp() {
             timer: 1500
           });
           setTimeout(() => {
-            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
