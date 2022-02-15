@@ -22,7 +22,7 @@ import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 async function loginUser(credentials) {
-  return fetch('http://localhost:8000/login', {
+  return fetch(`${process.env.REACT_APP_WEB_BACKEND}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ async function loginUser(credentials) {
   }).then((data) => data.json());
 }
 async function loginRider(credentials) {
-  return fetch('http://localhost:8000/loginRider', {
+  return fetch(`${process.env.REACT_APP_WEB_BACKEND}/loginRider`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
