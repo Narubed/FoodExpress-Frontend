@@ -266,8 +266,11 @@ export default function AdminEditProductApp() {
                 <img
                   className="previewimg"
                   src={
+                    `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
+                      'productImg'
+                    )}`
                     // eslint-disable-next-line global-require
-                    require(`../../../../assets/img/${localStorage.getItem('productImg')}`).default
+                    // require(`../../../../assets/img/${localStorage.getItem('productImg')}`).default
                   }
                   alt="UploadImage"
                 />

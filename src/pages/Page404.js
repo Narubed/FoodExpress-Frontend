@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
+
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
@@ -9,6 +10,7 @@ import { MotionContainer, varBounceIn } from '../components/animate';
 import Page from '../components/Page';
 
 // ----------------------------------------------------------------------
+require('dotenv').config();
 
 const RootStyle = styled(Page)(({ theme }) => ({
   display: 'flex',
@@ -40,10 +42,10 @@ export default function Page404() {
             <motion.div variants={varBounceIn}>
               <Box
                 component="img"
-                // src="/static/illustrations/illustration_404.svg"
+                src="/static/illustrations/illustration_404.svg"
                 // src="https://nbadigitalworlds.com/2021/assets/img/phone.png"
-                src="https://drive.google.com/uc?export=view&id=1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_"
-                // src={`${process.env.GOOGLE_DRIVE_SELECT_IMAGE}1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_`}
+                // src="https://drive.google.com/uc?export=view&id=1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_"
+                // src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_`}
                 sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
               />
             </motion.div>
