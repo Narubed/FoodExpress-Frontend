@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -20,6 +21,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+  console.log(process.env);
   return (
     <RootStyle title="404 Page Not Found | NBA-Express">
       <Container>
@@ -39,7 +41,9 @@ export default function Page404() {
               <Box
                 component="img"
                 // src="/static/illustrations/illustration_404.svg"
-                src="https://nbadigitalworlds.com/2021/assets/img/phone.png"
+                // src="https://nbadigitalworlds.com/2021/assets/img/phone.png"
+                src="https://drive.google.com/uc?export=view&id=1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_"
+                // src={`${process.env.GOOGLE_DRIVE_SELECT_IMAGE}1QQ_bX-oOShGSBQu2gAda0Mix6sCrcmQ_`}
                 sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
               />
             </motion.div>
