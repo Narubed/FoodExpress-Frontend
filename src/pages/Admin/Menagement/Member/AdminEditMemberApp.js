@@ -685,10 +685,13 @@ export default function AdminCreateMemberApp() {
                       className="previewimg"
                       src={
                         localStorage.getItem('cardImg')
-                          ? // eslint-disable-next-line global-require
-                            require(`../../../../assets/img/${localStorage.getItem('cardImg')}`)
-                              .default
-                          : null
+                          ? `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
+                              'cardImg'
+                            )}`
+                          : // eslint-disable-next-line global-require
+                            // require(`../../../../assets/img/${localStorage.getItem('cardImg')}`)
+                            //   .default
+                            null
                       }
                       alt="UploadImage"
                     />
@@ -704,10 +707,13 @@ export default function AdminCreateMemberApp() {
                       className="previewimg"
                       src={
                         localStorage.getItem('bookBankImg')
-                          ? // eslint-disable-next-line global-require
-                            require(`../../../../assets/img/${localStorage.getItem('bookBankImg')}`)
-                              .default
-                          : null
+                          ? `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
+                              'bookBankImg'
+                            )}`
+                          : // eslint-disable-next-line global-require
+                            // require(`../../../../assets/img/${localStorage.getItem('bookBankImg')}`)
+                            //   .default
+                            null
                       }
                       alt="UploadImage"
                     />
