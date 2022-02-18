@@ -27,6 +27,8 @@ import AdminTakesOrderDetail from './pages/Admin/TakesOrder/AdminTakesOrderDetai
 import AdminCreateOrderRiderApp from './pages/Admin/TakesOrder/AdminCreateOrderRiderApp';
 import AnnounceSlide from './pages/Admin/Announce/AnnounceSlide';
 import AnnounceAdvert from './pages/Admin/Announce/AnnounceAdvert';
+import ChangeAdminApp from './pages/Admin/ChangeAdmin/ChangeAdminApp';
+import CreateAdminApp from './pages/Admin/ChangeAdmin/CreateAdminApp';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +62,9 @@ export default function Router() {
           element: <AdminCreateOrderRiderApp />
         },
         { path: 'AnnounceSlide', element: <AnnounceSlide /> },
-        { path: 'AnnounceAdvert', element: <AnnounceAdvert /> }
+        { path: 'AnnounceAdvert', element: <AnnounceAdvert /> },
+        { path: 'ChangeAdminApp', element: <ChangeAdminApp /> },
+        { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

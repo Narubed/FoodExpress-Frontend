@@ -92,6 +92,26 @@ export default function AccountPopover() {
           </Box>
           หน้าหลัก
         </MenuItem>
+
+        <MenuItem
+          key={4}
+          to="/admin/ChangeAdminApp"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          >
+            <Icon icon="noto:hotel" width="24" height="24" />
+          </Box>
+          จัดการผู้ดูแลระบบ
+        </MenuItem>
+
         <MenuItem
           key={2}
           to="/admin/AnnounceSlide"
