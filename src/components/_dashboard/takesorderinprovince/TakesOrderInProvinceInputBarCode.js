@@ -47,7 +47,7 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
       );
       TakesOrderInProvinceCheckStock({ result, getDeliveryDetail });
       const DeliveryDetail = getDeliveryDetail.data.data;
-      dispatch({ type: 'OPEN' });
+
       DeliveryDetail.forEach(async (value, index) => {
         const ID = Date.now() + value.report_delivery_detail_id + index;
         const dataReportMember = {
@@ -61,6 +61,7 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
           report_order_status: 'รับเข้า'
         };
         // ยิง --------
+        dispatch({ type: 'OPEN' });
         await axios.post(
           `${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`,
           dataReportMember

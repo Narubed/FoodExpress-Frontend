@@ -189,10 +189,10 @@ export default function AppCardCutArount(props) {
         );
         //-----
 
-        await axios.put(
-          `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
-          dataChangeOrderDetail
-        );
+        // await axios.put(
+        //   `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
+        //   dataChangeOrderDetail
+        // );
       });
 
       valuesPutStockMember.map(

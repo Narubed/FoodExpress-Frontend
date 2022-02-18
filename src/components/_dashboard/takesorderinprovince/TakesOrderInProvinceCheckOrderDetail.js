@@ -6,8 +6,6 @@ TakesOrderInProvinceCheckOrderDetail.propTypes = {
   orderList: PropTypes.array
 };
 export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
-  const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   const userID = sessionStorage.getItem('user');
   const getAllOrderJoinDetailJoinCutArount = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
@@ -44,7 +42,7 @@ export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
         const reportOrders = {
           report_order_id: createReportID,
           id_order_rider_id: createReportID,
-          report_order_member_userid: parseInt(sessionStorage.getItem('user'), 10),
+          report_order_member_userid: sessionStorage.getItem('user'),
           report_order_product_id: parseInt(element.order_product_id, 10),
           report_order_product_name: element.order_product_name,
           report_order_product_amount_in: 0,
@@ -76,5 +74,4 @@ export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
       }
     });
   });
-  dispatch({ type: 'TURNOFF' });
 }

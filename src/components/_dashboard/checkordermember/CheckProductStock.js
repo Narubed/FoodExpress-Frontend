@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 
 export default async function CheckSlipImage(req) {
-  const dispatch = useDispatch();
   const getStockMember = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${sessionStorage.getItem(
       'user'
@@ -17,7 +16,6 @@ export default async function CheckSlipImage(req) {
     if (filterProductID[0].stock_product_amount < req.order_product_amoumt) {
       Swal.fire('ไม่สามารถหักสินค้าในสต๊อกได้!', 'สินค้าในสต๊อกคุณน้อยเกินไป', 'error');
     } else {
-      dispatch({ type: 'OPEN' });
       const reduceStock =
         parseInt(filterProductID[0].stock_product_amount, 10) -
         parseInt(req.order_product_amoumt, 10);
@@ -46,7 +44,6 @@ export default async function CheckSlipImage(req) {
         `${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`,
         dataPutStock
       );
-      dispatch({ type: 'TURNOFF' });
       Swal.fire({
         position: '',
         icon: 'success',

@@ -6,8 +6,6 @@ TakesOrderInProvinceCheckStock.propTypes = {
   DeliveryList: PropTypes.array
 };
 export default async function TakesOrderInProvinceCheckStock({ result, getDeliveryDetail }) {
-  const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   const getStockMember = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.receiver_delivery_member_id}`
   );
@@ -38,5 +36,4 @@ export default async function TakesOrderInProvinceCheckStock({ result, getDelive
       );
     }
   });
-  dispatch({ type: 'TURNOFF' });
 }

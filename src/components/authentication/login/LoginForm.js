@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -39,8 +38,16 @@ async function loginRider(credentials) {
     body: JSON.stringify(credentials)
   }).then((data) => data.json());
 }
+async function loginAdmin(credentials) {
+  return fetch(`${process.env.REACT_APP_WEB_BACKEND}/loginAdmin`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  }).then((data) => data.json());
+}
 export default function LoginForm() {
-  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -57,12 +64,10 @@ export default function LoginForm() {
     const setUserNames = e.username;
     const setPasswords = e.password;
     // console.log(setUserNames);
-    dispatch({ type: 'OPEN' });
     let response = await loginUser({
       setUserNames,
       setPasswords
     });
-    dispatch({ type: 'TURNOFF' });
     if ('accessToken' in response) {
       if (response.data.status !== 'Active') {
         Swal.fire({
@@ -87,12 +92,10 @@ export default function LoginForm() {
         });
       }
     } else {
-      dispatch({ type: 'OPEN' });
       response = await loginRider({
         setUserNames,
         setPasswords
       });
-      dispatch({ type: 'TURNOFF' });
       if ('accessToken' in response) {
         swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
           buttons: false,
@@ -108,7 +111,28 @@ export default function LoginForm() {
           window.location.href = '/';
         });
       } else {
-        swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error');
+        response = await loginAdmin({
+          setUserNames,
+          setPasswords
+        });
+        if ('accessToken' in response) {
+          swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
+            buttons: false,
+            timer: 2000
+          }).then(() => {
+            console.log(response);
+            sessionStorage.setItem('accessToken', response.accessToken);
+            sessionStorage.setItem('user', response.data.admin_auto_id);
+            sessionStorage.setItem('firstname', response.data.admin_first_name);
+            sessionStorage.setItem('lastname', response.data.admin_last_name);
+            sessionStorage.setItem('role', 'Admin');
+            sessionStorage.setItem('level', 'Admin');
+            // navigate('/dashboard', { replace: true });
+            window.location.href = '/';
+          });
+        } else {
+          swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error'); // สำหรับ login Admin
+        }
       }
     }
   };
