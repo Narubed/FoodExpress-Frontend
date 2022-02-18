@@ -1,6 +1,7 @@
 /* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -41,6 +42,7 @@ import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function AdminCreateMemberApp() {
+  const dispatch = useDispatch();
   const [fileUserId, setfileUserId] = useState([]);
   const [filepreviewUserId, setfilepreviewUserId] = useState(null);
   const [fileBook, setfileBook] = useState([]);
@@ -71,6 +73,12 @@ export default function AdminCreateMemberApp() {
     setApiThai(getApi.data);
     setgetApiThaiAmphure(getApiAmphure.data);
     setApiThaiTombon(getApitombon.data);
+    Swal.fire({
+      icon: 'question',
+      title: 'หากข้อมูลยังไม่ขึ้น กรุณากดปุ่มเรียกข้อมูล หรือ กด F5 ครับ',
+      showConfirmButton: false,
+      timer: 2000
+    });
   }, []);
   const RegisterSchema = Yup.object().shape({
     // Typeid: Yup.number().required('product price is required'),
@@ -114,10 +122,9 @@ export default function AdminCreateMemberApp() {
       filterSubdistrict = c[0].district_name;
     } else if (!buttonAddress) {
       filterProvince = localStorage.getItem('province-name');
-      filterSubdistrict = localStorage.getItem('district-name');
-      filterDistrict = localStorage.getItem('subdistrict-name');
+      filterDistrict = localStorage.getItem('district-name');
+      filterSubdistrict = localStorage.getItem('subdistrict-name');
     }
-
     if (fileBook.length === 0 && fileUserId.length === 0) {
       const data = {
         id: parseInt(e.id, 10),
@@ -148,6 +155,7 @@ export default function AdminCreateMemberApp() {
         confirmButtonText: 'Yes, need it!'
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios
             .put(`${process.env.REACT_APP_WEB_BACKEND}/member`, data)
             .then((response) => {
@@ -157,6 +165,7 @@ export default function AdminCreateMemberApp() {
             .catch((err) => {
               console.error(err);
             });
+          dispatch({ type: 'TURNOFF' });
           Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
         }
       });
@@ -190,13 +199,15 @@ export default function AdminCreateMemberApp() {
         confirmButtonText: 'Yes, need it!'
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postMemberCardImg`, formdata);
           await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
           await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
+            `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem('cardImg')}`
           );
           Swal.fire('Success!', 'คุณได้แก้ไขผู้ใช้เรียบร้อยเเล้ว.', 'success');
           setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
@@ -229,13 +240,16 @@ export default function AdminCreateMemberApp() {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, need it!'
+        confirmButtonText: 'ตกลง!'
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postMemberBookBankImg`, formdata);
           await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
           await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
+            `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem(
+              'bookBankImg'
+            )}`
           );
           Swal.fire({
             icon: 'success',
@@ -244,6 +258,7 @@ export default function AdminCreateMemberApp() {
             timer: 1500
           });
           setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
@@ -286,13 +301,16 @@ export default function AdminCreateMemberApp() {
             'question'
           );
         } else if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
           await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${e.id}`);
           await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('cardImg')}`
+            `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem('cardImg')}`
           );
           await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('bookBankImg')}`
+            `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem(
+              'bookBankImg'
+            )}`
           );
           Swal.fire({
             icon: 'success',
@@ -301,6 +319,7 @@ export default function AdminCreateMemberApp() {
             timer: 1500
           });
           setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
             window.localStorage.clear();
             window.history.back();
           }, 1500);
@@ -688,10 +707,10 @@ export default function AdminCreateMemberApp() {
                           ? `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
                               'cardImg'
                             )}`
-                          : // eslint-disable-next-line global-require
-                            // require(`../../../../assets/img/${localStorage.getItem('cardImg')}`)
-                            //   .default
-                            null
+                          : null
+                        // eslint-disable-next-line global-require
+                        // require(`../../../../assets/img/${localStorage.getItem('cardImg')}`)
+                        //   .default
                       }
                       alt="UploadImage"
                     />

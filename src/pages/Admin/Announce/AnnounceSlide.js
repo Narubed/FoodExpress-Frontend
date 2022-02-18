@@ -1,39 +1,15 @@
-import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { Icon } from '@iconify/react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 // material
-import { LoadingButton } from '@mui/lab';
-import {
-  Stack,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination
-} from '@mui/material';
+import { Stack, TextField, Button, Container, Typography } from '@mui/material';
 // companent
 import Page from '../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
   const [Announce, setAnnounce] = useState(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -59,7 +35,10 @@ export default function RegisterForm() {
       cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAnnounceSlide`, data);
+        dispatch({ type: 'TURNOFF' });
+
         Swal.fire('Success!', 'คุณได้แก้ไขประกาศเรียบร้อยเเล้ว.', 'success');
         setTimeout(() => {
           window.location.reload(false);
@@ -73,7 +52,7 @@ export default function RegisterForm() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            <div>แก้ไขประกาศ</div>
+            แก้ไขประกาศ
           </Typography>
         </Stack>
 

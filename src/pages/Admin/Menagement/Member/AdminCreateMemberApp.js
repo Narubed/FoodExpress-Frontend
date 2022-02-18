@@ -1,43 +1,20 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { Icon } from '@iconify/react';
+import { useDispatch } from 'react-redux';
 import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import Label from '@material-tailwind/react/Label';
 import Image from '@material-tailwind/react/Image';
 // material
 import { LoadingButton } from '@mui/lab';
-import {
-  Box,
-  Stack,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination,
-  ImageList,
-  ImageListItem,
-  MenuItem
-} from '@mui/material';
+import { Box, Stack, TextField, Container, Typography, ImageList, MenuItem } from '@mui/material';
 // companent
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
 
 export default function AdminCreateMemberApp() {
+  const dispatch = useDispatch();
   const [fileUserId, setfileUserId] = useState([]);
   const [filepreviewUserId, setfilepreviewUserId] = useState(null);
   const [fileBook, setfileBook] = useState([]);
@@ -136,7 +113,9 @@ export default function AdminCreateMemberApp() {
           'question'
         );
       } else if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
+        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           icon: 'success',
           title: 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว',

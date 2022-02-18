@@ -2,42 +2,19 @@
 /* eslint-disable import/no-dynamic-require */
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { Icon } from '@iconify/react';
-import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
 // material
 import { LoadingButton } from '@mui/lab';
-import {
-  Stack,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  TableContainer,
-  TablePagination,
-  MenuItem,
-  CircularProgress
-} from '@mui/material';
+import { Stack, TextField, Container, Typography } from '@mui/material';
 // companent
 import Page from '../../../components/Page';
 
 // ----------------------------------------------------------------------
-
 export default function AdminEditProductApp() {
+  const dispatch = useDispatch();
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [AnnounceAdverts, setAnnounceAdvert] = useState(null);
@@ -68,7 +45,9 @@ export default function AdminEditProductApp() {
         cancelButtonText: 'ยกเลิกการเปลี่ยนแปลง!'
       }).then(async (result) => {
         if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAnnounceAdvert`, formdata);
+
           Swal.fire({
             position: '',
             icon: 'success',
@@ -78,7 +57,7 @@ export default function AdminEditProductApp() {
           });
 
           setTimeout(() => {
-            window.location.reload(false);
+            dispatch({ type: 'TURNOFF' });
           }, 1500);
         }
       });
@@ -120,8 +99,8 @@ export default function AdminEditProductApp() {
             <img
               className="previewimg"
               src={
-                // eslint-disable-next-line global-require
-                require(`../../../assets/img/${AnnounceAdverts}`).default
+                `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${AnnounceAdverts}`
+                // require(`../../../assets/img/${AnnounceAdverts}`).default
               }
               alt="UploadImage"
             />

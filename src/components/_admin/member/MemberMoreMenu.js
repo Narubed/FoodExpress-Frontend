@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink, NavLink } from 'react-router-dom';
@@ -24,8 +24,12 @@ export default function MemberMoreMenu(props) {
   const { id, cardImg, bookBankImg } = props;
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const deleteProduct = (id) => {
+    const dataDeleteImage = [];
+    dataDeleteImage.push(cardImg);
+    dataDeleteImage.push(bookBankImg);
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการลบผู้ใช้หรือไม่ !',
@@ -39,8 +43,10 @@ export default function MemberMoreMenu(props) {
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });
         await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/memberId/${id}`);
-        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${cardImg}`);
-        await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${bookBankImg}`);
+        dataDeleteImage.map(async (value) => {
+          await axios.delete(`${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${value}`);
+        });
+
         Swal.fire({
           icon: 'success',
           title: 'คุณได้ลบผู้ใช้เรียบร้อยเเล้ว',
@@ -66,11 +72,15 @@ export default function MemberMoreMenu(props) {
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
 
-    const filterProvince = getApi.data.filter((e) => e.province_name === MemberlistID.province);
-    const filterDistrict = getApiAmphure.data.filter(
+    const filterProvince = await getApi.data.filter(
+      (e) => e.province_name === MemberlistID.province
+      // e.province_name === MemberlistID.province
+    );
+    const filterDistrict = await getApiAmphure.data.filter(
       (e) => e.amphur_name === MemberlistID.district
     );
-    const filterSubdistrict = getApitombon.data.filter(
+
+    const filterSubdistrict = await getApitombon.data.filter(
       (e) => e.district_name === MemberlistID.subdistrict
     );
     localStorage.setItem('id', MemberlistID.id);
