@@ -24,8 +24,8 @@ const ProductImgStyle = styled('img')({
   height: '100%',
   objectFit: 'cover',
   '&:hover': {
-    width: '110%',
-    height: '110%'
+    width: '103%',
+    height: '103%'
   },
   '&:last-child': {
     borderRight: 'solid 1px #cccccc'
@@ -44,6 +44,7 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product, setCount, count }) {
   const [showModal, setShowModal] = React.useState(false);
   const [showButton, setButton] = React.useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(async () => {}, [count]);
   const { name, productStetus, productName, productImg, productPrice, productid } = product;
   // eslint-disable-next-line global-require

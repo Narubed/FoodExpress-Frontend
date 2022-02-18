@@ -47,7 +47,7 @@ export default function AppCurrentVisits() {
   const [adminCancel, setadminCancel] = useState(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getOrder = await axios.get('http://localhost:8000/getAllOrder');
+    const getOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     let getAllOrder = getOrder.data.data;
     const roleMember = sessionStorage.getItem('role');
     if (roleMember === 'Member') {
@@ -84,10 +84,10 @@ export default function AppCurrentVisits() {
   ];
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
-      theme.palette.primary.main,
+      theme.palette.secondary.main,
       theme.palette.info.main,
       theme.palette.warning.main,
-      theme.palette.secondary.main,
+      theme.palette.primary.main,
       theme.palette.error.main,
       theme.palette.error.main
     ],
