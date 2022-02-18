@@ -20,8 +20,8 @@ TakesOrderInputBarCode.propTypes = {
   orderList: PropTypes.array
 };
 export default function TakesOrderInputBarCode({ orderList }) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
   const handleClickOpen = () => {
@@ -41,7 +41,6 @@ export default function TakesOrderInputBarCode({ orderList }) {
       );
       setOpen(false);
     } else {
-      dispatch({ type: 'OPEN' });
       const createReportID =
         Date.now() + result.order_rider_member_userid + result.order_rider_product_id;
       await TakesOrderCheckStock({ result });
@@ -56,6 +55,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
         report_order_product_amount_out: 0,
         report_order_status: 'รับเข้า'
       };
+      dispatch({ type: 'OPEN' });
       await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`, reportOrder);
       const data = {
         id_order_rider_id: parseInt(result.id_order_rider_id, 10),

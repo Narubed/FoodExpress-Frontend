@@ -1,5 +1,4 @@
 /* eslint-disable react/button-has-type */
-/* eslint-disable import/no-dynamic-require */
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';

@@ -32,7 +32,7 @@ export default function ProductCartShopping({ product, deleteProductShopCard, se
           <div className="flex-shrink-0 h-10 w-10">
             <img
               className="h-10 w-10 rounded-full"
-              src={require(`../../../assets/img/${product.productImg}`).default}
+              src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${product.productImg}`}
               alt=""
             />
           </div>

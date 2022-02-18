@@ -45,12 +45,12 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
+  // if (b[orderBy] < a[orderBy]) {
+  //   return -1;
+  // }
+  // if (b[orderBy] > a[orderBy]) {
+  //   return 1;
+  // }
   return 0;
 }
 
@@ -142,9 +142,12 @@ function AdminMemberApp() {
       const filterUser3 = filterMember.filter(
         (e) => e.province === getUser_id.data.data.province && e.level === 'province'
       );
-      const findUser = filterUser.find((e) => e === filterUser3[0]);
-      if (!findUser) {
-        filterUser.push(filterUser3[0]);
+      if (filterUser3.length !== 0) {
+        const findUser = filterUser.find((e) => e === filterUser3[0]);
+
+        if (!findUser) {
+          filterUser.push(filterUser3[0]);
+        }
       }
       setMemberlist(filterUser);
     }
@@ -158,14 +161,15 @@ function AdminMemberApp() {
       const filterUser3 = filterMember.filter(
         (e) => e.province === getUser_id.data.data.province && e.level === 'province'
       );
-      if (filterUser2) {
+      if (filterUser2.length !== 0) {
         filterUser.push(filterUser2[0]);
       }
-      if (filterUser3) {
+      if (filterUser3.length !== 0) {
         filterUser.push(filterUser3[0]);
       }
       console.log(filterUser2);
       console.log(filterUser3);
+      console.log(filterUser);
       setMemberlist(filterUser);
     }
   }, []);

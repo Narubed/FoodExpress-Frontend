@@ -1,13 +1,11 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+
 import axios from 'axios';
 
 TakesOrderCheckOrderDetail.propTypes = {
   orderList: PropTypes.array
 };
 export default async function TakesOrderCheckOrderDetail({ result }) {
-  const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   const getAllOrderJoinDetailJoinCutArount = await axios.get(
     `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
   );
@@ -68,5 +66,4 @@ export default async function TakesOrderCheckOrderDetail({ result }) {
       );
     }
   });
-  dispatch({ type: 'TURNOFF' });
 }

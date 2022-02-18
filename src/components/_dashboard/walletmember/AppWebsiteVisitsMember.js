@@ -15,7 +15,7 @@ import { BaseOptionChart } from '../../charts';
 export default function AppWebsiteVisits() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const a = await axios.get('http://localhost:8000/getAllOrder');
+    const a = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
     let filterStatusOld = a.data.data.filter((f) => f.order_status === 'จัดส่งสำเร็จ');
     const roleMember = sessionStorage.getItem('role');
     if (roleMember === 'Member') {

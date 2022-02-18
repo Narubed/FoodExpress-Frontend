@@ -47,7 +47,7 @@ export default function ShopProductCard({ product, setCount, count }) {
   React.useEffect(async () => {}, [count]);
   const { name, productStetus, productName, productImg, productPrice, productid } = product;
   // eslint-disable-next-line global-require
-  const ImageProduct = require(`../../../assets/img/${productImg}`).default;
+  const ImageProduct = `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`;
   const AddProduct = async () => {
     const value = count.concat(product);
     const filtereds = [];
@@ -127,8 +127,9 @@ export default function ShopProductCard({ product, setCount, count }) {
         <ModalBody>
           <Image
             src={
+              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
               // eslint-disable-next-line global-require
-              require(`../../../assets/img/${productImg}`).default
+              // require(`../../../assets/img/${productImg}`).default
             }
             rounded={false}
             raised

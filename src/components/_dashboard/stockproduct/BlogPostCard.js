@@ -78,14 +78,15 @@ export default function BlogPostCard({ stock }) {
           <AvatarStyle
             alt={stock_product_name}
             // eslint-disable-next-line import/no-dynamic-require
-            src={require(`../../../assets/img/${productImg}`).default}
+            src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`}
           />
 
           <CoverImgStyle
             alt={stock_product_name}
             src={
+              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
               // eslint-disable-next-line import/no-dynamic-require
-              require(`../../../assets/img/${productImg}`).default
+              // require(`../../../assets/img/${productImg}`).default
             }
           />
         </CardMediaStyle>

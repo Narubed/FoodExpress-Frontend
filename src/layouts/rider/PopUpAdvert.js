@@ -55,8 +55,9 @@ export default function PopUpAdvert() {
                 alt="Image"
                 className="previewimg"
                 src={
+                  `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${AnnounceAdvert}`
                   // eslint-disable-next-line global-require
-                  require(`../../assets/img/${AnnounceAdvert}`).default
+                  // require(`../../assets/img/${AnnounceAdvert}`).default
                 }
               />
             ) : null}

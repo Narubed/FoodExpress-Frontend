@@ -24,8 +24,9 @@ export default function MemberImage({ images, Name }) {
         <Image
           className="h-10 w-10 rounded-full"
           src={
+            `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${images}`
             // eslint-disable-next-line global-require
-            require(`../../../assets/img/${images}`).default
+            // require(`../../../assets/img/${images}`).default
           }
           rounded={false}
           raised
@@ -44,8 +45,9 @@ export default function MemberImage({ images, Name }) {
           <DialogContentText id="alert-dialog-slide-description">
             <Image
               src={
+                `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${images}`
                 // eslint-disable-next-line global-require
-                require(`../../../assets/img/${images}`).default
+                // require(`../../../assets/img/${images}`).default
               }
               rounded={false}
               raised

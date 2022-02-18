@@ -126,7 +126,7 @@ export default function BlogPostCard({ post, index, report }) {
           <AvatarStyle
             alt={report_order_product_name}
             // eslint-disable-next-line import/no-dynamic-require
-            src={require(`../../../assets/img/${productImg}`).default}
+            src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`}
             sx={{
               ...((latestPostLarge || latestPost) && {
                 zIndex: 9,
@@ -141,8 +141,9 @@ export default function BlogPostCard({ post, index, report }) {
           <CoverImgStyle
             alt={report_order_product_name}
             src={
+              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
               // eslint-disable-next-line import/no-dynamic-require
-              require(`../../../assets/img/${productImg}`).default
+              // require(`../../../assets/img/${productImg}`).default
             }
           />
         </CardMediaStyle>

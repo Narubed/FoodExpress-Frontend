@@ -14,7 +14,9 @@ export default async function checkStatusOrder() {
     );
     let checkStatusDetail = true;
     getOrderDetail.data.data.forEach((element) => {
-      const valueStatus = element.order_company_status === 'ตัดรอบการจัดส่งแล้ว';
+      const valueStatus =
+        element.order_company_status === 'ตัดรอบการจัดส่งแล้ว' ||
+        element.order_company_status === 'ยังไม่ได้จัดส่ง';
       if (valueStatus) {
         checkStatusDetail = false;
       }

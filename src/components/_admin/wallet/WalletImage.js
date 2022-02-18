@@ -38,8 +38,9 @@ export default function WalletImage({ images, Name }) {
             className="h-50 w-50 rounded-full"
             width="400"
             src={
+              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${images}`
               // eslint-disable-next-line global-require
-              require(`../../../assets/img/${images}`).default
+              // require(`../../../assets/img/${images}`).default
             }
             rounded={false}
             raised
