@@ -52,11 +52,11 @@ export default function LoginForm() {
 
   const LoginSchema = Yup.object().shape({
     username: Yup.string()
-      .min(1, 'เลขบัตรของท่านสั้นเกินไป!') // มาเปลี่ยนด้วย
+      .min(8, 'เลขบัตรของท่านสั้นเกินไป!') // มาเปลี่ยนด้วย
       .max(50, 'Too Long!')
       .required('id is reqired'),
     password: Yup.string()
-      .min(1, 'รหัสของท่านสั้นเกินไป!')
+      .min(8, 'รหัสของท่านสั้นเกินไป!')
       .max(50, 'Too Long!')
       .required('Password is required')
   });

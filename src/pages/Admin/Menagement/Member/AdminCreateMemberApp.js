@@ -262,12 +262,13 @@ export default function AdminCreateMemberApp() {
                     error={Boolean(touched.role && errors.role)}
                     helperText={touched.role && errors.role}
                   >
-                    <MenuItem key={1} value="Admin">
-                      Admin
-                    </MenuItem>
                     <MenuItem key={2} value="Member">
                       Member
                     </MenuItem>
+                    <MenuItem key={1} value="Admin" disabled>
+                      Admin
+                    </MenuItem>
+
                     <MenuItem key={3} value="Rider" disabled>
                       Rider
                     </MenuItem>

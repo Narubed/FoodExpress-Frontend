@@ -7,8 +7,7 @@ import AuthLayout from '../layouts/AuthLayout';
 // components
 import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
-import { LoginForm } from '../components/authentication/login';
-import AuthSocial from '../components/authentication/AuthSocial';
+import { LoginForm, RelatedSites } from '../components/authentication/login';
 
 // ----------------------------------------------------------------------
 
@@ -52,9 +51,10 @@ export default function Login() {
       <MHidden width="mdDown">
         <SectionStyle>
           <Typography variant="h4" sx={{ px: 5, mt: 10, mb: 5 }}>
-            <div>ยินดีตอนรับสู่ NBA Food Express</div>
+            <div>ยินดีต้อนรับสู่ NBA Food Express</div>
           </Typography>
           <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <RelatedSites />
         </SectionStyle>
       </MHidden>
 
