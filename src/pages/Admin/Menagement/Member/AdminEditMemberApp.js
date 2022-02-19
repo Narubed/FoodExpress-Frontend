@@ -70,6 +70,7 @@ export default function AdminCreateMemberApp() {
     const getApitombon = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
+
     setApiThai(getApi.data);
     setgetApiThaiAmphure(getApiAmphure.data);
     setApiThaiTombon(getApitombon.data);
@@ -196,7 +197,8 @@ export default function AdminCreateMemberApp() {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, need it!'
+        confirmButtonText: 'ใช่ ฉันต้องการเเก้ไข!',
+        cancelButtonText: 'ยกเลิก!'
       }).then(async (result) => {
         if (result.isConfirmed) {
           dispatch({ type: 'OPEN' });
@@ -381,6 +383,7 @@ export default function AdminCreateMemberApp() {
                   {...getFieldProps('userId')}
                   error={Boolean(touched.userId && errors.userId)}
                   helperText={touched.userId && errors.userId}
+                  disabled
                 />
                 <TextField
                   fullWidth

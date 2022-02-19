@@ -29,6 +29,8 @@ export default function AdminCreateMemberApp() {
   const [ApiThaiTombon, setApiThaiTombon] = useState([]);
   const [ApiTombonId, setApiTombonId] = useState([]);
 
+  const [showUSERID, setUSERID] = useState([]);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getApi = await axios.get(
@@ -40,6 +42,11 @@ export default function AdminCreateMemberApp() {
     const getApitombon = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
+    const getMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
+    const USERID = [];
+    getMember.data.data.map((value) => USERID.push(value.userId));
+
+    setUSERID(USERID);
     setApiThai(getApi.data);
     setgetApiThaiAmphure(getApiAmphure.data);
     setApiThaiTombon(getApitombon.data);
@@ -73,60 +80,69 @@ export default function AdminCreateMemberApp() {
     level: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('status is required')
   });
   const handleSubmits = async (e) => {
-    const filterProvince = ApiThai.filter((e) => e.province_id === ApiProvinceId);
-    const filterSubdistrict = ApiThaiAmphure.filter((e) => e.amphur_id === ApiAmphureId);
-    const filterDistrict = ApiThaiTombon.filter((e) => e.district_id === ApiTombonId);
+    const fildUSERID = showUSERID.filter((value) => value === e.userId);
+    if (fildUSERID.length !== 0) {
+      Swal.fire(
+        'เราคิดว่าคุณกรอกเลขบัตรซ้ำ ?',
+        'ลองเช็คเลขบัตรประจำตัว ของคุณอีกครั้ง?',
+        'question'
+      );
+    } else {
+      const filterProvince = ApiThai.filter((e) => e.province_id === ApiProvinceId);
+      const filterSubdistrict = ApiThaiAmphure.filter((e) => e.amphur_id === ApiAmphureId);
+      const filterDistrict = ApiThaiTombon.filter((e) => e.district_id === ApiTombonId);
 
-    const formdata = new FormData();
-    formdata.append('cardImg', fileUserId);
-    formdata.append('bookBankImg', fileBook);
-    formdata.append('userId', e.userId);
-    formdata.append('password', e.password);
-    formdata.append('email', e.email);
-    formdata.append('firstname', e.firstname);
-    formdata.append('lastname', e.lastname);
-    formdata.append('tel', e.tel);
-    formdata.append('bookname', e.bookname);
-    formdata.append('booknumber', e.booknumber);
-    formdata.append('role', e.role);
-    formdata.append('address', e.address);
-    formdata.append('subdistrict', filterDistrict[0].district_name);
-    formdata.append('district', filterSubdistrict[0].amphur_name);
-    formdata.append('province', filterProvince[0].province_name);
-    formdata.append('map', e.map);
-    formdata.append('status', e.status);
-    formdata.append('level', e.level);
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการเพิ่มผู้ใช้งานคนใหม่หรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ใช่ ฉันต้องการเเก้ไข!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (fileUserId.length === 0 || fileBook.length === 0) {
-        Swal.fire(
-          'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
-          'ลองเช็คที่ไฟล์รูปภาพ หรือ ที่อยู่ ของคุณอีกครั้ง?',
-          'question'
-        );
-      } else if (result.isConfirmed) {
-        dispatch({ type: 'OPEN' });
-        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
-        dispatch({ type: 'TURNOFF' });
-        Swal.fire({
-          icon: 'success',
-          title: 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
-      }
-    });
+      const formdata = new FormData();
+      formdata.append('cardImg', fileUserId);
+      formdata.append('bookBankImg', fileBook);
+      formdata.append('userId', e.userId);
+      formdata.append('password', e.password);
+      formdata.append('email', e.email);
+      formdata.append('firstname', e.firstname);
+      formdata.append('lastname', e.lastname);
+      formdata.append('tel', e.tel);
+      formdata.append('bookname', e.bookname);
+      formdata.append('booknumber', e.booknumber);
+      formdata.append('role', e.role);
+      formdata.append('address', e.address);
+      formdata.append('subdistrict', filterDistrict[0].district_name);
+      formdata.append('district', filterSubdistrict[0].amphur_name);
+      formdata.append('province', filterProvince[0].province_name);
+      formdata.append('map', e.map);
+      formdata.append('status', e.status);
+      formdata.append('level', e.level);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'คุณต้องการเพิ่มผู้ใช้งานคนใหม่หรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่ ฉันต้องการเเก้ไข!',
+        cancelButtonText: 'ยกเลิก!'
+      }).then(async (result) => {
+        if (fileUserId.length === 0 || fileBook.length === 0) {
+          Swal.fire(
+            'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
+            'ลองเช็คที่ไฟล์รูปภาพ หรือ ที่อยู่ ของคุณอีกครั้ง?',
+            'question'
+          );
+        } else if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/member`, formdata);
+          dispatch({ type: 'TURNOFF' });
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้เพิ่มผู้ใช้เรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            window.location.reload(false);
+          }, 1500);
+        }
+      });
+    }
   };
   const formik = useFormik({
     initialValues: {
