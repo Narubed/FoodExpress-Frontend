@@ -49,7 +49,10 @@ export default function TakesOrderInputBarCode({ DeliveryList }) {
       const DeliveryDetail = getDeliveryDetail.data.data;
 
       DeliveryDetail.forEach(async (value, index) => {
-        const ID = Date.now() + value.report_delivery_detail_id + index;
+        let random = new Array(1000).fill(1);
+        random = random.map((x, i) => i);
+        random = random.sort(() => 2 * Math.random() - 1);
+        const ID = Date.now() + value.report_delivery_detail_id + random[index];
         const dataReportMember = {
           report_order_id: ID,
           id_order_rider_id: ID,

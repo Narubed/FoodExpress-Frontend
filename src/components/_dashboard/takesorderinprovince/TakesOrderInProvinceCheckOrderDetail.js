@@ -37,8 +37,11 @@ export default async function TakesOrderInProvinceCheckOrderDetail({ result }) {
     );
     await filterOrderProductID.forEach(async (element, index) => {
       Stock.stock_product_amount -= element.order_product_amoumt;
+      let random = new Array(1000).fill(1);
+      random = random.map((x, i) => i);
+      random = random.sort(() => 2 * Math.random() - 1);
       if (Stock.stock_product_amount >= 0) {
-        const createReportID = Date.now() + result.member_delivery_member_id + index + 6;
+        const createReportID = Date.now() + result.member_delivery_member_id + random[index] + 6;
         const reportOrders = {
           report_order_id: createReportID,
           id_order_rider_id: createReportID,

@@ -38,13 +38,14 @@ export default async function TakesOrderCheckOrderDetail({ result }) {
         `${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`,
         putStockOrder
       );
+      let random = new Array(1000).fill(1);
+      random = random.map((x, i) => i);
+      random = random.sort(() => 2 * Math.random() - 1);
       const createReportID =
         Date.now() +
         result.order_rider_member_userid +
-        index +
-        index +
         result.order_rider_product_id +
-        index;
+        random[index];
       const reportOrder = {
         report_order_id: createReportID,
         id_order_rider_id: result.id_order_rider_id,

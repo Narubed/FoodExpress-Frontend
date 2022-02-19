@@ -141,7 +141,7 @@ export default function AppCardProvince(props) {
           dataCutAroundOrder
         );
         // eslint-disable-next-line array-callback-return
-        filterProvince.map(async (value) => {
+        await filterProvince.map(async (value) => {
           const dataPutOrderDetail = await {
             order_detail_id: value.order_detail_id,
             cut_arount_id: dataCutAroundOrder.cut_arount_id,
@@ -153,15 +153,13 @@ export default function AppCardProvince(props) {
             dataPutOrderDetail
           );
         });
-
+        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           icon: 'success',
           title: 'ยืนยันการตัดรอบสินค้านี้แล้ว',
           showConfirmButton: false,
           timer: 1500
         });
-
-        dispatch({ type: 'TURNOFF' });
 
         setTimeout(() => {
           window.location.reload(false);
