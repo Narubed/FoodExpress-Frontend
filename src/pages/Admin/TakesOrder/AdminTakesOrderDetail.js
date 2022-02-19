@@ -128,34 +128,6 @@ export default function AdminTakesOrderDetail() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, id) => {
-    const selectedIndex = selected.indexOf(name);
-    const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-      newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      newSelectedid = newSelectedid.concat(
-        selected_id.slice(0, selectedIndexid),
-        selected_id.slice(selectedIndexid + 1)
-      );
-    }
-    setSelected(newSelected);
-    setSelected_id(newSelectedid);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

@@ -108,7 +108,7 @@ export default function AppTrafficBySite() {
           <Grid item xs={6}>
             <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
               <IconWrapperStyle
-                onClick={() => window.open('https://e-transfer.nbadigitalworlds.com/', '_blank')}
+                onClick={() => window.open('https://www.shipmileservice.com/', '_blank')}
               >
                 <Image
                   src="https://www.shipsmileservices.com/wp-content/uploads/2021/08/logo-%E0%B8%8A%E0%B8%B4%E0%B8%9B%E0%B8%9B%E0%B9%8C%E0%B8%AA%E0%B9%84%E0%B8%A1%E0%B8%A5%E0%B9%8C-%E0%B9%80%E0%B8%8B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%A7%E0%B8%B4%E0%B8%AA-new-verion-Final-create-01.jpg"

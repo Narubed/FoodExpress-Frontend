@@ -313,120 +313,111 @@ export default function RegisterForm() {
           </FormikProvider>
         </Container>
       </Page>
-      <Modal size="lg" active={showModalSelectAddress} toggler={() => setModalSelectAddress(false)}>
-        <ModalHeader toggler={() => setModalSelectAddress(false)}>ค้นหาที่อยู่จัดส่ง</ModalHeader>
-        <ModalBody>
-          <Box
-            component="form"
-            sx={{
-              '& .MuiTextField-root': { mr: 40, width: '100%' }
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="ค้นหาจังหวัด"
-              value={provinceMember}
-              // onChange={(e) => WTFsetprovinceMember(e.target.value)}
-              onChange={(e) => onChangeProvinceMember(e)}
+
+      <Dialog
+        fullWidth="fullWidth"
+        maxWidth="md"
+        open={showModalSelectAddress}
+        onClose={() => setModalSelectAddress(false)}
+        TransitionComponent={Transition}
+      >
+        <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <br />
+            <Box
+              component="form"
+              sx={{
+                '& .MuiTextField-root': { mr: 40, width: '100%' }
+              }}
+              noValidate
+              autoComplete="off"
             >
-              {AllProvinceMember.map((value) => (
-                <MenuItem key={value.province} value={value.province}>
-                  {value.province}
-                </MenuItem>
+              <TextField
+                id="outlined-select-currency"
+                select
+                label="ค้นหาจังหวัด"
+                value={provinceMember}
+                // onChange={(e) => WTFsetprovinceMember(e.target.value)}
+                onChange={(e) => onChangeProvinceMember(e)}
+              >
+                {AllProvinceMember.map((value) => (
+                  <MenuItem key={value.province} value={value.province}>
+                    {value.province}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Box>
+          </DialogContentText>
+
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ระดับ
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ชื่อ
+                </th>
+
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ที่อยู่
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ยืนยันที่อยู่
+                </th>
+
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {(SelectprovinceMember.length === 0 ? Members : SelectprovinceMember).map((data) => (
+                <tr key={data.firstname}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {data.level === 'subdistrict' ? (
+                      <Label color="lightBlue">ระดับตำบล </Label>
+                    ) : null}
+
+                    {data.level === 'district' ? <Label color="green">ระดับอำเภอ</Label> : null}
+
+                    {data.level === 'province' ? <Label color="red">ระดับจังหวัด</Label> : null}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{data.firstname}</div>
+                  </td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-xs">{data.address}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <Button onClick={() => confirmMemberAddress(data)}>
+                      <Icon icon="mdi:truck-delivery" width={38} height={38} />
+                    </Button>
+                  </td>
+                </tr>
               ))}
-            </TextField>
-          </Box>
-          {/* -------------------------------------------------------- */}
+            </tbody>
+          </table>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={() => setModalSelectAddress(false)}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-          <div className="flex flex-col">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ระดับ
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ชื่อ
-                        </th>
-
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ที่อยู่
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          ยืนยันที่อยู่
-                        </th>
-
-                        <th scope="col" className="relative px-6 py-3">
-                          <span className="sr-only">Edit</span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {(SelectprovinceMember.length === 0 ? Members : SelectprovinceMember).map(
-                        (data) => (
-                          <tr key={data.firstname}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              {data.level === 'subdistrict' ? (
-                                <Label color="lightBlue">ระดับตำบล </Label>
-                              ) : null}
-
-                              {data.level === 'district' ? (
-                                <Label color="green">ระดับอำเภอ</Label>
-                              ) : null}
-
-                              {data.level === 'province' ? (
-                                <Label color="red">ระดับจังหวัด</Label>
-                              ) : null}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-900">{data.firstname}</div>
-                            </td>
-
-                            <td className="px-6 py-4 whitespace-nowrap text-xs">{data.address}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <Button onClick={() => confirmMemberAddress(data)}>
-                                <Icon icon="mdi:truck-delivery" width={38} height={38} />
-                              </Button>
-                            </td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <ButtonT
-            color="red"
-            buttonType="link"
-            onClick={() => setModalSelectAddress(false)}
-            ripple="dark"
-          >
-            Close
-          </ButtonT>
-        </ModalFooter>
-      </Modal>
       <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={Transition}>
         <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
         <DialogContent>
