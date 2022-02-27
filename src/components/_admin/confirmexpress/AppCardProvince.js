@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -65,6 +66,7 @@ const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={r
 
 export default function AppCardProvince(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   dispatch({ type: 'OPEN' });
   const [DataFilterProductName, setDataFilterProductName] = useState([]);
   const [Orderlist, setOrderlist] = useState([]);
@@ -141,8 +143,8 @@ export default function AppCardProvince(props) {
           dataCutAroundOrder
         );
         // eslint-disable-next-line array-callback-return
-        await filterProvince.map(async (value) => {
-          const dataPutOrderDetail = await {
+        filterProvince.map(async (value) => {
+          const dataPutOrderDetail = {
             order_detail_id: value.order_detail_id,
             cut_arount_id: dataCutAroundOrder.cut_arount_id,
             order_company_status: 'ตัดรอบการจัดส่งแล้ว'
@@ -153,17 +155,19 @@ export default function AppCardProvince(props) {
             dataPutOrderDetail
           );
         });
-        dispatch({ type: 'TURNOFF' });
         Swal.fire({
           icon: 'success',
           title: 'ยืนยันการตัดรอบสินค้านี้แล้ว',
           showConfirmButton: false,
-          timer: 1500
+          timer: 2500
         });
 
         setTimeout(() => {
-          window.location.reload(false);
-        }, 1500);
+          dispatch({ type: 'TURNOFF' });
+          navigate('/admin/AdminCutArountApp', {
+            replace: true
+          });
+        }, 2500);
       }
     });
   };

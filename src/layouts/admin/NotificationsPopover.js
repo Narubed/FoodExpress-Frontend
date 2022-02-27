@@ -41,6 +41,8 @@ NotificationItem.propTypes = {
 function NotificationItem({ notification }) {
   // const { avatar, title } = renderContent(notification);
   const title = `${notification.order_status} ${notification.province}`;
+  const today = new Date(notification.order_product_date);
+  today.setHours(today.getHours() - 7);
   return (
     <ListItemButton
       to="/admin/AdminCheckOrderApp"
@@ -73,7 +75,7 @@ function NotificationItem({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.order_product_date))}
+            {formatDistanceToNow(new Date(today))}
           </Typography>
         }
       />

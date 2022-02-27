@@ -14,6 +14,7 @@ import {
   DialogTitle,
   Slide
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -54,8 +55,12 @@ export default function CartWidget({
   setNumberRereder
 }) {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = React.useState(false);
   const onSubmit = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
     if (count.length === 0) {
       onCloseShopCard();
       Swal.fire('ไม่มีสินค้าในตะกร้า ?', 'กรุณาตรวจเช็คสินค้าของท่านอีกครั้ง ?', 'question');
@@ -221,9 +226,17 @@ export default function CartWidget({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
+          {/* <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
             ยืนยันรายการสั่งซื้อ
-          </Button>
+          </Button> */}
+          <LoadingButton
+            onClick={(e) => onSubmit(e)}
+            loading={loading}
+            loadingIndicator="Loading..."
+            variant="outlined"
+          >
+            ยืนยันรายการสั่งซื้อ
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </>

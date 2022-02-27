@@ -188,17 +188,13 @@ export default function AppCardCutArount(props) {
           dataReportMember
         );
         //-----
-
-        // await axios.put(
-        //   `${process.env.REACT_APP_WEB_BACKEND}/putStatusOrderDetail_inProvince`,
-        //   dataChangeOrderDetail
-        // );
       });
 
       valuesPutStockMember.map(
         async (value) =>
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
       );
+
       Orderlist.map(async (value) => {
         const dataChangeOrderDetail = {
           // เปลี่ยนเป็นยิงใน status จังหวัดแทน

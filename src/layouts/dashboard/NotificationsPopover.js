@@ -88,6 +88,8 @@ NotificationItem.propTypes = {
 };
 
 function NotificationItem({ notification }) {
+  const today = new Date(notification.order_product_date);
+  today.setHours(today.getHours() - 7);
   const title = `${notification.order_status} ${numeral(
     notification.order_product_total
   ).format()} บาท`;
@@ -136,7 +138,7 @@ function NotificationItem({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.order_product_date))}
+            {formatDistanceToNow(new Date(today))}
           </Typography>
         }
       />
@@ -151,6 +153,9 @@ function NotificationItemTakeOrder({ notification }) {
   // const { avatar, title } = renderContent(notification);
   const title = `สิ่งที่คุณต้องได้รับจากไรเดอร์คือ ${notification.order_rider_product_name}`;
   //
+  console.log(notification.order_rider_date_cut_arount);
+  const today = new Date(notification.order_rider_date_cut_arount);
+  today.setHours(today.getHours() + 7);
   return (
     <ListItemButton
       to="/dashboard/TakeOrdersMemberApp"
@@ -195,7 +200,7 @@ function NotificationItemTakeOrder({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.order_rider_date_cut_arount))}
+            {formatDistanceToNow(new Date(today))}
           </Typography>
         }
       />
@@ -212,6 +217,8 @@ function NotificationItemTakeOrderInProvince({ notification }) {
   const title = `คุณต้องได้รับของจากระดับ ${
     notification.member_delivery_level === 'province' ? 'ระดับจังหวัด' : 'ระดับอำเภอ'
   }`;
+  const today = new Date(notification.member_delivery_date);
+  today.setHours(today.getHours() - 7);
   return (
     <ListItemButton
       to="/dashboard/TakeOrdersInProvinceApp"
@@ -256,7 +263,7 @@ function NotificationItemTakeOrderInProvince({ notification }) {
             }}
           >
             <Box component={Icon} icon={clockFill} sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {formatDistanceToNow(new Date(notification.member_delivery_date))}
+            {formatDistanceToNow(new Date(today))}
           </Typography>
         }
       />

@@ -10,8 +10,10 @@ import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 import { Link as RouterLink } from 'react-router-dom';
+
 // material
 import { Box, Card, Link, Typography, Stack, TypeMap } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { styled } from '@mui/material/styles';
 // utils
 import Label from '../../Label';
@@ -44,12 +46,17 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product, setCount, count }) {
   const [showModal, setShowModal] = React.useState(false);
   const [showButton, setButton] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(async () => {}, [count]);
   const { name, productStetus, productName, productImg, productPrice, productid } = product;
   // eslint-disable-next-line global-require
   const ImageProduct = `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`;
   const AddProduct = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
     const value = count.concat(product);
     const filtereds = [];
     await value.forEach((item, index) => {
@@ -92,19 +99,16 @@ export default function ShopProductCard({ product, setCount, count }) {
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             {/* <ColorPreview colors={colors} /> */}
 
-            <Button
-              color="purple"
-              buttonType="outline"
-              size="sm"
-              rounded={false}
-              block={false}
-              iconOnly={false}
-              ripple="dark"
+            <LoadingButton
+              // color="secondary"
+              endIcon={<Icon icon="clarity:add-line" />}
+              loading={loading}
+              loadingPosition="end"
+              variant="outlined"
               onClick={() => AddProduct()}
             >
               เพิ่มในตะกร้า
-            </Button>
-
+            </LoadingButton>
             <Typography variant="subtitle1">
               <Typography
                 component="span"

@@ -94,7 +94,10 @@ export default function AppCardCutArountDistrtict(props) {
     const filterDeleteOrderMe = filterStatusINProvince.filter(
       (f) => f.order_member_id !== sessionStorage.getItem('user')
     );
-
+    const filterSubDistrict = filterDeleteOrderMe.filter(
+      (f) => f.order_product_subdistrict === props.props.order_product_subdistrict
+    );
+    setOrderlist(filterSubDistrict);
     const filtereds = [];
     await filterDeleteOrderMe.forEach((item) => {
       const idx = filtereds.findIndex(
@@ -109,7 +112,6 @@ export default function AppCardCutArountDistrtict(props) {
       }
     });
     setDataFilterProductName(filtereds);
-    setOrderlist(result.data.data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.props.order_product_subdistrict]);
 
@@ -188,9 +190,15 @@ export default function AppCardCutArountDistrtict(props) {
           `${process.env.REACT_APP_WEB_BACKEND}/portReportOrderMember`,
           dataReportMember
         );
-        //-----
+      });
+      valuesPutStockMember.map(
+        async (value) =>
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
+      );
+      //-----
+      Orderlist.map(async (value) => {
         const dataChangeOrderDetail = {
-          // เปลี่ยนเป็นยิงใน status อำเภอแทน
+          // เปลี่ยนเป็นยิงใน status จังหวัดแทน
           order_detail_id: value.order_detail_id,
           order_status_in_province: 'อำเภอตัดรอบการจัดส่งแล้ว'
         };
@@ -199,11 +207,6 @@ export default function AppCardCutArountDistrtict(props) {
           dataChangeOrderDetail
         );
       });
-
-      valuesPutStockMember.map(
-        async (value) =>
-          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountStockProductMember`, value)
-      );
       dispatch({ type: 'TURNOFF' });
       await CutArountOrderSubDistrict();
     }
