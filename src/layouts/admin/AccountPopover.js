@@ -111,6 +111,24 @@ export default function AccountPopover() {
           </Box>
           จัดการผู้ดูแลระบบ
         </MenuItem>
+        <MenuItem
+          key={5}
+          to="/admin/AdminCutArountAllApp"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          >
+            <Icon icon="noto:card-file-box" width="24" height="24" />
+          </Box>
+          รายการที่ถูกตัดรอบไปเเล้ว
+        </MenuItem>
 
         <MenuItem
           key={2}

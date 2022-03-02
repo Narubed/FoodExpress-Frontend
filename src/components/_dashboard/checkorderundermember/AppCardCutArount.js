@@ -18,6 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import LoadingButton from '@mui/lab/LoadingButton';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
@@ -78,7 +79,7 @@ export default function AppCardCutArount(props) {
   const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
   const [showNoProductINStock, setNoProductINStock] = useState([]);
   const [showValueNOTEnough, setValueNOTEnough] = useState([]);
-
+  const [loading, setLoading] = React.useState(false);
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -115,6 +116,10 @@ export default function AppCardCutArount(props) {
   }, [props.props.order_product_district]);
 
   const confirmAppCardCutArount = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
     setShowModal(false);
     Swal.fire({
       title: 'Are you sure?',
@@ -289,18 +294,14 @@ export default function AppCardCutArount(props) {
           <DialogTitle id="alert-dialog-title">
             อำเภอ: {props.props.order_product_district}
             <div className="flex justify-end ...">
-              <Button
-                color="lightBlue"
-                buttonType="outline"
-                size="sm"
-                rounded={false}
-                block={false}
-                iconOnly={false}
-                ripple="dark"
-                onClick={() => confirmAppCardCutArount()}
+              <LoadingButton
+                onClick={(e) => confirmAppCardCutArount(e)}
+                loading={loading}
+                loadingIndicator="Loading..."
+                variant="outlined"
               >
                 ตัดรอบออเดอร์ของอำเภอนี้
-              </Button>
+              </LoadingButton>
             </div>
           </DialogTitle>
 

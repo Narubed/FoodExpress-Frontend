@@ -60,7 +60,7 @@ export default function CartWidget({
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 2500);
     if (count.length === 0) {
       onCloseShopCard();
       Swal.fire('ไม่มีสินค้าในตะกร้า ?', 'กรุณาตรวจเช็คสินค้าของท่านอีกครั้ง ?', 'question');

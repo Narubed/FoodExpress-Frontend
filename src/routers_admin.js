@@ -29,7 +29,7 @@ import AnnounceSlide from './pages/Admin/Announce/AnnounceSlide';
 import AnnounceAdvert from './pages/Admin/Announce/AnnounceAdvert';
 import ChangeAdminApp from './pages/Admin/ChangeAdmin/ChangeAdminApp';
 import CreateAdminApp from './pages/Admin/ChangeAdmin/CreateAdminApp';
-
+import AdminCutArountAllApp from './pages/Admin/CutArountAll/AdminCutArountAllApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -64,7 +64,8 @@ export default function Router() {
         { path: 'AnnounceSlide', element: <AnnounceSlide /> },
         { path: 'AnnounceAdvert', element: <AnnounceAdvert /> },
         { path: 'ChangeAdminApp', element: <ChangeAdminApp /> },
-        { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> }
+        { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> },
+        { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

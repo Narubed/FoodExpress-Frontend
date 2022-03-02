@@ -13,6 +13,7 @@ import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 CheckOrderMemberPutSlip.propTypes = {
   order_id: PropTypes.number
@@ -21,6 +22,7 @@ CheckOrderMemberPutSlip.propTypes = {
 export default function CheckOrderMemberPutSlip({ order_id }) {
   const dispatch = useDispatch();
   dispatch({ type: 'OPEN' });
+  const [loading, setLoading] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [userInfo, setuserInfo] = React.useState({
     file: [],
@@ -34,6 +36,10 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
     });
   };
   const submit = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
     if (userInfo.file.length === 0) {
       Swal.fire({
         position: '',
@@ -107,10 +113,15 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
           <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
             Close
           </Button>
-          <Button type="submit" className="btn" onClick={() => submit()}>
-            {' '}
-            Save{' '}
-          </Button>
+
+          <LoadingButton
+            onClick={(e) => submit(e)}
+            loading={loading}
+            loadingIndicator="Loading..."
+            variant="outlined"
+          >
+            ยืนยันรายการสั่งซื้อ
+          </LoadingButton>
         </ModalFooter>
       </Modal>
     </div>

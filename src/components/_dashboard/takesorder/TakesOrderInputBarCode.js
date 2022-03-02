@@ -12,6 +12,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 import TakesOrderCheckStock from './TakesOrderCheckStock';
 import TakesOrderCheckOrderDetail from './TakesOrderCheckOrderDetail';
 import checkStatusOrder from '../../../utils/checkStatusOrder';
@@ -23,6 +25,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [valueBarcode, setValueBarcode] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,6 +35,10 @@ export default function TakesOrderInputBarCode({ orderList }) {
     setOpen(false);
   };
   const handleComfirm = async () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
     const result = orderList.find((f) => f.id_order_rider_id === valueBarcode);
     if (!result) {
       Swal.fire(
@@ -107,8 +114,18 @@ export default function TakesOrderInputBarCode({ orderList }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>ยกเลิก</Button>
-          <Button onClick={handleComfirm}>ยืนยัน</Button>
+          <Button color="error" onClick={handleClose}>
+            ยกเลิก
+          </Button>
+          {/* <Button onClick={handleComfirm}>ยืนยัน</Button> */}
+          <LoadingButton
+            onClick={(e) => handleComfirm(e)}
+            loading={loading}
+            loadingIndicator="Loading..."
+            variant="outlined"
+          >
+            ยืนยัน
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </div>

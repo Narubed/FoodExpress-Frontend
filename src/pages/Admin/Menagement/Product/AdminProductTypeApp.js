@@ -123,7 +123,8 @@ export default function AdminProductTypeApp() {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, need it!'
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         if (editnewProductTypeName === null) {
@@ -374,11 +375,11 @@ export default function AdminProductTypeApp() {
             onClick={(e) => setShowModalEdit(false)}
             ripple="dark"
           >
-            Close
+            ยกเลิก
           </Button>
 
           <Button color="green" onClick={(e) => confirmEditType(e)} ripple="light">
-            Save Changes
+            ยืนยัน
           </Button>
         </ModalFooter>
       </Modal>
