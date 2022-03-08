@@ -44,7 +44,7 @@ import {
 const TABLE_HEAD = [
   { id: 'id_order_rider_id', label: 'รหัส barcode', alignRight: false },
   { id: 'order_rider_product_name', label: 'ชื่อสินค้า', alignRight: false },
-  { id: 'order_rider_Amount', label: 'จำนวน/กิโลกรัม', alignRight: false },
+  { id: 'order_rider_Amount', label: 'จำนวน', alignRight: false },
   { id: 'order_rider_status', label: 'สถานะ', alignRight: false },
   // { id: 'order_rider_company_name', label: 'ชื่อบริษัท', alignRight: false },
   // { id: 'order_rider_company_company_address', label: 'ที่อยู่บริษัท', alignRight: false },
@@ -194,7 +194,8 @@ export default function AdminTakesOrderDetail() {
                         id_order_rider_id,
                         order_rider_product_name,
                         order_rider_Amount,
-                        order_rider_status
+                        order_rider_status,
+                        order_rider_currency
                       } = row;
                       const isItemSelected = selected.indexOf(id_order_rider_id) !== -1;
 
@@ -217,7 +218,9 @@ export default function AdminTakesOrderDetail() {
                             <Label color="blueGray">{id_order_rider_id}</Label>
                           </TableCell>
                           <TableCell align="left">{order_rider_product_name}</TableCell>
-                          <TableCell align="left">{numeral(order_rider_Amount).format()}</TableCell>
+                          <TableCell align="left">
+                            {numeral(order_rider_Amount).format()} {order_rider_currency}
+                          </TableCell>
                           <TableCell align="left">
                             {order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (
                               <Label color="green">{order_rider_status}</Label>
@@ -251,7 +254,7 @@ export default function AdminTakesOrderDetail() {
           </Scrollbar>
 
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[5, 10, 25, 50]}
             component="div"
             count={filteredUsers.length}
             rowsPerPage={rowsPerPage}

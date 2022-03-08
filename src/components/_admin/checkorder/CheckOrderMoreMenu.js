@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import editFill from '@iconify/icons-eva/edit-fill';
 import numeral from 'numeral';
@@ -21,7 +21,12 @@ import {
   ListItemIcon,
   ListItemText,
   TableContainer,
-  Table
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -39,6 +44,7 @@ CheckOrderMoreMenu.propTypes = {
   order_product_total: PropTypes.number,
   order_status: PropTypes.string
 };
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 export default function CheckOrderMoreMenu(props) {
   const dispatch = useDispatch();
   // eslint-disable-next-line camelcase
@@ -53,6 +59,7 @@ export default function CheckOrderMoreMenu(props) {
       // eslint-disable-next-line camelcase
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderDetail_id/${order_id}`
     );
+    console.log(data.data.data);
     setOrderDetail(data.data.data);
     setShowModal(true);
   };
@@ -566,15 +573,11 @@ export default function CheckOrderMoreMenu(props) {
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
-          <MenuItem sx={{ color: 'text.secondary' }}>
+          <MenuItem sx={{ color: 'text.secondary' }} onClick={() => detailOrder()}>
             <ListItemIcon>
               <Icon icon="icon-park-outline:view-grid-detail" width={24} height={24} />
             </ListItemIcon>
-            <ListItemText
-              primary="รายระเอียด"
-              primaryTypographyProps={{ variant: 'body2' }}
-              onClick={() => detailOrder()}
-            />
+            <ListItemText primary="รายระเอียด" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
 
           {order_status === 'รอตรวจสอบ' ? (
@@ -602,9 +605,17 @@ export default function CheckOrderMoreMenu(props) {
             </>
           ) : null}
         </Menu>
-        <Modal size="lg" active={showModal} toggler={() => setShowModal(false)}>
-          <ModalHeader toggler={() => setShowModal(false)}>รายระเอียดออเดอร์</ModalHeader>
-          <ModalBody>
+
+        <Dialog
+          fullWidth="fullWidth"
+          maxWidth="md"
+          open={showModal}
+          onClose={() => setShowModal(false)}
+          TransitionComponent={Transition}
+        >
+          <DialogTitle>รายระเอียดออเดอร์</DialogTitle>
+          <DialogContent>
+            {' '}
             <div className="px-6 py-3 text-left text-sm font-medium text-gray-900 uppercase tracking-wider">
               ราคาสินค้าทั้งหมด {numeral(order_product_total).format()} บาท
             </div>{' '}
@@ -683,7 +694,7 @@ export default function CheckOrderMoreMenu(props) {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                  {person.order_product_amoumt}
+                                  {person.order_product_amoumt} {person.order_product_currency}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -703,8 +714,8 @@ export default function CheckOrderMoreMenu(props) {
               </div>
             </TableContainer>
             {/* </Scrollbar> */}
-          </ModalBody>
-          <ModalFooter>
+          </DialogContent>
+          <DialogActions>
             <Button
               color="red"
               buttonType="link"
@@ -713,8 +724,8 @@ export default function CheckOrderMoreMenu(props) {
             >
               Close
             </Button>
-          </ModalFooter>
-        </Modal>
+          </DialogActions>
+        </Dialog>
       </>
     </>
   );

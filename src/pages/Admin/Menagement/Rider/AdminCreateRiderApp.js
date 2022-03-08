@@ -92,7 +92,7 @@ export default function RegisterForm() {
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   fullWidth
-                  label="First name"
+                  label="ชื่อ"
                   {...getFieldProps('firstName')}
                   error={Boolean(touched.firstName && errors.firstName)}
                   helperText={touched.firstName && errors.firstName}
@@ -100,7 +100,7 @@ export default function RegisterForm() {
 
                 <TextField
                   fullWidth
-                  label="Last name"
+                  label="นามสกุล"
                   {...getFieldProps('lastName')}
                   error={Boolean(touched.lastName && errors.lastName)}
                   helperText={touched.lastName && errors.lastName}
@@ -110,7 +110,7 @@ export default function RegisterForm() {
               <TextField
                 fullWidth
                 autoComplete="username"
-                label="ID"
+                label="ไอดี"
                 {...getFieldProps('riderid')}
                 error={Boolean(touched.riderid && errors.riderid)}
                 helperText={touched.riderid && errors.riderid}
@@ -120,7 +120,7 @@ export default function RegisterForm() {
                 fullWidth
                 autoComplete="current-password"
                 type={showPassword ? 'text' : 'password'}
-                label="Password"
+                label="รหัสผ่าน"
                 {...getFieldProps('password')}
                 InputProps={{
                   endAdornment: (
