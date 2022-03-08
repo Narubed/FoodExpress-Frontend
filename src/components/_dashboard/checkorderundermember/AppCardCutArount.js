@@ -79,7 +79,7 @@ export default function AppCardCutArount(props) {
   const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
   const [showNoProductINStock, setNoProductINStock] = useState([]);
   const [showValueNOTEnough, setValueNOTEnough] = useState([]);
-  const [loading, setLoading] = React.useState(false);
+  // const [loading, setLoading] = React.useState(false);
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -116,10 +116,10 @@ export default function AppCardCutArount(props) {
   }, [props.props.order_product_district]);
 
   const confirmAppCardCutArount = async () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2500);
+    // setLoading(true);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 2500);
     setShowModal(false);
     Swal.fire({
       title: 'Are you sure?',
@@ -296,7 +296,7 @@ export default function AppCardCutArount(props) {
             <div className="flex justify-end ...">
               <LoadingButton
                 onClick={(e) => confirmAppCardCutArount(e)}
-                loading={loading}
+                // loading={loading}
                 loadingIndicator="Loading..."
                 variant="outlined"
               >

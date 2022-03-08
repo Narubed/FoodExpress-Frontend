@@ -61,6 +61,9 @@ export default function RegisterForm() {
   const dispatch = useDispatch();
   const [showModalSelectAddress, setModalSelectAddress] = useState(false);
   const [ProductType, setProductType] = useState([]);
+  const [Products, setProducts] = useState([]);
+  const [SelectProducts, setSelectProducts] = useState(null);
+
   const [Company, setCompany] = useState([]);
   const [SelectCompany, setSelectCompany] = useState(null);
 
@@ -74,10 +77,6 @@ export default function RegisterForm() {
   const [IDCutArount, setIDCutArount] = useState();
   const [dataPostExpress, setPostExpress] = useState();
   const RegisterSchema = Yup.object().shape({
-    product_name: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('product_name is required'),
     product_amount: Yup.number().required('product_amount is required')
   });
   dispatch({ type: 'OPEN' });
@@ -101,13 +100,14 @@ export default function RegisterForm() {
   dispatch({ type: 'TURNOFF' });
   const handleSubmits = async (e) => {
     const orderRiderId = Date.now() + localStorage.getItem('rider_id') + SelectCompany.company_id;
-    const filterProductID = ProductType.filter((f) => f.productName === e.product_name);
+    const filterProductID = ProductType.filter((f) => f.productName === SelectProducts.productName);
     const data = {
       id_order_rider_id: orderRiderId,
       order_rider_id: localStorage.getItem('rider_id'),
       order_rider_product_id: filterProductID[0].productid,
-      order_rider_product_name: e.product_name,
+      order_rider_product_name: SelectProducts.productName,
       order_rider_Amount: e.product_amount,
+      order_rider_currency: SelectProducts.currency,
       order_rider_company_name: SelectCompany.company_name,
       order_rider_company_company_address: SelectCompany.company_address,
       order_rider_member_userid: SelectMembers.userId,
@@ -126,6 +126,9 @@ export default function RegisterForm() {
     onSubmit: (e) => handleSubmits(e)
   });
 
+  const onChangeProduct = (e) => {
+    setSelectProducts(e.target.value);
+  };
   const onChangeCompany = (e) => {
     setSelectCompany(e.target.value);
   };
@@ -153,6 +156,7 @@ export default function RegisterForm() {
         order_rider_product_id: dataPostExpress.order_rider_product_id,
         order_rider_product_name: dataPostExpress.order_rider_product_name,
         order_rider_Amount: dataPostExpress.order_rider_Amount,
+        order_rider_currency: dataPostExpress.order_rider_currency,
         order_rider_company_name: dataPostExpress.order_rider_company_name,
         order_rider_company_company_address: dataPostExpress.order_rider_company_company_address,
         order_rider_member_userid: dataPostExpress.order_rider_member_userid,
@@ -213,12 +217,14 @@ export default function RegisterForm() {
                       id="outlined-select-currency"
                       select
                       label="ชื่อสินค้า"
-                      {...getFieldProps('product_name')}
+                      value={SelectProducts}
+                      onChange={(e) => onChangeProduct(e)}
+                      // {...getFieldProps('product_name')}
                       error={Boolean(touched.product_name && errors.product_name)}
                       helperText={touched.product_name && errors.product_name}
                     >
                       {ProductType.map((value) => (
-                        <MenuItem key={value.productid} value={value.productName}>
+                        <MenuItem key={value.productid} value={value}>
                           {value.productName}
                         </MenuItem>
                       ))}
@@ -230,6 +236,14 @@ export default function RegisterForm() {
                     {...getFieldProps('product_amount')}
                     error={Boolean(touched.product_amount && errors.product_amount)}
                     helperText={touched.product_amount && errors.product_amount}
+                  />
+                  <Input
+                    disabled
+                    // color="pink"
+                    size="Regular"
+                    outline
+                    placeholder="สกุลสินค้า"
+                    defaultValue={SelectProducts === null ? '' : SelectProducts.currency}
                   />
                 </Stack>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>

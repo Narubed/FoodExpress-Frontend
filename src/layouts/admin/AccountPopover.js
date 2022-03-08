@@ -129,7 +129,24 @@ export default function AccountPopover() {
           </Box>
           รายการที่ถูกตัดรอบไปเเล้ว
         </MenuItem>
-
+        <MenuItem
+          key={5}
+          to="/admin/NBACompanyPerfitApp"
+          component={RouterLink}
+          onClick={handleClose}
+          sx={{ typography: 'body2', py: 1, px: 2.5 }}
+        >
+          <Box
+            sx={{
+              mr: 2,
+              width: 24,
+              height: 24
+            }}
+          >
+            <Icon icon="noto-v1:money-bag" width="24" height="24" />
+          </Box>
+          กำไรทั้งหมดของบริษัท
+        </MenuItem>
         <MenuItem
           key={2}
           to="/admin/AnnounceSlide"

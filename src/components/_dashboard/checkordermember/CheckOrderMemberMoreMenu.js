@@ -48,6 +48,7 @@ export default function CheckOrderMemberMoreMenu(props) {
       // eslint-disable-next-line camelcase
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderDetail_id/${order_id}`
     );
+    console.log(data.data.data);
     setconfirmExpress(true);
     data.data.data.forEach((element) => {
       if (order_status !== 'รอจัดส่ง') {
@@ -294,7 +295,7 @@ export default function CheckOrderMemberMoreMenu(props) {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                  {person.order_product_amoumt}
+                                  {person.order_product_amoumt} {person.order_product_currency}
                                 </span>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

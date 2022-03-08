@@ -30,6 +30,7 @@ import AnnounceAdvert from './pages/Admin/Announce/AnnounceAdvert';
 import ChangeAdminApp from './pages/Admin/ChangeAdmin/ChangeAdminApp';
 import CreateAdminApp from './pages/Admin/ChangeAdmin/CreateAdminApp';
 import AdminCutArountAllApp from './pages/Admin/CutArountAll/AdminCutArountAllApp';
+import NBACompanyPerfitApp from './pages/Admin/NBACompanyPerfit/NBACompanyPerfitApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -65,7 +66,8 @@ export default function Router() {
         { path: 'AnnounceAdvert', element: <AnnounceAdvert /> },
         { path: 'ChangeAdminApp', element: <ChangeAdminApp /> },
         { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> },
-        { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> }
+        { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> },
+        { path: 'NBACompanyPerfitApp', element: <NBACompanyPerfitApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

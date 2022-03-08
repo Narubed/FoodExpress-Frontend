@@ -90,9 +90,9 @@ function CheckOrderUnderMemberApp() {
           setOrderDontHaveDistrict(fileterDontHaveDistrict);
         }
       }
-      setOrder(filterDistrict2);
-
+      console.log(MyMember.data.data);
       setMyMemberMe(MyMember.data.data);
+      setOrder(filterDistrict2);
     } else if (MyMember.data.data.level === 'district') {
       const filterProvinceMember = filterCompanyStatus.filter(
         (f) => f.order_product_province === MyMember.data.data.province

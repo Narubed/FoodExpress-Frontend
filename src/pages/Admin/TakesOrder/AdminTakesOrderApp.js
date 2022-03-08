@@ -172,7 +172,7 @@ export default function AdminTakesOrderApp() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            รายชื่อไรเดอร์ที่รับขอส่ง
+            รายชื่อไรเดอร์
           </Typography>
         </Stack>
         <Card>
