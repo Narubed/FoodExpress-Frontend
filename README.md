@@ -25,15 +25,17 @@
 - [Register](https://minimal-kit-react.vercel.app/register)
 - [Not Found](https://minimal-kit-react.vercel.app/404) -->
 
+## Project NBA FoodExpress Frontend
+- contact [(nbadigitalworlds)](https://nbadigitalworlds.com/)
 ## Getting started
 
 - Recommended `node js 14+` and `npm 6+`
 - Install dependencies: `npm install` or `yarn install`
 - Start the server: `npm run start` or `yarn start`
 
-## License
+## Github
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Narubed) for more information.
+To request a code for this project Please contact at [Narubed](https://github.com/Narubed) at all. 
 
 ## Contact us
 
