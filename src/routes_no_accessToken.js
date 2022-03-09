@@ -5,6 +5,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/Page404';
+import ForgotPassword from './pages/ForgotPassword';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +17,8 @@ export default function Router() {
       children: [
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
+        { path: 'ForgotPassword', element: <ForgotPassword /> },
+
         { path: '404', element: <NotFound /> },
         { path: '/', element: <Navigate to="/login" /> },
         { path: '*', element: <Navigate to="/404" /> }
