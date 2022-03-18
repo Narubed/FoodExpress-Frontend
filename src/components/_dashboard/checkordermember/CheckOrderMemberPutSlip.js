@@ -1,3 +1,6 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable global-require */
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/button-has-type */
@@ -14,12 +17,22 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
 CheckOrderMemberPutSlip.propTypes = {
   order_id: PropTypes.number
 };
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+
 // eslint-disable-next-line camelcase
 export default function CheckOrderMemberPutSlip({ order_id }) {
+  const imageQRCode = require(`../../../assets/img/qrcode.PNG`).default;
   const dispatch = useDispatch();
   dispatch({ type: 'OPEN' });
   const [loading, setLoading] = React.useState(false);
@@ -36,6 +49,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
     });
   };
   const submit = async () => {
+    setShowModal(false)
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -92,24 +106,34 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
           height={22}
         />
       </button>
-      <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน</ModalHeader>
-        <ModalBody>
-          {' '}
-          <div className="form-row">
-            <label className="text-white">หลักฐานการโอน :</label>
-            <input type="file" name="upload_file" onChange={handleInputChange} />
-            {userInfo.filepreview !== null ? (
-              <Image
-                width="500"
-                className="previewimg"
-                src={userInfo.filepreview}
-                alt="UploadImage"
-              />
-            ) : null}
-          </div>
-        </ModalBody>
-        <ModalFooter>
+
+      <Dialog
+        open={showModal}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setShowModal(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>
+          เพิ่มสลิปเงิน <Image src={imageQRCode} />
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <div className="form-row">
+              {/* <label>หลักฐานการโอน :</label> */}
+              <input type="file" name="upload_file" onChange={handleInputChange} />
+              {userInfo.filepreview !== null ? (
+                <Image
+                  width="500"
+                  className="previewimg"
+                  src={userInfo.filepreview}
+                  alt="UploadImage"
+                />
+              ) : null}
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
             Close
           </Button>
@@ -122,8 +146,8 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
           >
             ยืนยันรายการสั่งซื้อ
           </LoadingButton>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

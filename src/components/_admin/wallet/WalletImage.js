@@ -9,13 +9,14 @@ import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 import { Icon } from '@iconify/react';
+import { imageListClasses } from '@mui/material';
 
 WalletImage.propTypes = {
   images: PropTypes.string,
   Name: PropTypes.string
 };
 
-export default function WalletImage({ images, Name }) {
+export default function WalletImage(images) {
   const [showModal, setShowModal] = React.useState(false);
   return (
     <div>
@@ -32,13 +33,13 @@ export default function WalletImage({ images, Name }) {
         <Icon icon="twemoji:check-mark-button" width={22} height={22} />
       </Button>
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>{Name}</ModalHeader>
+        {/* <ModalHeader toggler={() => setShowModal(false)}>{Name}</ModalHeader> */}
         <ModalBody>
           <Image
             className="h-50 w-50 rounded-full"
             width="400"
             src={
-              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${images}`
+              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${images.images}`
               // eslint-disable-next-line global-require
               // require(`../../../assets/img/${images}`).default
             }

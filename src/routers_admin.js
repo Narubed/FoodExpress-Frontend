@@ -31,6 +31,9 @@ import ChangeAdminApp from './pages/Admin/ChangeAdmin/ChangeAdminApp';
 import CreateAdminApp from './pages/Admin/ChangeAdmin/CreateAdminApp';
 import AdminCutArountAllApp from './pages/Admin/CutArountAll/AdminCutArountAllApp';
 import NBACompanyPerfitApp from './pages/Admin/NBACompanyPerfit/NBACompanyPerfitApp';
+import AdminPrintOrderApp from './pages/Admin/CheckOrder/AdminPrintOrderApp';
+import AdminCutArountWalletApp from './pages/Admin/Wallet/AdminCutArountWalletApp';
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -55,6 +58,7 @@ export default function Router() {
         { path: 'AdminCheckOrderApp', element: <AdminCheckOrderApp /> },
         { path: 'AdminConfirmExpressApp', element: <AdminConfirmExpressApp /> },
         { path: 'AdminWalletApp', element: <AdminWalletApp /> },
+        { path: 'AdminWalletApp/AdminCutArountWalletApp', element: <AdminCutArountWalletApp /> },
         { path: 'AdminCutArountApp', element: <AdminCutArountApp /> },
         { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> },
         { path: 'AdminTakesOrderApp/AdminTakesOrderDetail', element: <AdminTakesOrderDetail /> },
@@ -67,7 +71,8 @@ export default function Router() {
         { path: 'ChangeAdminApp', element: <ChangeAdminApp /> },
         { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> },
         { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> },
-        { path: 'NBACompanyPerfitApp', element: <NBACompanyPerfitApp /> }
+        { path: 'NBACompanyPerfitApp', element: <NBACompanyPerfitApp /> },
+        { path: 'AdminCheckOrderApp/AdminPrintOrderApp', element: <AdminPrintOrderApp /> }
 
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }

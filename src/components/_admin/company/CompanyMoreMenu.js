@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Icon } from '@iconify/react';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,14 +22,15 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Select,
+  TextField,
+  Box,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 // ----------------------------------------------------------------------
 RiderMoreMenu.propTypes = {
@@ -37,20 +39,56 @@ RiderMoreMenu.propTypes = {
   company_tel: PropTypes.string,
   book_name: PropTypes.string,
   book_number: PropTypes.number,
-  company_address: PropTypes.string
+  company_address: PropTypes.string,
+  // company_login_id: PropTypes.string,
+  // company_login_pw: PropTypes.string,
+  company_taxpayer_number: PropTypes.string,
+  company_line_id: PropTypes.string
 };
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
-
+const BankName = [
+  'ธนาคารแห่งประเทศไทย',
+  'ธนาคารกรุงเทพ',
+  'ธนาคารกสิกรไทย',
+  'ธนาคารกรุงไทย',
+  'ธนาคารทหารไทยธนชาต',
+  'ธนาคารไทยพาณิชย์',
+  'ธนาคารกรุงศรีอยุธยา',
+  'ธนาคารเกียรตินาคินภัทร',
+  'ธนาคารซีไอเอ็มบีไทย',
+  'ธนาคารทิสโก้',
+  'ธนาคารยูโอบี',
+  'ธนาคารไทยเครดิตเพื่อรายย่อย',
+  'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร',
+  'ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย',
+  'ธนาคารออมสิน',
+  'ธนาคารอาคารสงเคราะห์',
+  'ธนาคารอิสลามแห่งประเทศไทย'
+];
 export default function RiderMoreMenu(props) {
   const dispatch = useDispatch();
-  // eslint-disable-next-line camelcase
-  const { id, company_name, company_tel, book_name, book_number, company_address } = props;
+  const {
+    id,
+    company_name,
+    company_tel,
+    book_name,
+    book_number,
+    company_address,
+    // company_login_id,
+    // company_login_pw,
+    company_taxpayer_number,
+    company_line_id
+  } = props;
   const [onChangeCompanyName, setonChangeCompanyName] = useState('');
   const [onChangeTel, setonChangeTel] = useState();
   const [onChangeBookName, setonChangeBookName] = useState();
   const [onChangeBookNumber, setonChangeBookNumber] = useState();
   const [onChangeAddress, setonChangeAddress] = useState();
+  // const [onChangeLoginID, setonChangeLoginID] = useState();
+  // const [onChangeLoginPW, setonChangeLoginPW] = useState();
+  const [onChangeTaxpayer, setonChangeTaxpayer] = useState();
+  const [onChangeLineID, setonChangeLineID] = useState();
   const [showModal, setShowModalCode] = useState(false);
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -87,9 +125,14 @@ export default function RiderMoreMenu(props) {
     setonChangeBookName(book_name);
     setonChangeBookNumber(book_number);
     setonChangeAddress(company_address);
+    // setonChangeLoginID(company_login_id);
+    // setonChangeLoginPW(company_login_pw);
+    setonChangeTaxpayer(company_taxpayer_number);
+    setonChangeLineID(company_line_id);
     setShowModalCode(true);
   };
   const handleOk = async () => {
+    console.log(onChangeBookName);
     setShowModalCode(false);
     Swal.fire({
       title: 'Are you sure?',
@@ -107,8 +150,13 @@ export default function RiderMoreMenu(props) {
         company_tel: onChangeTel,
         book_name: onChangeBookName,
         book_number: onChangeBookNumber,
-        company_address: onChangeAddress
+        company_address: onChangeAddress,
+        // company_login_id: onChangeLoginID,
+        // company_login_pw: onChangeLoginPW,
+        company_taxpayer_number: onChangeTaxpayer,
+        company_line_id: onChangeLineID
       };
+      console.log(data);
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putCompany`, data);
@@ -178,7 +226,6 @@ export default function RiderMoreMenu(props) {
           <DialogTitle>{onChangeCompanyName}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              {' '}
               <Input
                 type="text"
                 color="lightBlue"
@@ -201,15 +248,47 @@ export default function RiderMoreMenu(props) {
                 />
               </div>
               <br />
-              <Input
-                type="text"
-                color="lightBlue"
-                size="regular"
-                outline
-                placeholder="ชื่อธนาคาร"
+              {/* <div>
+                <Input
+                  type="text"
+                  color="lightBlue"
+                  size="regular"
+                  outline
+                  placeholder="ไอดีสำหรับเข้าสู่ระบบ"
+                  defaultValue={onChangeLoginID}
+                  onChange={(e) => setonChangeLoginID(e.target.value)}
+                />
+              </div>
+              <br />
+              <div>
+                <Input
+                  type="text"
+                  color="lightBlue"
+                  size="regular"
+                  outline
+                  placeholder="รหัสผ่าน"
+                  defaultValue={onChangeLoginPW}
+                  onChange={(e) => setonChangeLoginPW(e.target.value)}
+                />
+              </div>
+              <br /> */}
+              <TextField
+                fullWidth
+                select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
                 defaultValue={onChangeBookName}
+                value={onChangeBookName}
+                label={onChangeBookName}
                 onChange={(e) => setonChangeBookName(e.target.value)}
-              />
+              >
+                {BankName.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <br />
               <br />
               <Input
                 type="text"
@@ -219,6 +298,26 @@ export default function RiderMoreMenu(props) {
                 placeholder="เลขบัญญชีธนาคาร"
                 defaultValue={onChangeBookNumber}
                 onChange={(e) => setonChangeBookNumber(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="เลขประจำตัวผู้เสียภาษี"
+                defaultValue={onChangeTaxpayer}
+                onChange={(e) => setonChangeTaxpayer(e.target.value)}
+              />
+              <br />
+              <Input
+                type="text"
+                color="lightBlue"
+                size="regular"
+                outline
+                placeholder="Line หรือช่องทางติดต่อ"
+                defaultValue={onChangeLineID}
+                onChange={(e) => setonChangeLineID(e.target.value)}
               />
               <br />
               <Input

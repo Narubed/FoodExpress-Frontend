@@ -19,6 +19,7 @@ import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import ProductCartShopping from './ProductCartShopping';
+import ProductPercentDetail from './ProductPercentDetail';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -82,15 +83,19 @@ export default function CartWidget({
       const getMemberMyID = await axios.get(
         `${process.env.REACT_APP_WEB_BACKEND}/member/${sessionStorage.getItem('user')}`
       );
+
       // eslint-disable-next-line camelcase
       let Order_Detail_FoodExpress = [];
+      console.log(count);
       await count.map(
         (e) =>
           // eslint-disable-next-line camelcase
           (Order_Detail_FoodExpress = Order_Detail_FoodExpress.concat({
             order_id: OrderFoodExpress.order_id,
+            order_detail_id: OrderFoodExpress.order_id + e.productid,
             order_member_id: OrderFoodExpress.order_member_id,
             order_product_id: e.productid,
+            order_product_cost: e.productCost,
             order_product_price: e.productPrice,
             order_product_amoumt: e.amount,
             order_product_currency: e.currency,
@@ -104,6 +109,7 @@ export default function CartWidget({
             order_product_level: getMemberMyID.data.data.level
           }))
       );
+
       Swal.fire({
         title: 'Are you sure?',
         text: 'คุณต้องการเพิ่มรายการสินค้านี้หรือไม่ !',
@@ -116,7 +122,7 @@ export default function CartWidget({
       }).then(async (result) => {
         if (result.isConfirmed) {
           await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrder`, OrderFoodExpress);
-
+          await ProductPercentDetail({ count, OrderFoodExpress });
           Order_Detail_FoodExpress.map(
             async (e) =>
               // eslint-disable-next-line no-return-await
@@ -124,6 +130,7 @@ export default function CartWidget({
                 await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrderDetail`, e)
               )
           );
+
           Swal.fire({
             position: '',
             icon: 'success',

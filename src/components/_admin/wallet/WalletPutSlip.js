@@ -36,8 +36,8 @@ export default function WalletPutSlip({ wallet_id }) {
   const submit = async () => {
     const formdata = new FormData();
     formdata.append('avatar', userInfo.file);
-    formdata.append('wallet_id', wallet_id);
-    formdata.append('wallet_status', 'ได้รับเงินแล้ว');
+    formdata.append('id_report_wallet_member_express', wallet_id);
+    formdata.append('report_wallet_member_status', 'ได้รับเงินแล้ว');
     Swal.fire({
       title: 'คุณต้องการบันทึกสลิปหรือไม่ ?',
       text: 'หลังจากคุณบันทึกสถานะของรายการนี้จะถูกเปลี่ยนเป็นได้รับเงินเเล้ว !',
@@ -50,7 +50,7 @@ export default function WalletPutSlip({ wallet_id }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });
-        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlipWallet`, formdata);
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlipWalletMember`, formdata);
         dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
@@ -77,7 +77,7 @@ export default function WalletPutSlip({ wallet_id }) {
         iconOnly
         ripple="dark"
       >
-        <Icon icon="flat-color-icons:add-image" width={22} height={22} />
+        <Icon icon="flat-color-icons:plus" width={22} height={22} />
       </Button>
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
         <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน</ModalHeader>

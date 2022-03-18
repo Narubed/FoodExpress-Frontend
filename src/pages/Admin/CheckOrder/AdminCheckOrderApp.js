@@ -1,13 +1,15 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
 import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
+import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 // material
 import {
@@ -23,7 +25,8 @@ import {
   TablePagination,
   Badge,
   TextField,
-  Box
+  Box,
+  Tooltip
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -208,6 +211,21 @@ function AdminCheckOrderApp() {
             <Typography variant="h4" gutterBottom>
               <div>เช็คออเดอร์</div>
             </Typography>
+            <Tooltip title="ปริ้นรายระเอียดออเดอร์">
+              <Link to="/admin/AdminCheckOrderApp/AdminPrintOrderApp">
+                <Button
+                  color="lightBlue"
+                  buttonType="link"
+                  size="regular"
+                  rounded
+                  block={false}
+                  iconOnly
+                  ripple="dark"
+                >
+                  <Icon icon="flat-color-icons:print" width={32} height={32} />
+                </Button>
+              </Link>
+            </Tooltip>
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
@@ -227,6 +245,7 @@ function AdminCheckOrderApp() {
               />
             </Stack>
           </LocalizationProvider>
+
           <Card>
             <CheckOrderListToolbar
               numSelected={selected.length}

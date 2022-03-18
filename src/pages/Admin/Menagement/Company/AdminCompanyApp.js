@@ -246,7 +246,11 @@ function AdminCompanyApp() {
                           company_tel,
                           book_name,
                           book_number,
-                          company_address
+                          company_address,
+                          company_login_id,
+                          company_login_pw,
+                          company_taxpayer_number,
+                          company_line_id
                         } = row;
                         const isItemSelected = selected.indexOf(company_name) !== -1;
 
@@ -299,6 +303,10 @@ function AdminCompanyApp() {
                                 book_name={book_name}
                                 book_number={book_number}
                                 company_address={company_address}
+                                company_login_id={company_login_id}
+                                company_login_pw={company_login_pw}
+                                company_taxpayer_number={company_taxpayer_number}
+                                company_line_id={company_line_id}
                               />
                             </TableCell>
                           </TableRow>

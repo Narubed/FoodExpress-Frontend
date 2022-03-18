@@ -49,12 +49,12 @@ const TABLE_HEAD = [
   { id: 'firstname', label: 'ชื่อ', alignRight: false },
   // { id: 'wallet_slip', label: 'Slip', alignRight: false },
   // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
-  { id: 'wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'report_wallet_member_total', label: 'ผลรวม', alignRight: false },
   { id: 'subdistrict', label: 'ตำบล', alignRight: false },
   { id: 'district', label: 'อำเภอ', alignRight: false },
   { id: 'province', label: 'จังหวัด', alignRight: false },
-  { id: 'cutarount', label: 'ตัดรอบการจ่ายเงิน', alignRight: false },
-  // { id: 'wallet_date', label: 'วัน-เดือน-ปี', alignRight: false },
+  { id: 'report_wallet_member_status', label: 'สถานะ', alignRight: false },
+  { id: 'report_wallet_member_timestamp', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
 ];
 // ----------------------------------------------------------------------
@@ -91,8 +91,8 @@ function applySortFilter(array, comparator, query) {
         // _user.wallet_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1
-      // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.report_wallet_member_status.toLowerCase().indexOf(query.toLowerCase()) !== -1
       // _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
@@ -128,7 +128,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   }
 }));
 
-function AdminWalletApp() {
+function AdminCutArountWalletApp() {
   const dispatch = useDispatch();
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
@@ -142,11 +142,10 @@ function AdminWalletApp() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [value, setValue] = React.useState(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const WalletMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getWalletJoinMembers`
+      `${process.env.REACT_APP_WEB_BACKEND}/getReportWalletJoinMembers`
     );
     const reverseData = WalletMember.data.data.reverse();
     setWalletMemberlist(reverseData);
@@ -200,14 +199,6 @@ function AdminWalletApp() {
             <Typography variant="h4" gutterBottom>
               Commission
             </Typography>
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to="/admin/AdminWalletApp/AdminCutArountWalletApp"
-              endIcon={<Icon icon="bi:send-check" />}
-            >
-              รายการที่ตัดรอบแล้ว
-            </Button>
           </Stack>
 
           <Card>
@@ -237,32 +228,30 @@ function AdminWalletApp() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          id_wallet_member_express,
+                          id_report_wallet_member_express,
                           level,
                           firstname,
-                          wallet_slip,
-                          wallet_member_total,
+                          report_wallet_member_total,
                           subdistrict,
                           district,
-                          province
+                          province,
+                          report_wallet_member_status,
+                          report_wallet_member_timestamp,
+                          report_wallet_member_slip
                         } = row;
-                        const isItemSelected = selected.indexOf(id_wallet_member_express) !== -1;
+                        const isItemSelected =
+                          selected.indexOf(id_report_wallet_member_express) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={id_wallet_member_express}
+                            key={id_report_wallet_member_express}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
                             aria-checked={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
-                              {/* <Checkbox
-                                checked={isItemSelected}
-                                onChange={(event) => handleClick(event, company_name, company_id)}
-                              /> */}
-                            </TableCell>
+                            <TableCell padding="checkbox" />
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
                                 <Typography variant="subtitle2" noWrap>
@@ -282,20 +271,40 @@ function AdminWalletApp() {
                             <TableCell align="left">{firstname}</TableCell>
 
                             <TableCell align="left">
-                              {numeral(wallet_member_total).format('0,0.000')}
+                              {numeral(report_wallet_member_total).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">{subdistrict}</TableCell>
                             <TableCell align="left">{district}</TableCell>
                             <TableCell align="left">{province}</TableCell>
+                            <TableCell align="left">
+                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                <Label color="pink"> {report_wallet_member_status}</Label>
+                              ) : (
+                                <Label color="green"> {report_wallet_member_status}</Label>
+                              )}
+                            </TableCell>
+                            <TableCell align="left">
+                              <Label color="lightGreen">
+                                {report_wallet_member_timestamp
+                                  ? dayjs(report_wallet_member_timestamp)
+                                      .locale('th')
+                                      .format('DD MMMM YYYY')
+                                  : null}
+                              </Label>{' '}
+                            </TableCell>
 
                             <TableCell align="left">
-                              <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                              >
-                                <WalletCutArount row={row} />
-                              </StyledBadge>
+                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                <StyledBadge
+                                  overlap="circular"
+                                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                  variant="dot"
+                                >
+                                  <WalletPutSlip />
+                                </StyledBadge>
+                              ) : (
+                                <WalletImage images={report_wallet_member_slip} />
+                              )}
                             </TableCell>
                           </TableRow>
                         );
@@ -334,4 +343,4 @@ function AdminWalletApp() {
     </>
   );
 }
-export default AdminWalletApp;
+export default AdminCutArountWalletApp;
