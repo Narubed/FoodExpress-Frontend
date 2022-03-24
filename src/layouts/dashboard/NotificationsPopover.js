@@ -293,7 +293,7 @@ export default function NotificationsPopover() {
       `${process.env.REACT_APP_WEB_BACKEND}/getAllOrderExpressJoinRider`
     );
     const filterOrder = getOrderRider.data.data.filter(
-      (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
+      (f) => parseInt(f.order_rider_consignee_id, 10) === parseInt(user, 10)
     );
     const filterOrderStatus = filterOrder.filter(
       (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'

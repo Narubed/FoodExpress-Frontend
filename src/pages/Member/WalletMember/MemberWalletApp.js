@@ -37,11 +37,14 @@ import SearchNotFound from '../../../components/SearchNotFound';
 const TABLE_HEAD = [
   { id: 'level', label: 'ระดับ', alignRight: false },
   { id: 'firstname', label: 'ชื่อ', alignRight: false },
-  { id: 'wallet_slip', label: 'Slip', alignRight: false },
-  { id: 'wallet_total', label: 'สถานะ', alignRight: false },
-  { id: 'wallet_status', label: 'ผลรวม', alignRight: false },
-
-  { id: 'wallet_date', label: 'วัน-เดือน-ปี', alignRight: false },
+  // { id: 'wallet_slip', label: 'Slip', alignRight: false },
+  // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
+  { id: 'report_wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'subdistrict', label: 'ตำบล', alignRight: false },
+  { id: 'district', label: 'อำเภอ', alignRight: false },
+  { id: 'province', label: 'จังหวัด', alignRight: false },
+  { id: 'report_wallet_member_status', label: 'สถานะ', alignRight: false },
+  { id: 'report_wallet_member_timestamp', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
 ];
 // ----------------------------------------------------------------------
@@ -75,10 +78,12 @@ function applySortFilter(array, comparator, query) {
       (_user) =>
         _user.level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        // _user.wallet_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.report_wallet_member_status.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      // _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -129,7 +134,7 @@ function AdminWalletApp() {
   useEffect(async () => {
     const user = sessionStorage.getItem('user');
     const WalletMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getJoinWalletMember`
+      `${process.env.REACT_APP_WEB_BACKEND}/getReportWalletJoinMembers`
     );
     const filterMemberId = WalletMember.data.data.filter((f) => f.userId === user);
     const reverseData = filterMemberId.reverse();
@@ -218,20 +223,24 @@ function AdminWalletApp() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          wallet_id,
+                          id_report_wallet_member_express,
                           level,
                           firstname,
-                          wallet_slip,
-                          wallet_total,
-                          wallet_status,
-                          wallet_date
+                          report_wallet_member_total,
+                          subdistrict,
+                          district,
+                          province,
+                          report_wallet_member_status,
+                          report_wallet_member_timestamp,
+                          report_wallet_member_slip
                         } = row;
-                        const isItemSelected = selected.indexOf(wallet_id) !== -1;
+                        const isItemSelected =
+                          selected.indexOf(id_report_wallet_member_express) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={wallet_id}
+                            key={id_report_wallet_member_express}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
@@ -250,39 +259,47 @@ function AdminWalletApp() {
                                   {level === 'subdistrict' ? (
                                     <Label color="amber"> ระดับตำบล</Label>
                                   ) : null}
+                                  {/* <Label color="blueGray"> {level}</Label> */}
                                 </Typography>
                               </Stack>
                             </TableCell>
                             <TableCell align="left">{firstname}</TableCell>
+
                             <TableCell align="left">
-                              {wallet_slip !== '' ? (
+                              {numeral(report_wallet_member_total).format('0,0.000')}
+                            </TableCell>
+                            <TableCell align="left">{subdistrict}</TableCell>
+                            <TableCell align="left">{district}</TableCell>
+                            <TableCell align="left">{province}</TableCell>
+                            <TableCell align="left">
+                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                <Label color="pink"> {report_wallet_member_status}</Label>
+                              ) : (
+                                <Label color="green"> {report_wallet_member_status}</Label>
+                              )}
+                            </TableCell>
+                            <TableCell align="left">
+                              <Label color="lightGreen">
+                                {report_wallet_member_timestamp
+                                  ? dayjs(report_wallet_member_timestamp)
+                                      .locale('th')
+                                      .format('DD MMMM YYYY')
+                                  : null}
+                              </Label>{' '}
+                            </TableCell>
+
+                            <TableCell align="left">
+                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
                                 <StyledBadge
                                   overlap="circular"
                                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                   variant="dot"
                                 >
-                                  {/* {wallet_slip} */}
-                                  <WalletImage images={wallet_slip} Name={wallet_id} />
+                                  {/* <WalletPutSlip row={row} /> */}
                                 </StyledBadge>
-                              ) : null}
-                            </TableCell>
-
-                            <TableCell align="left">
-                              {wallet_status === 'ยังไม่ได้รับเงิน' ? (
-                                <Label color="pink"> {wallet_status}</Label>
-                              ) : null}
-                              {wallet_status === 'ได้รับเงินแล้ว' ? (
-                                <Label color="lightBlue"> {wallet_status}</Label>
-                              ) : null}
-                            </TableCell>
-                            <TableCell align="left">{numeral(wallet_total).format()}</TableCell>
-
-                            <TableCell align="left">
-                              <Label color="lightGreen">
-                                {wallet_date
-                                  ? dayjs(wallet_date).locale('th').format('MMMM YYYY')
-                                  : null}
-                              </Label>{' '}
+                              ) : (
+                                <WalletImage images={report_wallet_member_slip} />
+                              )}
                             </TableCell>
                           </TableRow>
                         );

@@ -38,6 +38,15 @@ export default async function PercentDetailSubDistrict({ count, OrderFoodExpress
             percent_order_detail_nba: filterLevel[0].percent_nba,
             percent_value_detail:
               (value.productPrice * (100 / 107) - value.productCost) * value.amount,
+            percent_older_value_detail_subdistrict:
+              (value.productPrice * (100 / 107) - value.productCost) *
+              (value.amount * filterLevel[0].percent_subdistrict),
+            percent_older_value_detail_district:
+              (value.productPrice * (100 / 107) - value.productCost) *
+              (value.amount * filterLevel[0].percent_district),
+            percent_older_value_detail_provice:
+              (value.productPrice * (100 / 107) - value.productCost) *
+              (value.amount * filterLevel[0].percent_provice),
             percent_value_detail_subdistrict:
               (value.productPrice * (100 / 107) - value.productCost) *
                 (value.amount * filterLevel[0].percent_subdistrict) -
@@ -75,6 +84,13 @@ export default async function PercentDetailSubDistrict({ count, OrderFoodExpress
             percent_order_detail_nba: filterLevel[0].percent_nba + filterLevel[0].percent_district,
             percent_value_detail:
               (value.productPrice * (100 / 107) - value.productCost) * value.amount,
+            percent_older_value_detail_subdistrict:
+              (value.productPrice * (100 / 107) - value.productCost) *
+              (value.amount * filterLevel[0].percent_subdistrict),
+            percent_older_value_detail_district: 0,
+            percent_older_value_detail_provice:
+              (value.productPrice * (100 / 107) - value.productCost) *
+              (value.amount * filterLevel[0].percent_provice),
             percent_value_detail_subdistrict:
               (value.productPrice * (100 / 107) - value.productCost) *
                 (value.amount * filterLevel[0].percent_subdistrict) -
@@ -109,6 +125,13 @@ export default async function PercentDetailSubDistrict({ count, OrderFoodExpress
           percent_order_detail_nba: filterLevel[0].percent_nba + filterLevel[0].percent_provice,
           percent_value_detail:
             (value.productPrice * (100 / 107) - value.productCost) * value.amount,
+          percent_older_value_detail_subdistrict:
+            (value.productPrice * (100 / 107) - value.productCost) *
+            (value.amount * filterLevel[0].percent_subdistrict),
+          percent_older_value_detail_district:
+            (value.productPrice * (100 / 107) - value.productCost) *
+            (value.amount * filterLevel[0].percent_district),
+          percent_older_value_detail_provice: 0, // ไม่มีจังหวัด
           percent_value_detail_subdistrict:
             (value.productPrice * (100 / 107) - value.productCost) *
               (value.amount * filterLevel[0].percent_subdistrict) -
@@ -145,6 +168,11 @@ export default async function PercentDetailSubDistrict({ count, OrderFoodExpress
             filterLevel[0].percent_provice,
           percent_value_detail:
             (value.productPrice * (100 / 107) - value.productCost) * value.amount,
+          percent_older_value_detail_subdistrict:
+            (value.productPrice * (100 / 107) - value.productCost) *
+            (value.amount * filterLevel[0].percent_subdistrict),
+          percent_older_value_detail_district: 0,
+          percent_older_value_detail_provice: 0, // ไม่มีจังหวัด
           percent_value_detail_subdistrict:
             (value.productPrice * (100 / 107) - value.productCost) *
               (value.amount * filterLevel[0].percent_subdistrict) -

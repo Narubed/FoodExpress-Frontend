@@ -12,7 +12,7 @@ export default async function CheckWalletDistrict(myUser, percentOrderDetail) {
     (f) => f.wallet_member_id_express === myUser.userId
   );
   const reducePercentMe = percentOrderDetail.reduce(
-    (sum, percent) => sum + percent.percent_value_detail_district,
+    (sum, percent) => sum + percent.percent_older_value_detail_district,
     0
   );
   const getAllMembers = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
@@ -25,7 +25,7 @@ export default async function CheckWalletDistrict(myUser, percentOrderDetail) {
       (f) => f.wallet_member_id_express === filterProvice[0].userId
     );
     const reducePercentProvince = percentOrderDetail.reduce(
-      (sum, percent) => sum + percent.percent_value_detail_provice,
+      (sum, percent) => sum + percent.percent_older_value_detail_provice,
       0
     );
     if (filterWalletMyProvince.length !== 0) {

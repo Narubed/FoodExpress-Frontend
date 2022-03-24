@@ -37,7 +37,9 @@ export default function WalletCutArount(row) {
     };
     const dataPostReport = {
       report_wallet_member_id: row.row.wallet_member_id_express,
-      report_wallet_member_total: row.row.wallet_member_total,
+      report_wallet_member_older_total: row.row.wallet_member_total,
+      report_wallet_member_3: row.row.wallet_member_total * 0.03,
+      report_wallet_member_total: row.row.wallet_member_total - row.row.wallet_member_total * 0.03,
       report_wallet_member_status: 'รอรับค่าคอมมิชชั่น'
     };
     Swal.fire({

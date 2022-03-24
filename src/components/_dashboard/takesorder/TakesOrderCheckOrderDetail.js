@@ -10,7 +10,7 @@ export default async function TakesOrderCheckOrderDetail({ result }) {
     `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
   );
   const filterOrderMe = getAllOrderJoinDetailJoinCutArount.data.data.filter(
-    (value) => value.order_member_id === result.order_rider_member_userid
+    (value) => value.order_member_id === result.order_rider_consignee_id
   );
   const filterOrderStatus = filterOrderMe.filter((value) => value.order_status === 'รอจัดส่ง');
   const filterOrderDetailStatus = filterOrderStatus.filter(
@@ -19,12 +19,12 @@ export default async function TakesOrderCheckOrderDetail({ result }) {
   const filterOrderProductID = filterOrderDetailStatus.filter(
     (value) => parseInt(value.order_product_id, 10) === parseInt(result.order_rider_product_id, 10)
   );
-
+  console.log(filterOrderProductID);
   const getStockMember = await axios.get(
-    `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.order_rider_member_userid}`
+    `${process.env.REACT_APP_WEB_BACKEND}/getStockProductMemberByUserID/${result.order_rider_consignee_id}`
   );
   const filterStockOrderByProductID = getStockMember.data.data.filter(
-    (value) => value.stock_product_id === result.order_rider_product_id
+    (value) => parseInt(value.stock_product_id, 10) === parseInt(result.order_rider_product_id, 10)
   );
   const Stock = filterStockOrderByProductID[0];
   filterOrderProductID.forEach(async (element, index) => {
@@ -43,13 +43,13 @@ export default async function TakesOrderCheckOrderDetail({ result }) {
       random = random.sort(() => 2 * Math.random() - 1);
       const createReportID =
         Date.now() +
-        result.order_rider_member_userid +
+        result.order_rider_consignee_id +
         result.order_rider_product_id +
         random[index];
       const reportOrder = {
         report_order_id: createReportID,
         id_order_rider_id: result.id_order_rider_id,
-        report_order_member_userid: result.order_rider_member_userid,
+        report_order_member_userid: result.order_rider_consignee_id,
         report_order_product_id: result.order_rider_product_id,
         report_order_product_name: result.order_rider_product_name,
         report_order_product_amount_in: 0,

@@ -19,7 +19,8 @@ WalletPutSlip.propTypes = {
 };
 
 // eslint-disable-next-line camelcase
-export default function WalletPutSlip({ wallet_id }) {
+export default function WalletPutSlip({ row }) {
+  console.log(row);
   const dispatch = useDispatch();
   const [showModal, setShowModal] = React.useState(false);
   const [userInfo, setuserInfo] = React.useState({
@@ -36,7 +37,8 @@ export default function WalletPutSlip({ wallet_id }) {
   const submit = async () => {
     const formdata = new FormData();
     formdata.append('avatar', userInfo.file);
-    formdata.append('id_report_wallet_member_express', wallet_id);
+    // eslint-disable-next-line react/prop-types
+    formdata.append('id_report_wallet_member_express', row.id_report_wallet_member_express);
     formdata.append('report_wallet_member_status', 'ได้รับเงินแล้ว');
     Swal.fire({
       title: 'คุณต้องการบันทึกสลิปหรือไม่ ?',
@@ -79,11 +81,12 @@ export default function WalletPutSlip({ wallet_id }) {
       >
         <Icon icon="flat-color-icons:plus" width={22} height={22} />
       </Button>
-      <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน</ModalHeader>
+      <Modal size="md" active={showModal} toggler={() => setShowModal(false)}>
+        <ModalHeader toggler={() => setShowModal(false)}>เพิ่มสลิปเงิน {row.bookname}</ModalHeader>
+        เลขบัญชี : {row.booknumber} ชื่อ : {row.firstname} {row.lastname}
         <ModalBody>
           <div className="form-row">
-            <label className="text-white">หลักฐานการโอน :</label>
+            <br />
             <input type="file" name="upload_file" onChange={handleInputChange} />
             {userInfo.filepreview !== null ? (
               <Image
@@ -97,10 +100,10 @@ export default function WalletPutSlip({ wallet_id }) {
         </ModalBody>
         <ModalFooter>
           <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
-            Close
+            ยกเลิก
           </Button>
           <Button type="submit" className="btn" onClick={() => submit()}>
-            Save
+            ตกลง
           </Button>
         </ModalFooter>
       </Modal>

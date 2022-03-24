@@ -97,7 +97,7 @@ export default function AdminTakesOrderDetail() {
       `${process.env.REACT_APP_WEB_BACKEND}/getAllOrderExpressJoinRider`
     );
     const filterOrder = getOrderRider.data.data.filter(
-      (f) => parseInt(f.order_rider_member_userid, 10) === parseInt(user, 10)
+      (f) => parseInt(f.order_rider_consignee_id, 10) === parseInt(user, 10)
     );
     const filterOrderStatus = filterOrder.filter(
       (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
@@ -177,7 +177,7 @@ export default function AdminTakesOrderDetail() {
                       const {
                         id_order_rider_id,
                         order_rider_product_name,
-                        order_rider_Amount,
+                        order_rider_amount,
                         order_rider_status,
                         rider_first_name,
                         rider_tel
@@ -195,7 +195,7 @@ export default function AdminTakesOrderDetail() {
                         >
                           <TableCell padding="checkbox" />
                           <TableCell align="left">{order_rider_product_name}</TableCell>
-                          <TableCell align="left">{numeral(order_rider_Amount).format()}</TableCell>
+                          <TableCell align="left">{numeral(order_rider_amount).format()}</TableCell>
                           <TableCell align="left">
                             {order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (
                               <Label color="pink">{order_rider_status}</Label>

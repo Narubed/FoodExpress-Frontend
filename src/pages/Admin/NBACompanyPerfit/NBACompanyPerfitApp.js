@@ -20,21 +20,24 @@ function AdminCutArountAllApp() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     // eslint-disable-next-line camelcase
-    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`);
-    const filterStatusOrder = getAllOrder.data.data.filter(
-      (f) => f.order_status === 'จัดส่งสำเร็จ'
+    const getAllOrder = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoin_order_detail_member`
     );
+    const filterStatusOrder = getAllOrder.data.data.filter(
+      (f) => f.order_status === 'จัดส่งสำเร็จ' || f.order_status === 'รอจัดส่ง'
+    );
+
     const filetereds = [];
     filterStatusOrder.forEach((element) => {
       const idx = filetereds.findIndex((value) => value.province === element.province);
       if (idx === -1) {
         filetereds.push(element);
       } else if (idx !== -1) {
-        filetereds[idx].order_percent_nba += element.order_percent_nba;
+        filetereds[idx].percent_value_detail_nba += element.percent_value_detail_nba;
       }
     });
     setOrder(filetereds);
-    const Percent = filetereds.reduce((sum, data) => sum + data.order_percent_nba, 0);
+    const Percent = filetereds.reduce((sum, data) => sum + data.percent_value_detail_nba, 0);
     setPercentNBA(Percent);
   }, []);
   dispatch({ type: 'TURNOFF' });
@@ -43,7 +46,7 @@ function AdminCutArountAllApp() {
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">รายได้ของบริษัททั้งหมด (กำไร)</Typography>
-          <Typography variant="h4">{numeral(PercentNBA).format()} บาท</Typography>
+          <Typography variant="h4">{numeral(PercentNBA).format('0,0.000')} บาท</Typography>
         </Box>
         <Input placeholder="ค้นหาตามจังหวัด" onChange={(event) => setQuery(event.target.value)} />
         <br />

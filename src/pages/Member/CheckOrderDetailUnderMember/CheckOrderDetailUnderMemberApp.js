@@ -101,12 +101,11 @@ function CheckOrderDetailUnderMemberApp() {
     const level = sessionStorage.getItem('level');
     const user = sessionStorage.getItem('user');
     const getOrderAndMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrderAndMember`
     );
     const getUser_id = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${user}`);
     const reverseOrderAndMember = getOrderAndMember.data.data.reverse();
     const filterByStatus = reverseOrderAndMember.filter((e) => e.order_status === 'รอจัดส่ง');
-    console.log(filterByStatus);
     let filterData = [];
     if (level === 'province') {
       console.log('ระดับ province');
@@ -124,7 +123,6 @@ function CheckOrderDetailUnderMemberApp() {
       const a = filterByStatus.filter((f) => f.subdistrict === getUser_id.data.data.subdistrict);
       filterData = a.filter((f) => f.level === 'subdistrict');
     }
-    console.log(filterData);
 
     setOrderlist(filterData);
   }, []);

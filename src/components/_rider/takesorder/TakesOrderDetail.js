@@ -41,6 +41,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 export default function TakesOrderListHead({ props }) {
   const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <TableHead>
@@ -72,19 +73,19 @@ export default function TakesOrderListHead({ props }) {
             {[props].map((m) => (
               <Grid key={m.id_order_rider_id}>
                 <RootStyle>
-                  <IconWrapperStyle>
-                    <Button target="_blank" href={m.map}>
-                      <Icon icon="emojione:world-map" width="64" height="64" />
-                    </Button>
-                    {/* <Barcode value={m.id_order_rider_id} format="CODE128" /> */}
-                  </IconWrapperStyle>
-                  <Typography variant="h">ชื่อบริษัท : {m.order_rider_company_name} </Typography>
+                  {/* <IconWrapperStyle> */}
+                  {/* <Button target="_blank" href={m.map}> */}
+                  {/* <Icon icon="emojione:world-map" width="64" height="64" /> */}
+                  {/* </Button> */}
+                  {/* <Barcode value={m.id_order_rider_id} format="CODE128" /> */}
+                  {/* </IconWrapperStyle> */}
+                  <Typography variant="h">ชื่อผู้นำจ่าย : {m.order_rider_dealer_name} </Typography>
                   <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                    ที่อยู่บริษัท : {m.order_rider_company_company_address}
+                    ที่อยู่/note : {m.order_rider_dealer_note}
                   </Typography>
-                  <Typography variant="h">ชื่อผู้รับ : {m.firstname}</Typography>
+                  <Typography variant="h">ชื่อผู้รับ : {m.order_rider_consignee_name}</Typography>
                   <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-                    ที่อยู่ผู้รับ : {m.address}
+                    ที่อยู่/note : {m.order_rider_consignee_note}
                   </Typography>
                 </RootStyle>
               </Grid>

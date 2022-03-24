@@ -39,7 +39,7 @@ NotificationItem.propTypes = {
 };
 
 function NotificationItem({ notification }) {
-  const title = ` ชื่อสินค้า ${notification.order_rider_product_name} จากบริษัท ${notification.order_rider_company_name}`;
+  const title = ` ชื่อสินค้า ${notification.order_rider_product_name} จาก ${notification.order_rider_dealer_name}`;
   return (
     <ListItemButton
       to="/rider/RiderTakesOrderApp"
@@ -101,12 +101,8 @@ export default function NotificationsPopover() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const rider = sessionStorage.getItem('user');
-    const getRider = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrderExpressJoinMember`
-    );
-    const filterRiderid = getRider.data.data.filter(
-      (f) => f.order_rider_id === parseInt(rider, 10)
-    );
+    const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrder`);
+    const filterRiderid = getRider.data.data.filter((f) => f.order_rider_id === rider);
     const filterStatus = filterRiderid.filter(
       (value) => value.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
     );

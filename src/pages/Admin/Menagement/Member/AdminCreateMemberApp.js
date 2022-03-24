@@ -12,6 +12,25 @@ import { Box, Stack, TextField, Container, Typography, ImageList, MenuItem } fro
 // companent
 import Page from '../../../../components/Page';
 // ----------------------------------------------------------------------
+const BankName = [
+  'ธนาคารแห่งประเทศไทย',
+  'ธนาคารกรุงเทพ',
+  'ธนาคารกสิกรไทย',
+  'ธนาคารกรุงไทย',
+  'ธนาคารทหารไทยธนชาต',
+  'ธนาคารไทยพาณิชย์',
+  'ธนาคารกรุงศรีอยุธยา',
+  'ธนาคารเกียรตินาคินภัทร',
+  'ธนาคารซีไอเอ็มบีไทย',
+  'ธนาคารทิสโก้',
+  'ธนาคารยูโอบี',
+  'ธนาคารไทยเครดิตเพื่อรายย่อย',
+  'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร',
+  'ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย',
+  'ธนาคารออมสิน',
+  'ธนาคารอาคารสงเคราะห์',
+  'ธนาคารอิสลามแห่งประเทศไทย'
+];
 
 export default function AdminCreateMemberApp() {
   const dispatch = useDispatch();
@@ -244,11 +263,19 @@ export default function AdminCreateMemberApp() {
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   fullWidth
+                  id="outlined-select-currency"
+                  select
                   label="ชื่อบัญชีธนาคาร"
                   {...getFieldProps('bookname')}
                   error={Boolean(touched.bookname && errors.bookname)}
                   helperText={touched.bookname && errors.bookname}
-                />
+                >
+                  {BankName.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <TextField
                   fullWidth
                   autoComplete="booknumber"

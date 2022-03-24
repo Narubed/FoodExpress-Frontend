@@ -16,7 +16,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import LoadingButton from '@mui/lab/LoadingButton';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
@@ -74,7 +73,6 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
   const [showalertValueNOTEnough, setalertValueNOTEnough] = useState(false);
   const [showNoProductINStock, setNoProductINStock] = useState([]);
   const [showValueNOTEnough, setValueNOTEnough] = useState([]);
-  // const [loading, setLoading] = React.useState(false);
   let componentRef = useRef();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -115,10 +113,6 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
   }, [props.props.order_product_subdistrict]);
 
   const confirmAppCardCutArount = async () => {
-    // setLoading(true);
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 2500);
     setShowModal(false);
     Swal.fire({
       title: 'Are you sure?',
@@ -316,14 +310,7 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
               >
                 ตัดรอบออเดอร์ของตำบลนี้
               </Button> */}
-              <LoadingButton
-                onClick={(e) => confirmAppCardCutArount(e)}
-                // loading={loading}
-                loadingIndicator="Loading..."
-                variant="outlined"
-              >
-                ตัดรอบออเดอร์ของตำบลนี้
-              </LoadingButton>
+              <Button onClick={(e) => confirmAppCardCutArount(e)}>ตัดรอบออเดอร์ของตำบลนี้</Button>
             </div>
           </DialogTitle>
           <DialogContent>

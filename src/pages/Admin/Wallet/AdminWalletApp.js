@@ -50,6 +50,8 @@ const TABLE_HEAD = [
   // { id: 'wallet_slip', label: 'Slip', alignRight: false },
   // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
   { id: 'wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'หัก3%', label: 'หัก3%', alignRight: false },
+  { id: 'ยอดสุทธิ', label: 'ยอดสุทธิ', alignRight: false },
   { id: 'subdistrict', label: 'ตำบล', alignRight: false },
   { id: 'district', label: 'อำเภอ', alignRight: false },
   { id: 'province', label: 'จังหวัด', alignRight: false },
@@ -283,6 +285,14 @@ function AdminWalletApp() {
 
                             <TableCell align="left">
                               {numeral(wallet_member_total).format('0,0.000')}
+                            </TableCell>
+                            <TableCell align="left">
+                              {numeral(wallet_member_total * 0.03).format('0,0.000')}
+                            </TableCell>
+                            <TableCell align="left">
+                              {numeral(wallet_member_total - wallet_member_total * 0.03).format(
+                                '0,0.000'
+                              )}
                             </TableCell>
                             <TableCell align="left">{subdistrict}</TableCell>
                             <TableCell align="left">{district}</TableCell>

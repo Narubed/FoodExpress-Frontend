@@ -102,11 +102,9 @@ export default function AdminTakesOrderDetail() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getRider = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrderExpressJoinMember`
-    );
+    const getRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrder`);
     const filterRider_id = getRider.data.data.filter(
-      (f) => f.order_rider_id === parseInt(localStorage.getItem('rider_id'), 10)
+      (f) => f.order_rider_id === localStorage.getItem('rider_id')
     );
     setRiderlist(filterRider_id);
   }, []);
@@ -193,7 +191,7 @@ export default function AdminTakesOrderDetail() {
                       const {
                         id_order_rider_id,
                         order_rider_product_name,
-                        order_rider_Amount,
+                        order_rider_amount,
                         order_rider_status,
                         order_rider_currency
                       } = row;
@@ -219,7 +217,7 @@ export default function AdminTakesOrderDetail() {
                           </TableCell>
                           <TableCell align="left">{order_rider_product_name}</TableCell>
                           <TableCell align="left">
-                            {numeral(order_rider_Amount).format()} {order_rider_currency}
+                            {numeral(order_rider_amount).format()} {order_rider_currency}
                           </TableCell>
                           <TableCell align="left">
                             {order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว' ? (

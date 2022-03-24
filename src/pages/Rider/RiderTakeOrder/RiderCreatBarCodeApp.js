@@ -47,13 +47,11 @@ function RiderCreatBarCodeApp() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const rider = sessionStorage.getItem('user');
-    const getOrderRider = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrderExpressJoinMember`
-    );
+    const getOrderRider = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllRiderOrder`);
     const filterStatus = getOrderRider.data.data.filter(
       (f) => f.order_rider_status === 'ไรเดอร์รับมอบหมายงานแล้ว'
     );
-    const filterRiderid = filterStatus.filter((f) => f.order_rider_id === parseInt(rider, 10));
+    const filterRiderid = filterStatus.filter((f) => f.order_rider_id === rider);
     setOrder(filterRiderid);
   }, []);
   dispatch({ type: 'TURNOFF' });
@@ -89,7 +87,9 @@ function RiderCreatBarCodeApp() {
                   <IconWrapperStyle>
                     <Barcode value={m.id_order_rider_id} format="CODE128" />
                   </IconWrapperStyle>
-                  <Typography variant="h3">{`${fNumber(m.order_rider_Amount)} KG`}</Typography>
+                  <Typography variant="h3">{`${fNumber(m.order_rider_amount)} ${
+                    m.order_rider_currency
+                  }`}</Typography>
                   <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
                     {m.order_rider_product_name}
                   </Typography>

@@ -9,6 +9,7 @@ import RiderApp from './pages/Rider/RiderApp';
 import NotFound from './pages/Page404';
 import RiderTakesOrderApp from './pages/Rider/RiderTakeOrder/RiderTakesOrderApp';
 import RiderCreatBarCodeApp from './pages/Rider/RiderTakeOrder/RiderCreatBarCodeApp';
+import PickUpProductApp from './pages/Rider/PickUpProduct/PickUpProductApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -20,7 +21,8 @@ export default function Router() {
         { element: <Navigate to="/rider/RiderTakesOrderApp" replace /> },
         { path: 'app', element: <RiderApp /> },
         { path: 'RiderTakesOrderApp', element: <RiderTakesOrderApp /> },
-        { path: 'RiderTakesOrderApp/RiderCreatBarCodeApp', element: <RiderCreatBarCodeApp /> }
+        { path: 'RiderTakesOrderApp/RiderCreatBarCodeApp', element: <RiderCreatBarCodeApp /> },
+        { path: 'PickUpProductApp', element: <PickUpProductApp /> }
       ]
     },
     {

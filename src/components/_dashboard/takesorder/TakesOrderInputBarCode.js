@@ -40,6 +40,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
       setLoading(false);
     }, 2500);
     const result = orderList.find((f) => f.id_order_rider_id === valueBarcode);
+
     if (!result) {
       Swal.fire(
         'เราหาเลขออเดอร์นี้ไม่เจอ !!',
@@ -49,16 +50,16 @@ export default function TakesOrderInputBarCode({ orderList }) {
       setOpen(false);
     } else {
       const createReportID =
-        Date.now() + result.order_rider_member_userid + result.order_rider_product_id;
+        Date.now() + result.order_rider_consignee_id + result.order_rider_product_id;
       await TakesOrderCheckStock({ result });
 
       const reportOrder = {
         report_order_id: createReportID,
         id_order_rider_id: result.id_order_rider_id,
-        report_order_member_userid: result.order_rider_member_userid,
+        report_order_member_userid: result.order_rider_consignee_id,
         report_order_product_id: result.order_rider_product_id,
         report_order_product_name: result.order_rider_product_name,
-        report_order_product_amount_in: result.order_rider_Amount,
+        report_order_product_amount_in: result.order_rider_amount,
         report_order_product_amount_out: 0,
         report_order_status: 'รับเข้า'
       };

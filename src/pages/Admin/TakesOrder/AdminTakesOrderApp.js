@@ -174,6 +174,15 @@ export default function AdminTakesOrderApp() {
           <Typography variant="h4" gutterBottom>
             รายชื่อไรเดอร์
           </Typography>
+          <Button
+            color="error"
+            variant="outlined"
+            component={RouterLink}
+            to="/admin/AdminTakesOrderApp/CheckRemainingOrders"
+            startIcon={<Icon icon="fluent:delete-arrow-back-16-regular" width="22" height="22" />}
+          >
+            เช็คออเดอร์ตกค้าง
+          </Button>
         </Stack>
         <Card>
           <TakesOrderListToolbar

@@ -33,7 +33,7 @@ import AdminCutArountAllApp from './pages/Admin/CutArountAll/AdminCutArountAllAp
 import NBACompanyPerfitApp from './pages/Admin/NBACompanyPerfit/NBACompanyPerfitApp';
 import AdminPrintOrderApp from './pages/Admin/CheckOrder/AdminPrintOrderApp';
 import AdminCutArountWalletApp from './pages/Admin/Wallet/AdminCutArountWalletApp';
-
+import CheckRemainingOrders from './pages/Admin/TakesOrder/CheckRemainingOrders';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -62,6 +62,7 @@ export default function Router() {
         { path: 'AdminCutArountApp', element: <AdminCutArountApp /> },
         { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> },
         { path: 'AdminTakesOrderApp/AdminTakesOrderDetail', element: <AdminTakesOrderDetail /> },
+        { path: 'AdminTakesOrderApp/CheckRemainingOrders', element: <CheckRemainingOrders /> },
         {
           path: 'AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp',
           element: <AdminCreateOrderRiderApp />

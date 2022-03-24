@@ -22,6 +22,11 @@ export default async function PercentDetailProvice({ count, OrderFoodExpress, fi
         percent_order_detail_provice: filterLevel[0].percent_provice,
         percent_order_detail_nba: filterLevel[0].percent_nba,
         percent_value_detail: (value.productPrice * (100 / 107) - value.productCost) * value.amount,
+        percent_older_value_detail_subdistrict: 0,
+        percent_older_value_detail_district: 0,
+        percent_older_value_detail_provice:
+          (value.productPrice * (100 / 107) - value.productCost) *
+          (value.amount * filterLevel[0].percent_provice),
         percent_value_detail_subdistrict: 0,
         percent_value_detail_district: 0,
         percent_value_detail_provice:

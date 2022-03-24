@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import faker from 'faker';
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
@@ -40,7 +41,15 @@ NotificationItem.propTypes = {
 
 function NotificationItem({ notification }) {
   // const { avatar, title } = renderContent(notification);
-  const title = `${notification.order_status} ${notification.province}`;
+  let setLevel = null;
+  if (notification.level === 'province') {
+    setLevel = 'ระดับจังหวัด';
+  } else if (notification.level === 'district') {
+    setLevel = 'ระดับอำเภอ';
+  } else if (notification.level === 'subdistrict') {
+    setLevel = 'ระดับตำบล';
+  }
+  const title = `มีออเดอร์ของ ${setLevel} จ.${notification.province}`;
   const today = new Date(notification.order_product_date);
   today.setHours(today.getHours() - 7);
   return (
@@ -59,11 +68,23 @@ function NotificationItem({ notification }) {
     >
       <ListItemAvatar>
         <Avatar sx={{ bgcolor: 'background.neutral' }}>
-          <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />
+          <img alt={notification.title} src={require('../../assets/img/Alert.png').default} />
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={title}
+        primary={
+          <Typography
+            variant="caption"
+            sx={{
+              mt: 0.5,
+              display: 'flex',
+              alignItems: 'center',
+              color: 'text.disabled'
+            }}
+          >
+            {title}
+          </Typography>
+        }
         secondary={
           <Typography
             variant="caption"
@@ -91,8 +112,11 @@ export default function NotificationsPopover() {
   const [Total, setTotal] = useState([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getAllOrder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member`);
+    const getAllOrder = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrderAndMember`
+    );
     const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
+    console.log(filterStatusOrder);
     setTotal(filterStatusOrder);
     setNotifications(filterStatusOrder);
   }, []);

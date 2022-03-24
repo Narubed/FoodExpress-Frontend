@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
+import ReactToPrint from 'react-to-print';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
@@ -25,7 +26,7 @@ import {
   TableContainer,
   TablePagination,
   Badge,
-  TextField,
+  Tooltip,
   Button
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -50,6 +51,8 @@ const TABLE_HEAD = [
   // { id: 'wallet_slip', label: 'Slip', alignRight: false },
   // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
   { id: 'report_wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'หัก3%', label: 'หัก3%', alignRight: false },
+  { id: 'ยอดสุทธิ', label: 'ยอดสุทธิ', alignRight: false },
   { id: 'subdistrict', label: 'ตำบล', alignRight: false },
   { id: 'district', label: 'อำเภอ', alignRight: false },
   { id: 'province', label: 'จังหวัด', alignRight: false },
@@ -130,6 +133,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function AdminCutArountWalletApp() {
   const dispatch = useDispatch();
+  let componentRef = useRef();
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [WalletMemberlist, setWalletMemberlist] = useState([]);
@@ -199,6 +203,17 @@ function AdminCutArountWalletApp() {
             <Typography variant="h4" gutterBottom>
               Commission
             </Typography>
+
+            <ReactToPrint
+              trigger={() => (
+                <Tooltip title="ปริ้นข้อมูลในตาราง">
+                  <Button>
+                    <Icon icon="flat-color-icons:print" width={32} height={32} />
+                  </Button>
+                </Tooltip>
+              )}
+              content={() => componentRef}
+            />
           </Stack>
 
           <Card>
@@ -212,120 +227,128 @@ function AdminCutArountWalletApp() {
             />
 
             <Scrollbar>
-              <TableContainer sx={{ minWidth: 800 }}>
-                <Table>
-                  <WalletListHead
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={WalletMemberlist.length}
-                    numSelected={selected.length}
-                    onRequestSort={handleRequestSort}
-                    onSelectAllClick={handleSelectAllClick}
-                  />
-                  <TableBody>
-                    {filteredWallet
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row) => {
-                        const {
-                          id_report_wallet_member_express,
-                          level,
-                          firstname,
-                          report_wallet_member_total,
-                          subdistrict,
-                          district,
-                          province,
-                          report_wallet_member_status,
-                          report_wallet_member_timestamp,
-                          report_wallet_member_slip
-                        } = row;
-                        const isItemSelected =
-                          selected.indexOf(id_report_wallet_member_express) !== -1;
-
-                        return (
-                          <TableRow
-                            hover
-                            key={id_report_wallet_member_express}
-                            tabIndex={-1}
-                            role="checkbox"
-                            selected={isItemSelected}
-                            aria-checked={isItemSelected}
-                          >
-                            <TableCell padding="checkbox" />
-                            <TableCell component="th" scope="row" padding="none">
-                              <Stack direction="row" alignItems="center" spacing={2}>
-                                <Typography variant="subtitle2" noWrap>
-                                  {level === 'province' ? (
-                                    <Label color="pink"> ระดับจังหวัด</Label>
-                                  ) : null}
-                                  {level === 'district' ? (
-                                    <Label color="lightBlue"> ระดับอำเภอ</Label>
-                                  ) : null}
-                                  {level === 'subdistrict' ? (
-                                    <Label color="amber"> ระดับตำบล</Label>
-                                  ) : null}
-                                  {/* <Label color="blueGray"> {level}</Label> */}
-                                </Typography>
-                              </Stack>
-                            </TableCell>
-                            <TableCell align="left">{firstname}</TableCell>
-
-                            <TableCell align="left">
-                              {numeral(report_wallet_member_total).format('0,0.000')}
-                            </TableCell>
-                            <TableCell align="left">{subdistrict}</TableCell>
-                            <TableCell align="left">{district}</TableCell>
-                            <TableCell align="left">{province}</TableCell>
-                            <TableCell align="left">
-                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
-                                <Label color="pink"> {report_wallet_member_status}</Label>
-                              ) : (
-                                <Label color="green"> {report_wallet_member_status}</Label>
-                              )}
-                            </TableCell>
-                            <TableCell align="left">
-                              <Label color="lightGreen">
-                                {report_wallet_member_timestamp
-                                  ? dayjs(report_wallet_member_timestamp)
-                                      .locale('th')
-                                      .format('DD MMMM YYYY')
-                                  : null}
-                              </Label>{' '}
-                            </TableCell>
-
-                            <TableCell align="left">
-                              {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
-                                <StyledBadge
-                                  overlap="circular"
-                                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                  variant="dot"
-                                >
-                                  <WalletPutSlip />
-                                </StyledBadge>
-                              ) : (
-                                <WalletImage images={report_wallet_member_slip} />
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                  {isUserNotFound && (
+              <div ref={(el) => (componentRef = el)}>
+                <TableContainer sx={{ minWidth: 800 }}>
+                  <Table>
+                    <WalletListHead
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={WalletMemberlist.length}
+                      numSelected={selected.length}
+                      onRequestSort={handleRequestSort}
+                      onSelectAllClick={handleSelectAllClick}
+                    />
                     <TableBody>
-                      <TableRow>
-                        <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={filterName} />
-                        </TableCell>
-                      </TableRow>
+                      {filteredWallet
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row) => {
+                          const {
+                            id_report_wallet_member_express,
+                            level,
+                            firstname,
+                            report_wallet_member_older_total,
+                            report_wallet_member_total,
+                            report_wallet_member_3,
+                            subdistrict,
+                            district,
+                            province,
+                            report_wallet_member_status,
+                            report_wallet_member_timestamp,
+                            report_wallet_member_slip
+                          } = row;
+                          const isItemSelected =
+                            selected.indexOf(id_report_wallet_member_express) !== -1;
+
+                          return (
+                            <TableRow
+                              hover
+                              key={id_report_wallet_member_express}
+                              tabIndex={-1}
+                              role="checkbox"
+                              selected={isItemSelected}
+                              aria-checked={isItemSelected}
+                            >
+                              <TableCell padding="checkbox" />
+                              <TableCell component="th" scope="row" padding="none">
+                                <Stack direction="row" alignItems="center" spacing={2}>
+                                  <Typography variant="subtitle2" noWrap>
+                                    {level === 'province' ? (
+                                      <Label color="pink"> ระดับจังหวัด</Label>
+                                    ) : null}
+                                    {level === 'district' ? (
+                                      <Label color="lightBlue"> ระดับอำเภอ</Label>
+                                    ) : null}
+                                    {level === 'subdistrict' ? (
+                                      <Label color="amber"> ระดับตำบล</Label>
+                                    ) : null}
+                                    {/* <Label color="blueGray"> {level}</Label> */}
+                                  </Typography>
+                                </Stack>
+                              </TableCell>
+                              <TableCell align="left">{firstname}</TableCell>
+                              <TableCell align="left">
+                                {numeral(report_wallet_member_older_total).format('0,0.000')}
+                              </TableCell>
+                              <TableCell align="left">
+                                {numeral(report_wallet_member_3).format('0,0.000')}
+                              </TableCell>
+                              <TableCell align="left">
+                                {numeral(report_wallet_member_total).format('0,0.000')}
+                              </TableCell>
+                              <TableCell align="left">{subdistrict}</TableCell>
+                              <TableCell align="left">{district}</TableCell>
+                              <TableCell align="left">{province}</TableCell>
+                              <TableCell align="left">
+                                {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                  <Label color="pink"> {report_wallet_member_status}</Label>
+                                ) : (
+                                  <Label color="green"> {report_wallet_member_status}</Label>
+                                )}
+                              </TableCell>
+                              <TableCell align="left">
+                                <Label color="lightGreen">
+                                  {report_wallet_member_timestamp
+                                    ? dayjs(report_wallet_member_timestamp)
+                                        .locale('th')
+                                        .format('DD MMMM YYYY')
+                                    : null}
+                                </Label>{' '}
+                              </TableCell>
+                              <TableCell align="left">
+                                {report_wallet_member_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                  <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                  >
+                                    <WalletPutSlip row={row} />
+                                  </StyledBadge>
+                                ) : (
+                                  <WalletImage images={report_wallet_member_slip} />
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                          <TableCell colSpan={6} />
+                        </TableRow>
+                      )}
                     </TableBody>
-                  )}
-                </Table>
-              </TableContainer>
+                    {isUserNotFound && (
+                      <TableBody>
+                        <TableRow>
+                          <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                            <SearchNotFound searchQuery={filterName} />
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    )}
+                  </Table>
+                </TableContainer>
+              </div>
             </Scrollbar>
 
             <TablePagination

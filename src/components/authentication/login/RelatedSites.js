@@ -41,7 +41,8 @@ export default function RelatedSites() {
               onClick={() => window.open('https://nbadigitalworlds.com/2021/index.html', '_blank')}
             >
               <Image
-                src="https://pbs.twimg.com/profile_images/1322478404625600513/Nv3hd_Dr_400x400.jpg"
+                // eslint-disable-next-line global-require
+                src={require('../../../assets/img/NBA1.jpg').default}
                 rounded
                 raised={false}
                 alt="Image"
@@ -59,7 +60,8 @@ export default function RelatedSites() {
               onClick={() => window.open('https://e-branch2.nbadigitalworlds.com/', '_blank')}
             >
               <Image
-                src="https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.6435-9/124823904_134675811738789_1925878336350011621_n.png?_nc_cat=104&ccb=1-5&_nc_sid=174925&_nc_eui2=AeG6o8kTpsVBbFMNWUGtCgHkPFCBLS2fxIs8UIEtLZ_Ei0igB_kUMl6bVDubn8fpPMGWB54HtSt9DuyBjMqFBQmH&_nc_ohc=vyXyeUR6SHsAX-CHG2I&_nc_ht=scontent.fcnx2-1.fna&oh=00_AT_qjqCvZVtsc5xdEEuI9llHxjEKWiPdnmZ9PYdZkvRxvA&oe=62299117"
+                // eslint-disable-next-line global-require
+                src={require('../../../assets/img/NBA2.png').default}
                 rounded
                 raised={false}
                 alt="Image"
@@ -75,7 +77,8 @@ export default function RelatedSites() {
             onClick={() => window.open('https://e-transfer.nbadigitalworlds.com/', '_blank')}
           >
             <Image
-              src="https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.6435-9/120018763_101101201762917_3238496539064837074_n.png?_nc_cat=110&ccb=1-5&_nc_sid=174925&_nc_eui2=AeH6te0pt9UuEl0LtUAHAOQZSPfFIlU6KX9I98UiVTopf9VVABc1klm1grBvG8hLAUuEahtghANNvfbC0KaD-9v1&_nc_ohc=6wRi0OZNqugAX-syYmt&_nc_ht=scontent.fcnx2-1.fna&oh=00_AT9gfT0939QpocmUMHoumOJnXk-BKePy8K8woIxXVZPPQg&oe=6225FF46"
+              // eslint-disable-next-line global-require
+              src={require('../../../assets/img/NBA3.png').default}
               rounded
               raised={false}
               alt="Image"

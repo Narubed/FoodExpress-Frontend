@@ -47,14 +47,14 @@ export default function AdminCreateCompanyApp() {
       .min(2, 'Too Short!')
       .max(100, 'Too Long!')
       .required('Address name required'),
-    company_login_id: Yup.string()
-      .min(2, 'Too Short!')
-      .max(100, 'Too Long!')
-      .required('ID Login is  required'),
-    company_login_pw: Yup.string()
-      .min(2, 'Too Short!')
-      .max(100, 'Too Long!')
-      .required('password is  required'),
+    // company_login_id: Yup.string()
+    //   .min(2, 'Too Short!')
+    //   .max(100, 'Too Long!')
+    //   .required('ID Login is  required'),
+    // company_login_pw: Yup.string()
+    //   .min(2, 'Too Short!')
+    //   .max(100, 'Too Long!')
+    //   .required('password is  required'),
     company_taxpayer_number: Yup.string()
       .min(1, 'Too Short!')
       .max(100, 'Too Long!')

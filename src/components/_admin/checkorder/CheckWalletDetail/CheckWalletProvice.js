@@ -11,7 +11,7 @@ export default async function CheckWalletProvice(myUser, percentOrderDetail) {
     (f) => f.wallet_member_id_express === myUser.userId
   );
   const reducePercentMe = percentOrderDetail.reduce(
-    (sum, percent) => sum + percent.percent_value_detail_provice,
+    (sum, percent) => sum + percent.percent_older_value_detail_provice,
     0
   );
   if (filterWalletMyUserID.length !== 0) {

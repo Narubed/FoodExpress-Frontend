@@ -30,7 +30,7 @@ export default function WalletImage(images) {
         ripple="dark"
         onClick={() => setShowModal(true)}
       >
-        <Icon icon="twemoji:check-mark-button" width={22} height={22} />
+        <Icon icon="mdi:eye-check-outline" width={26} height={26} />
       </Button>
       <Modal size="sm" active={showModal} toggler={() => setShowModal(false)}>
         {/* <ModalHeader toggler={() => setShowModal(false)}>{Name}</ModalHeader> */}

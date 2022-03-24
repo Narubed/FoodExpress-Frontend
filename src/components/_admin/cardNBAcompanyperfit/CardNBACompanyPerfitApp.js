@@ -86,7 +86,7 @@ export default function AppCardCutArountAll(props) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getOrderDetail = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_Member/`
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoin_order_detail_member/`
     );
     const filterStatusOrderMember = getOrderDetail.data.data.filter(
       (f) => f.order_status === 'รอจัดส่ง' || f.order_status === 'จัดส่งสำเร็จ'
@@ -102,12 +102,13 @@ export default function AppCardCutArountAll(props) {
       const idx = filteredsProvince.findIndex((value) => value.userId === item.userId);
       if (idx !== -1) {
         // eslint-disable-next-line operator-assignment
-        filteredsProvince[idx].order_percent_nba =
-          filteredsProvince[idx].order_percent_nba + item.order_percent_nba;
+        filteredsProvince[idx].percent_value_detail_nba =
+          filteredsProvince[idx].percent_value_detail_nba + item.percent_value_detail_nba;
       } else {
         filteredsProvince.push(item);
       }
     });
+    console.log(filteredsProvince);
     setDataOrderDetail(filteredsProvince);
     setShowModal(true);
   };
@@ -126,7 +127,7 @@ export default function AppCardCutArountAll(props) {
               ยอดรวมของจังหวัด :{props.props.province}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {numeral(props.props.order_percent_nba).format()} บาท
+              {numeral(props.props.percent_value_detail_nba).format('0,0.000')} บาท
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -212,7 +213,7 @@ export default function AppCardCutArountAll(props) {
                               <td className="px-6 py-4 whitespace-nowrap">{data.province}</td>
                               {/* <td className="px-6 py-4 whitespace-nowrap">{data.currency}</td> */}
                               <td className="px-6 py-4 whitespace-nowrap">
-                                {numeral(data.order_percent_nba).format()} บาท
+                                {numeral(data.percent_value_detail_nba).format('0,0.000')} บาท
                               </td>
 
                               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" />
