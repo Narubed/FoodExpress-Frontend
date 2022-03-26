@@ -23,6 +23,7 @@ import {
   TablePagination,
   Badge
 } from '@mui/material';
+import Label from '@material-tailwind/react/Label';
 import Image from '@material-tailwind/react/Image';
 import { styled } from '@mui/material/styles';
 // components
@@ -39,6 +40,7 @@ import {
 const TABLE_HEAD = [
   { id: 'admin_first_name', label: 'ชื่อ', alignRight: false },
   { id: 'admin_last_name', label: 'นามสกุล', alignRight: false },
+  { id: 'admin_level', label: 'level', admin_level: false },
   { id: 'admin_id_login', label: 'Login ID', alignRight: false },
   { id: 'admin_pw_login', label: 'Login Password', alignRight: false },
   { id: '' }
@@ -142,43 +144,13 @@ export default function User() {
     setSelected_id([]);
   };
 
-  const handleClick = (event, name, id) => {
-    const selectedIndex = selected.indexOf(name);
-    const selectedIndexid = selected_id.indexOf(id);
-    let newSelected = [];
-    let newSelectedid = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-      newSelectedid = newSelectedid.concat(selected_id, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-      newSelectedid = newSelectedid.concat(selected_id.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-      newSelectedid = newSelectedid.concat(
-        selected_id.slice(0, selectedIndexid),
-        selected_id.slice(selectedIndexid + 1)
-      );
-    }
-    setSelected(newSelected);
-    setSelected_id(newSelectedid);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
@@ -197,6 +169,9 @@ export default function User() {
             ผู้ดูแลระบบทั้งหมด
           </Typography>
           <Button
+            sx={{
+              bgcolor: 'purple'
+            }}
             variant="contained"
             component={RouterLink}
             to="/admin/ChangeAdminApp/CreateAdminApp"
@@ -236,63 +211,74 @@ export default function User() {
                         admin_id_login,
                         admin_pw_login,
                         admin_first_name,
-                        admin_last_name
+                        admin_last_name,
+                        admin_level
                       } = row;
                       const isItemSelected = selected.indexOf(admin_first_name) !== -1;
 
                       return (
-                        <TableRow
-                          hover
-                          key={admin_auto_id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            {/* <Checkbox
+                        <>
+                          <TableRow
+                            hover
+                            key={admin_auto_id}
+                            tabIndex={-1}
+                            role="checkbox"
+                            selected={isItemSelected}
+                            aria-checked={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              {/* <Checkbox
                               checked={isItemSelected}
                               onChange={(event) =>
                                 handleClick(event, admin_first_name, admin_auto_id)
                               }
                             /> */}
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <StyledBadge
-                                overlap="circular"
-                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                variant="dot"
-                              >
-                                <Image
-                                  className="h-10 w-10 rounded-full"
-                                  // eslint-disable-next-line react/jsx-curly-brace-presence
-                                  src={
-                                    'https://as1.ftcdn.net/v2/jpg/00/07/32/48/1000_F_7324864_FXazuBCI3dQBwIWY7gaWQzXskXJaTbrY.jpg'
-                                  }
-                                  alt=""
-                                />
-                              </StyledBadge>
-                              <Typography variant="subtitle2" noWrap>
-                                {admin_first_name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{admin_last_name}</TableCell>
-                          <TableCell align="left">{admin_id_login}</TableCell>
-                          <TableCell align="left">{admin_pw_login}</TableCell>
+                            </TableCell>
+                            <TableCell component="th" scope="row" padding="none">
+                              <Stack direction="row" alignItems="center" spacing={2}>
+                                <StyledBadge
+                                  overlap="circular"
+                                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                  variant="dot"
+                                >
+                                  <Image
+                                    className="h-10 w-10 rounded-full"
+                                    // eslint-disable-next-line react/jsx-curly-brace-presence
+                                    src={
+                                      'https://as1.ftcdn.net/v2/jpg/00/07/32/48/1000_F_7324864_FXazuBCI3dQBwIWY7gaWQzXskXJaTbrY.jpg'
+                                    }
+                                    alt=""
+                                  />
+                                </StyledBadge>
+                                <Typography variant="subtitle2" noWrap>
+                                  {admin_first_name}
+                                </Typography>
+                              </Stack>
+                            </TableCell>
+                            <TableCell align="left">{admin_last_name}</TableCell>
+                            <TableCell align="left">
+                              {admin_level === 'ManagerAdmin' ? (
+                                <Label color="lightBlue">ผู้ดูแลระบบขั้นสูง</Label>
+                              ) : (
+                                <Label color="lightGreen">ผู้ดูแลระบบทั่วไป</Label>
+                              )}
+                            </TableCell>
+                            <TableCell align="left">{admin_id_login}</TableCell>
+                            <TableCell align="left">{admin_pw_login}</TableCell>
 
-                          <TableCell align="right">
-                            <AdminMoreMenu
-                              // id={rider_id}
-                              admin_auto_id={admin_auto_id}
-                              admin_id_login={admin_id_login}
-                              admin_pw_login={admin_pw_login}
-                              admin_first_name={admin_first_name}
-                              admin_last_name={admin_last_name}
-                            />
-                          </TableCell>
-                        </TableRow>
+                            <TableCell align="right">
+                              <AdminMoreMenu
+                                // id={rider_id}
+                                row={row}
+                                admin_auto_id={admin_auto_id}
+                                admin_id_login={admin_id_login}
+                                admin_pw_login={admin_pw_login}
+                                admin_first_name={admin_first_name}
+                                admin_last_name={admin_last_name}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </>
                       );
                     })}
                   {emptyRows > 0 && (

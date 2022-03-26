@@ -92,25 +92,26 @@ export default function AccountPopover() {
           </Box>
           หน้าหลัก
         </MenuItem>
-
-        <MenuItem
-          key={4}
-          to="/admin/ChangeAdminApp"
-          component={RouterLink}
-          onClick={handleClose}
-          sx={{ typography: 'body2', py: 1, px: 2.5 }}
-        >
-          <Box
-            sx={{
-              mr: 2,
-              width: 24,
-              height: 24
-            }}
+        {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+          <MenuItem
+            key={4}
+            to="/admin/ChangeAdminApp"
+            component={RouterLink}
+            onClick={handleClose}
+            sx={{ typography: 'body2', py: 1, px: 2.5 }}
           >
-            <Icon icon="noto:hotel" width="24" height="24" />
-          </Box>
-          จัดการผู้ดูแลระบบ
-        </MenuItem>
+            <Box
+              sx={{
+                mr: 2,
+                width: 24,
+                height: 24
+              }}
+            >
+              <Icon icon="noto:hotel" width="24" height="24" />
+            </Box>
+            จัดการผู้ดูแลระบบ
+          </MenuItem>
+        ) : null}
         <MenuItem
           key={5}
           to="/admin/AdminCutArountAllApp"
@@ -129,24 +130,26 @@ export default function AccountPopover() {
           </Box>
           รายการที่ถูกตัดรอบไปเเล้ว
         </MenuItem>
-        <MenuItem
-          key={6}
-          to="/admin/NBACompanyPerfitApp"
-          component={RouterLink}
-          onClick={handleClose}
-          sx={{ typography: 'body2', py: 1, px: 2.5 }}
-        >
-          <Box
-            sx={{
-              mr: 2,
-              width: 24,
-              height: 24
-            }}
+        {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+          <MenuItem
+            key={6}
+            to="/admin/NBACompanyPerfitApp"
+            component={RouterLink}
+            onClick={handleClose}
+            sx={{ typography: 'body2', py: 1, px: 2.5 }}
           >
-            <Icon icon="noto-v1:money-bag" width="24" height="24" />
-          </Box>
-          กำไรทั้งหมดของบริษัท
-        </MenuItem>
+            <Box
+              sx={{
+                mr: 2,
+                width: 24,
+                height: 24
+              }}
+            >
+              <Icon icon="noto-v1:money-bag" width="24" height="24" />
+            </Box>
+            กำไรทั้งหมดของบริษัท
+          </MenuItem>
+        ) : null}
         <MenuItem
           key={2}
           to="/admin/AnnounceSlide"

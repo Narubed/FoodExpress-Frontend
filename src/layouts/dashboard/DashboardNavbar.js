@@ -10,7 +10,9 @@ import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // components
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { purple } from '@mui/material/colors';
 import { MHidden } from '../../components/@material-extend';
+
 //
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';

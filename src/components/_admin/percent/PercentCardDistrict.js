@@ -117,6 +117,7 @@ export default function PercentCardProvice() {
           {' '}
           <div className="h-56 grid grid-cols-3 gap-4 content-between">
             <Button
+              disabled={sessionStorage.getItem('level') !== 'ManagerAdmin'}
               color="green"
               buttonType="outline"
               size="regular"

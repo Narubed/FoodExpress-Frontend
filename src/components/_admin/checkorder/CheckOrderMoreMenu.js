@@ -31,14 +31,12 @@ import {
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 
 import CheckWalletMember from './CheckWalletMember';
-import Scrollbar from '../../Scrollbar';
+import EditAmountOrder from './EditAmountOrder';
+import postActionAdmin from '../../../utils/postActionAdmin';
+
 // ----------------------------------------------------------------------
 CheckOrderMoreMenu.propTypes = {
   order_id: PropTypes.number,
@@ -60,7 +58,6 @@ export default function CheckOrderMoreMenu(props) {
       // eslint-disable-next-line camelcase
       `${process.env.REACT_APP_WEB_BACKEND}/getByOrderDetail_id/${order_id}`
     );
-    console.log(data.data.data);
     setOrderDetail(data.data.data);
     setShowModal(true);
   };
@@ -68,6 +65,14 @@ export default function CheckOrderMoreMenu(props) {
     const data = {
       order_id,
       order_status: 'ผู้ดูแลระบบยกเลิก'
+    };
+    const dataReport = `ได้ทำการยืนยันการยกเลิกออเดอร์หมายเลข ${order_id} จำนวนเงิน ${row.order_product_total}`;
+    const postReportAdmin = {
+      id_report_action_admin: Date.now().toString() + order_id,
+      report_action_admin_id: sessionStorage.getItem('user'),
+      report_action_order_id: order_id,
+      report_action_admin_value: dataReport,
+      report_action_admin_date: new Date()
     };
     Swal.fire({
       title: 'Are you sure?',
@@ -81,6 +86,7 @@ export default function CheckOrderMoreMenu(props) {
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        postActionAdmin(postReportAdmin);
         dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
@@ -102,6 +108,14 @@ export default function CheckOrderMoreMenu(props) {
       order_id,
       order_status: 'รอจัดส่ง'
     };
+    const dataReport = `ได้ทำการยืนยันการโอนเงินของออเดอร์หมายเลข ${order_id} จำนวนเงิน ${row.order_product_total}`;
+    const postReportAdmin = {
+      id_report_action_admin: Date.now().toString() + order_id,
+      report_action_admin_id: sessionStorage.getItem('user'),
+      report_action_order_id: order_id,
+      report_action_admin_value: dataReport,
+      report_action_admin_date: new Date()
+    };
 
     Swal.fire({
       title: 'Are you sure?',
@@ -116,6 +130,7 @@ export default function CheckOrderMoreMenu(props) {
         dispatch({ type: 'OPEN' });
         await CheckWalletMember(order_id, order_product_total, order_status, order_member_id);
         await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putStatusOrder`, data);
+        postActionAdmin(postReportAdmin);
         dispatch({ type: 'TURNOFF' });
         Swal.fire({
           position: '',
@@ -126,6 +141,38 @@ export default function CheckOrderMoreMenu(props) {
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Cancelled', 'คุณทำการยกเลิกการยืนยันการโอนเงิน :)', 'error');
+      }
+    });
+  };
+  const confirmEditAmountOrderDetail = (req) => {
+    console.log(req);
+    setShowModal(false);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการแก้ไขออเดอร์นี้หรือไม่ !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ยืนยัน!',
+      cancelButtonText: 'ยกเลิก!',
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch({ type: 'OPEN' });
+        await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putAmountOrderDetail`, req.data);
+        postActionAdmin(req.postReportAdmin);
+        dispatch({ type: 'TURNOFF' });
+        Swal.fire({
+          position: '',
+          icon: 'success',
+          title: 'คุณได้ยืนยันการแก้ไขออเดอร์นี้เเล้ว ',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire('Cancelled', 'คุณทำการออกจากการแก้ไขออเดอร์ :)', 'error');
       }
     });
   };
@@ -186,7 +233,7 @@ export default function CheckOrderMoreMenu(props) {
           onClose={() => setShowModal(false)}
           TransitionComponent={Transition}
         >
-          <DialogTitle>รายระเอียดออเดอร์</DialogTitle>
+          <DialogTitle>รายละเอียดออเดอร์</DialogTitle>
           <DialogContent>
             {' '}
             <div className="px-6 py-3 text-left text-sm font-medium text-gray-900 uppercase tracking-wider">
@@ -277,6 +324,12 @@ export default function CheckOrderMoreMenu(props) {
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {person.order_company_status}
                               </td>
+                              {order_status === 'รอจัดส่ง' ? (
+                                <EditAmountOrder
+                                  person={person}
+                                  confirmEditAmountOrderDetail={confirmEditAmountOrderDetail}
+                                />
+                              ) : null}
                             </tr>
                           ))}
                         </tbody>
@@ -289,12 +342,7 @@ export default function CheckOrderMoreMenu(props) {
             {/* </Scrollbar> */}
           </DialogContent>
           <DialogActions>
-            <Button
-              color="red"
-              buttonType="link"
-              onClick={(e) => setShowModal(false)}
-              ripple="dark"
-            >
+            <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
               Close
             </Button>
           </DialogActions>

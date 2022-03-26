@@ -7,6 +7,8 @@ import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import swal from 'sweetalert';
 import Swal from 'sweetalert2';
+import { styled } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 // material
 import {
   Link,
@@ -47,6 +49,21 @@ async function loginAdmin(credentials) {
     body: JSON.stringify(credentials)
   }).then((data) => data.json());
 }
+const ColorButton = styled(LoadingButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[700]
+  }
+}));
+const ColorLink = styled(Link)(({ theme }) => ({
+  contrastText: theme.palette.getContrastText(purple[500]),
+  color: purple[500],
+  '&:hover': {
+    contrastText: purple[700]
+  }
+}));
+
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -116,6 +133,7 @@ export default function LoginForm() {
           setPasswords
         });
         if ('accessToken' in response) {
+          console.log(response);
           swal('ข้อมูลถูกต้อง', 'ยินดีต้อนรับเข้าสู่ระบบการซื้อขาย', 'success', {
             buttons: false,
             timer: 2000
@@ -126,7 +144,8 @@ export default function LoginForm() {
             sessionStorage.setItem('firstname', response.data.admin_first_name);
             sessionStorage.setItem('lastname', response.data.admin_last_name);
             sessionStorage.setItem('role', 'Admin');
-            sessionStorage.setItem('level', 'Admin');
+            sessionStorage.setItem('level', response.data.admin_level);
+
             // navigate('/dashboard', { replace: true });
             window.location.href = '/';
           });
@@ -156,6 +175,7 @@ export default function LoginForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <TextField
+            color="secondary"
             fullWidth
             autoComplete="username"
             type="text"
@@ -166,6 +186,7 @@ export default function LoginForm() {
           />
 
           <TextField
+            color="secondary"
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
@@ -187,24 +208,33 @@ export default function LoginForm() {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
+            control={
+              <Checkbox
+                style={{
+                  color: '#800080'
+                }}
+                {...getFieldProps('remember')}
+                checked={values.remember}
+              />
+            }
             label="Remember me"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to="/ForgotPassword">
+          <ColorLink component={RouterLink} variant="subtitle2" to="/ForgotPassword">
             Forgot password?
-          </Link>
+          </ColorLink>
         </Stack>
 
-        <LoadingButton
+        <ColorButton
+          // styled
           fullWidth
           size="large"
           type="submit"
           variant="contained"
           loading={isSubmitting}
         >
-          Login
-        </LoadingButton>
+          เข้าสู่ระบบ
+        </ColorButton>
       </Form>
     </FormikProvider>
   );

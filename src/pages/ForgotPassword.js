@@ -45,13 +45,8 @@ export default function ForgotPassword() {
       <AuthLayout />
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h5" sx={{ px: 5, mt: 10, mb: 5 }}>
-            <div>
-              หากไม่สามารถเปลี่ยนรหัสผ่านได้ <br />
-              กรุณาติดต่อผู้ดูเเลระบบ
-            </div>
-          </Typography>
-          <img alt="register" src="/static/illustrations/illustration_register.png" />
+          <Typography variant="h5" sx={{ px: 5, mt: 10, mb: 5 }} />
+          <img alt="register" src="/static/illustrations/icon 01-02.png" />
         </SectionStyle>
       </MHidden>
 

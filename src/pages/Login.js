@@ -27,7 +27,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
 }));
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  maxWidth: 480,
+  maxWidth: 560,
   margin: 'auto',
   display: 'flex',
   minHeight: '100vh',
@@ -50,10 +50,8 @@ export default function Login() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h4" sx={{ px: 5, mt: 10, mb: 5 }}>
-            <div>ยินดีต้อนรับสู่ NBA Food Express</div>
-          </Typography>
-          <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <Typography variant="h4" sx={{ px: 3, mt: 10, mb: 3 }} />
+          <img src="/static/illustrations/icon 01-01.png" alt="login" />
           <RelatedSites />
         </SectionStyle>
       </MHidden>

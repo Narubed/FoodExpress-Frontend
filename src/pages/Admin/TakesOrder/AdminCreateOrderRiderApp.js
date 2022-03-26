@@ -3,44 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import eyeFill from '@iconify/icons-eva/eye-fill';
-import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import Input from '@material-tailwind/react/Input';
-import Modal from '@material-tailwind/react/Modal';
-import ModalHeader from '@material-tailwind/react/ModalHeader';
-import ModalBody from '@material-tailwind/react/ModalBody';
-import ModalFooter from '@material-tailwind/react/ModalFooter';
-import ButtonT from '@material-tailwind/react/Button';
-import Label from '@material-tailwind/react/Label';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TimePicker from '@mui/lab/TimePicker';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import MobileDatePicker from '@mui/lab/MobileDatePicker';
-
 // material
 import { LoadingButton } from '@mui/lab';
 import {
   Stack,
   TextField,
-  IconButton,
-  InputAdornment,
-  Card,
-  Table,
-  Avatar,
   Button,
-  Checkbox,
-  TableRow,
-  TableBody,
-  TableCell,
   Container,
   Typography,
-  TableContainer,
-  TablePagination,
   MenuItem,
   Box,
   Dialog,
@@ -57,7 +30,6 @@ import {
 } from '@mui/material';
 // companent
 import Page from '../../../components/Page';
-import Scrollbar from '../../../components/Scrollbar';
 import DealerCompany from '../../../components/_admin/takesorder/CreateOrderRider/DealerCompany';
 import DealerRider from '../../../components/_admin/takesorder/CreateOrderRider/DealerRider';
 import ConsigneeMember from '../../../components/_admin/takesorder/CreateOrderRider/ConsigneeMember';
@@ -82,20 +54,19 @@ export default function RegisterForm() {
   const [SelectConsignee, setSelectConsignee] = useState(null); // เลือกที่จะจัดส่งเเล้ว
   const [TextConsignee, setTextConsignee] = useState('');
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [IDCutArount, setIDCutArount] = useState();
   const [dataPostExpress, setPostExpress] = useState();
 
   const [RadioDealer, setRadioDealer] = useState([]);
   const [RadioConsignee, setRadioConsignee] = useState([]);
 
-  const RegisterSchema = Yup.object().shape({
-    product_amount: Yup.number().required('product_amount is required')
-  });
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const ProductType = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getJoinProductType`);
+    const ProductType = await axios.get(
+      `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrder_detail_cutarount`
+    );
     setProductType(ProductType.data.data);
   }, []);
   dispatch({ type: 'TURNOFF' });
@@ -137,14 +108,14 @@ export default function RegisterForm() {
       ConsigneeName = SelectConsignee.firstname;
     }
     const orderRiderId = Date.now() + localStorage.getItem('rider_id') + 12;
-    const filterProductID = ProductType.filter((f) => f.productName === SelectProducts.productName);
+    // const filterProductID = ProductType.filter((f) => f.productName === SelectProducts.productName);
     const data = {
       id_order_rider_id: orderRiderId,
       order_rider_id: localStorage.getItem('rider_id'),
-      order_rider_product_id: filterProductID[0].productid,
-      order_rider_product_name: SelectProducts.productName,
-      order_rider_amount: parseInt(e.product_amount, 10),
-      order_rider_currency: SelectProducts.currency,
+      order_rider_product_id: SelectProducts.order_product_id,
+      order_rider_product_name: SelectProducts.order_product_name,
+      order_rider_amount: SelectProducts.order_product_amoumt,
+      order_rider_currency: SelectProducts.order_product_currency,
       order_rider_dealer_type: DealersTypes,
       order_rider_dealer_name: DealersName,
       order_rider_dealer_id: DealersID[0],
@@ -153,17 +124,39 @@ export default function RegisterForm() {
       order_rider_consignee_name: ConsigneeName,
       order_rider_consignee_id: ConsigneeID[0],
       order_rider_consignee_note: NodeConsignee[0],
-      order_rider_status: 'ไรเดอร์รับมอบหมายงานแล้ว'
+      order_rider_status: 'ไรเดอร์รับมอบหมายงานแล้ว',
+      order_rider_cut_arount_id: parseInt(ProductType[0].cut_arount_id, 10),
+      order_rider_date_cut_arount: ProductType[0].cut_arount_date,
+      order_rider_province_cut_arount: ProductType[0].cut_arount_province
     };
-    setPostExpress(data);
-    setOpen(true);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'ตกลง!',
+      cancelButtonText: 'ยกเลิก!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Confirm !',
+          text: 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        dispatch({ type: 'OPEN' });
+        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, data);
+
+        setTimeout(() => {
+          dispatch({ type: 'TURNOFF' });
+        }, 2000);
+      }
+    });
   };
   const formik = useFormik({
-    initialValues: {
-      product_name: '',
-      product_amount: ''
-    },
-    validationSchema: RegisterSchema,
     onSubmit: (e) => handleSubmits(e)
   });
 
@@ -171,55 +164,90 @@ export default function RegisterForm() {
     setSelectProducts(e.target.value);
   };
 
-  const handleConfirmCutArountID = async () => {
-    const getDataCutArountByID = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getByOrderCutArountID/${IDCutArount}`
-    );
-    if (getDataCutArountByID.data.data.length !== 0) {
-      const CutArountID = getDataCutArountByID.data.data;
-      const DataExpress = {
-        id_order_rider_id: dataPostExpress.id_order_rider_id,
-        order_rider_id: dataPostExpress.order_rider_id,
-        order_rider_product_id: dataPostExpress.order_rider_product_id,
-        order_rider_product_name: dataPostExpress.order_rider_product_name,
-        order_rider_amount: dataPostExpress.order_rider_amount,
-        order_rider_currency: dataPostExpress.order_rider_currency,
-        order_rider_dealer_type: dataPostExpress.order_rider_dealer_type,
-        order_rider_dealer_name: dataPostExpress.order_rider_dealer_name,
-        order_rider_dealer_id: dataPostExpress.order_rider_dealer_id,
-        order_rider_dealer_note: dataPostExpress.order_rider_dealer_note,
-        order_rider_consignee_type: dataPostExpress.order_rider_consignee_type,
-        order_rider_consignee_name: dataPostExpress.order_rider_consignee_name,
-        order_rider_consignee_id: dataPostExpress.order_rider_consignee_id,
-        order_rider_consignee_note: dataPostExpress.order_rider_consignee_note,
-        order_rider_status: dataPostExpress.order_rider_status,
-        order_rider_cut_arount_id: parseInt(CutArountID[0].cut_arount_id, 10),
-        order_rider_date_cut_arount: CutArountID[0].cut_arount_date,
-        order_rider_province_cut_arount: CutArountID[0].cut_arount_province
-      };
-      Swal.fire({
-        icon: 'success',
-        title: 'Confirm !',
-        text: 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.',
-        timer: 2000,
-        showConfirmButton: false
-      });
-      dispatch({ type: 'OPEN' });
-      await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, DataExpress);
+  // const handleConfirmCutArountID = async () => {
+  //   const getDataCutArountByID = await axios.get(
+  //     `${process.env.REACT_APP_WEB_BACKEND}/getByOrderCutArountID/${IDCutArount}`
+  //   );
+  //   if (getDataCutArountByID.data.data.length !== 0) {
+  //     const CutArountID = getDataCutArountByID.data.data;
+  //     const DataExpress = {
+  //       id_order_rider_id: dataPostExpress.id_order_rider_id,
+  //       order_rider_id: dataPostExpress.order_rider_id,
+  //       order_rider_product_id: dataPostExpress.order_rider_product_id,
+  //       order_rider_product_name: dataPostExpress.order_rider_product_name,
+  //       order_rider_amount: dataPostExpress.order_rider_amount,
+  //       order_rider_currency: dataPostExpress.order_rider_currency,
+  //       order_rider_dealer_type: dataPostExpress.order_rider_dealer_type,
+  //       order_rider_dealer_name: dataPostExpress.order_rider_dealer_name,
+  //       order_rider_dealer_id: dataPostExpress.order_rider_dealer_id,
+  //       order_rider_dealer_note: dataPostExpress.order_rider_dealer_note,
+  //       order_rider_consignee_type: dataPostExpress.order_rider_consignee_type,
+  //       order_rider_consignee_name: dataPostExpress.order_rider_consignee_name,
+  //       order_rider_consignee_id: dataPostExpress.order_rider_consignee_id,
+  //       order_rider_consignee_note: dataPostExpress.order_rider_consignee_note,
+  //       order_rider_status: dataPostExpress.order_rider_status,
+  //       order_rider_cut_arount_id: parseInt(CutArountID[0].cut_arount_id, 10),
+  //       order_rider_date_cut_arount: CutArountID[0].cut_arount_date,
+  //       order_rider_province_cut_arount: CutArountID[0].cut_arount_province
+  //     };
+  //     Swal.fire({
+  //       icon: 'success',
+  //       title: 'Confirm !',
+  //       text: 'คุณได้เพิ่มงานให้ไรเดอร์เรียบร้อยเเล้ว.',
+  //       timer: 2000,
+  //       showConfirmButton: false
+  //     });
+  //     dispatch({ type: 'OPEN' });
+  //     await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, DataExpress);
 
+  //     setTimeout(() => {
+  //       dispatch({ type: 'TURNOFF' });
+  //     }, 2000);
+  //   } else {
+  //     Swal.fire({
+  //       icon: 'error',
+  //       title: 'Error !',
+  //       text: 'ค้นหา รหัสที่ถูกตัดรอบนี้ไม่เจอ.',
+  //       timer: 2000,
+  //       showConfirmButton: false
+  //     });
+  //   }
+  //   setOpen(false);
+  // };
+  const getProductByIDCutArount = async () => {
+    const filterStatusOrder = ProductType.filter(
+      (f) => f.order_company_status === 'ตัดรอบการจัดส่งแล้ว'
+    );
+    const filterCutArount = filterStatusOrder.filter((f) => f.cut_arount_id === IDCutArount);
+    if (filterCutArount.length === 0) {
+      setOpen(false);
+      Swal.fire({
+        icon: 'warning',
+        title: 'ไม่มีเลขตัดรอบนี้',
+        showConfirmButton: false,
+        timer: 2000
+      });
       setTimeout(() => {
-        dispatch({ type: 'TURNOFF' });
+        setOpen(true);
       }, 2000);
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error !',
-        text: 'ค้นหา รหัสที่ถูกตัดรอบนี้ไม่เจอ.',
-        timer: 2000,
-        showConfirmButton: false
+      const filteredsCutArount = [];
+      filterCutArount.forEach((element) => {
+        const idx = filteredsCutArount.findIndex(
+          (value) => value.order_product_id === element.order_product_id
+        );
+        if (idx !== -1) {
+          filteredsCutArount[idx].order_product_amoumt += element.order_product_amoumt;
+        } else if (idx === -1) {
+          filteredsCutArount.push(element);
+        }
       });
+      setProductType(filteredsCutArount);
+      setOpen(false);
+      // setOpen(false); IDCutArount
     }
-    setOpen(false);
+    // setOpen(false); IDCutArount
+    // console.log(filterCutArount);
   };
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
@@ -233,7 +261,7 @@ export default function RegisterForm() {
             </Typography>
           </Stack>
           <FormikProvider value={formik}>
-            <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <Form autoComplete="off" noValidate onSubmit={handleSubmits}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                   <Box
@@ -256,17 +284,29 @@ export default function RegisterForm() {
                     >
                       {ProductType.map((value) => (
                         <MenuItem key={value.productid} value={value}>
-                          {value.productName}
+                          {value.order_product_name}
                         </MenuItem>
                       ))}
                     </TextField>
                   </Box>
-                  <TextField
+                  {/* <TextField
                     fullWidth
+                    disabled
+                    value={SelectProducts.order_product_amoumt}
                     label="จำนวนสินค้า"
                     {...getFieldProps('product_amount')}
                     error={Boolean(touched.product_amount && errors.product_amount)}
                     helperText={touched.product_amount && errors.product_amount}
+                  /> */}
+                  <Input
+                    disabled
+                    // color="pink"
+                    size="Regular"
+                    outline
+                    placeholder="จำนวนสินค้า"
+                    defaultValue={
+                      SelectProducts === null ? '' : SelectProducts.order_product_amoumt
+                    }
                   />
                   <Input
                     disabled
@@ -274,7 +314,9 @@ export default function RegisterForm() {
                     size="Regular"
                     outline
                     placeholder="สกุลสินค้า"
-                    defaultValue={SelectProducts === null ? '' : SelectProducts.currency}
+                    defaultValue={
+                      SelectProducts === null ? '' : SelectProducts.order_product_currency
+                    }
                   />
                 </Stack>
                 <FormControl onChange={(e) => setRadioDealer(e.target.value)}>
@@ -370,7 +412,7 @@ export default function RegisterForm() {
         </Container>
       </Page>
 
-      <Dialog open={open} onClose={() => setOpen(false)} TransitionComponent={Transition}>
+      <Dialog open={open} TransitionComponent={Transition}>
         <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -389,12 +431,10 @@ export default function RegisterForm() {
           />
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={() => setOpen(false)}>
+          {/* <Button color="secondary" onClick={() => setOpen(false)}>
             Cancel
-          </Button>
-          <Button color="secondary" onClick={() => handleConfirmCutArountID()}>
-            ยืนยัน
-          </Button>
+          </Button> */}
+          <Button onClick={() => getProductByIDCutArount()}>ยืนยัน</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -129,6 +129,7 @@ export default function PercentCardSubdistrict() {
         <CardFooter>
           <div className="h-56 grid grid-cols-3 gap-4 content-between">
             <Button
+              disabled={sessionStorage.getItem('level') !== 'ManagerAdmin'}
               color="yellow"
               buttonType="outline"
               size="regular"

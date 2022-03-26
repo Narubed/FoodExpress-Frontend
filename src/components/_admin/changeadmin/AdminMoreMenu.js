@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 // material-tailwind
 import '@material-tailwind/react/tailwind.css';
 import Input from '@material-tailwind/react/Input';
+import { styled } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 // material
 import {
   Menu,
@@ -22,7 +24,12 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -41,6 +48,7 @@ const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={r
 
 export default function RiderMoreMenu(props) {
   const dispatch = useDispatch();
+  const [radioLevel, setRadioLevel] = useState(props.row.admin_level);
   // eslint-disable-next-line camelcase
   const { admin_auto_id, admin_id_login, admin_pw_login, admin_first_name, admin_last_name } =
     props;
@@ -102,7 +110,8 @@ export default function RiderMoreMenu(props) {
         admin_id_login: onChangeIDLogin,
         admin_pw_login: onChangePWLogin,
         admin_first_name: onChangeFirstname,
-        admin_last_name: onChangeLastName
+        admin_last_name: onChangeLastName,
+        admin_level: radioLevel
       };
       if (result.isConfirmed) {
         dispatch({ type: 'OPEN' });
@@ -172,6 +181,45 @@ export default function RiderMoreMenu(props) {
           <DialogTitle>{onChangeFirstname}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
+              <FormControl color="secondary">
+                <FormLabel id="demo-row-radio-buttons-group-label">
+                  กรูณาเลือกระดับของผู้ดูแลระบบ
+                </FormLabel>
+                <RadioGroup
+                  value={radioLevel}
+                  onChange={(e) => setRadioLevel(e.target.value)}
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <FormControlLabel
+                    value="GeneralAdmin"
+                    control={
+                      <Radio
+                        sx={{
+                          '&, &.Mui-checked': {
+                            color: purple[500]
+                          }
+                        }}
+                      />
+                    }
+                    label="GeneralAdmin (ทั่วไป)"
+                  />
+                  <FormControlLabel
+                    value="ManagerAdmin"
+                    control={
+                      <Radio
+                        sx={{
+                          '&, &.Mui-checked': {
+                            color: purple[500]
+                          }
+                        }}
+                      />
+                    }
+                    label="ManagerAdmin (ขั้นสูง)"
+                  />
+                </RadioGroup>
+              </FormControl>
               <br />
               <Input
                 type="text"

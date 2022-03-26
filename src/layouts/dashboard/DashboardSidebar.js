@@ -4,7 +4,10 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import ButtonT from '@material-tailwind/react/Button';
 // components
+import { purple } from '@mui/material/colors';
+
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
@@ -29,7 +32,7 @@ const AccountStyle = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: theme.spacing(2, 2.5),
   borderRadius: theme.shape.borderRadiusSm,
-  backgroundColor: theme.palette.grey[200]
+  backgroundColor: purple[50]
 }));
 
 // ----------------------------------------------------------------------
@@ -38,7 +41,13 @@ DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
   onCloseSidebar: PropTypes.func
 };
-
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[700]
+  }
+}));
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
 
@@ -48,7 +57,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
   const renderContent = (
     <Scrollbar
       sx={{
@@ -56,17 +64,16 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         '& .simplebar-content': { height: '100%', display: 'flex', flexDirection: 'column' }
       }}
     >
-      <Box sx={{ px: 2.5, py: 3 }}>
+      <Box sx={{ px: 2.5, py: 3, mx: 'auto' }}>
         <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
           <Logo />
         </Box>
       </Box>
-
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
             {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ ml: 2, boxShadow: 3 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
                 <div>
                   {`${sessionStorage.getItem('firstname')}  ${sessionStorage.getItem('lastname')}`}
@@ -79,11 +86,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           </AccountStyle>
         </Link>
       </Box>
-
       <NavSection navConfig={sidebarConfig} />
-
       <Box sx={{ flexGrow: 1 }} />
-
       <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
         <Stack
           alignItems="center"
@@ -93,32 +97,22 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             pt: 5,
             borderRadius: 2,
             position: 'relative',
-            bgcolor: 'grey.200'
+            bgcolor: purple[100]
           }}
         >
           <Box
             component="img"
-            src="/static/illustrations/illustration_avatar.png"
-            sx={{ width: 100, position: 'absolute', top: -50 }}
+            src="/static/illustrations/icon 01-04.png"
+            sx={{ width: 250, position: 'absolute', top: -60 }}
           />
-
-          {/* <Box sx={{ textAlign: 'center' }}>
-            <Typography gutterBottom variant="h6">
-              Get more?
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              From only $69
-            </Typography>
-          </Box> */}
-
-          <Button
+          <ColorButton
             fullWidth
             href="https://nbadigitalworlds.com/2021/"
             target="_blank"
             variant="contained"
           >
             <div>ติดต่อได้ที่ NBA Digital</div>
-          </Button>
+          </ColorButton>
         </Stack>
       </Box>
     </Scrollbar>

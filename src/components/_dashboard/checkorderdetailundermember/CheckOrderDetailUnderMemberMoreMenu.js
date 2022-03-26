@@ -5,6 +5,7 @@ import numeral from 'numeral';
 import { Link as RouterLink } from 'react-router-dom';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import PropTypes from 'prop-types';
+import ReactToPrint from 'react-to-print';
 import 'dayjs/locale/th';
 // material-tailwind
 import '@material-tailwind/react/tailwind.css';
@@ -35,6 +36,8 @@ CheckOrderDetailUnderMemberMoreMenu.propTypes = {
 };
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 export default function CheckOrderDetailUnderMemberMoreMenu(props) {
+  let componentRef = useRef();
+  let componentRef2 = useRef();
   // eslint-disable-next-line camelcase
   const { order_id, row, order_product_total } = props;
   const [showModal, setShowModal] = useState(false);
@@ -105,93 +108,95 @@ export default function CheckOrderDetailUnderMemberMoreMenu(props) {
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               <TableContainer sx={{ minWidth: 200 }}>
-                <div className="flex flex-col">
-                  <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                รหัสสินค้า
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                ชื่อประเภทสินค้า
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                ชื่อสินค้า
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                จำนวนสินค้า
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                ราคาสินค้าต่อชิ้น
-                              </th>
+                <div ref={(el) => (componentRef2 = el)}>
+                  <div className="flex flex-col">
+                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  รหัสสินค้า
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  ชื่อประเภทสินค้า
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  ชื่อสินค้า
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  จำนวนสินค้า
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  ราคาสินค้าต่อชิ้น
+                                </th>
 
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                สถานะสินค้า
-                              </th>
-                              <th scope="col" className="relative px-6 py-3">
-                                <span className="sr-only">Edit</span>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {orderDetail.map((person) => (
-                              <tr key={person.order_product_id}>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {person.order_product_id}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center">
-                                    <div className="ml-4">
-                                      <div className="text-sm text-gray-500">
-                                        {person.order_product_type_name}
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  สถานะสินค้า
+                                </th>
+                                <th scope="col" className="relative px-6 py-3">
+                                  <span className="sr-only">Edit</span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              {orderDetail.map((person) => (
+                                <tr key={person.order_product_id}>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-900">
+                                      {person.order_product_id}
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                      <div className="ml-4">
+                                        <div className="text-sm text-gray-500">
+                                          {person.order_product_type_name}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {person.order_product_name}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {person.order_product_amoumt} {person.order_product_currency}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {/* {person.order_product_price} */}
-                                  {numeral(person.order_product_price).format()}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {person.order_company_status}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="text-sm text-gray-900">
+                                      {person.order_product_name}
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                      {person.order_product_amoumt} {person.order_product_currency}
+                                    </span>
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {/* {person.order_product_price} */}
+                                    {numeral(person.order_product_price).format()}
+                                  </td>
+                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {person.order_company_status}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -203,6 +208,22 @@ export default function CheckOrderDetailUnderMemberMoreMenu(props) {
             <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
               Close
             </Button>
+            <ReactToPrint
+              trigger={() => (
+                <Button
+                  color="lightBlue"
+                  buttonType="link"
+                  size="regular"
+                  rounded
+                  block={false}
+                  iconOnly
+                  ripple="dark"
+                >
+                  <Icon icon="flat-color-icons:print" width={32} height={32} />
+                </Button>
+              )}
+              content={() => componentRef2}
+            />
           </DialogActions>
         </Dialog>
 
@@ -222,76 +243,78 @@ export default function CheckOrderDetailUnderMemberMoreMenu(props) {
                 ราคาสินค้าทั้งหมด {numeral(order_product_total).format()} บาท
               </div>{' '}
               <TableContainer sx={{ minWidth: 200 }}>
-                <div className="flex flex-col">
-                  <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                ชื่อ
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                นามสกุล
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                email
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                เบอร์โทรศัพท์
-                              </th>
-                              <th
-                                scope="col"
-                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                              >
-                                ที่อยู่
-                              </th>
+                <div ref={(el) => (componentRef = el)}>
+                  <div className="flex flex-col">
+                    <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  ชื่อ
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  นามสกุล
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  email
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  เบอร์โทรศัพท์
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                  ที่อยู่
+                                </th>
 
-                              <th scope="col" className="relative px-6 py-3">
-                                <span className="sr-only">Edit</span>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            <tr key={row.order_id}>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{row.firstname}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="ml-4">
-                                    <div className="text-sm text-gray-500">{row.lastname}</div>
+                                <th scope="col" className="relative px-6 py-3">
+                                  <span className="sr-only">Edit</span>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                              <tr key={row.order_id}>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{row.firstname}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="ml-4">
+                                      <div className="text-sm text-gray-500">{row.lastname}</div>
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{row.email}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                  {row.tel}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {row.address}
-                                {/* {numeral(person.order_product_price).format()} */}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{row.email}</div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    {row.tel}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {row.address}
+                                  {/* {numeral(person.order_product_price).format()} */}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -308,6 +331,22 @@ export default function CheckOrderDetailUnderMemberMoreMenu(props) {
             >
               Close
             </Button>
+            <ReactToPrint
+              trigger={() => (
+                <Button
+                  color="lightBlue"
+                  buttonType="link"
+                  size="regular"
+                  rounded
+                  block={false}
+                  iconOnly
+                  ripple="dark"
+                >
+                  <Icon icon="flat-color-icons:print" width={32} height={32} />
+                </Button>
+              )}
+              content={() => componentRef}
+            />
           </DialogActions>
         </Dialog>
       </>

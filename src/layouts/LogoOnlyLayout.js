@@ -7,6 +7,7 @@ import Logo from '../components/Logo';
 // ----------------------------------------------------------------------
 
 const HeaderStyle = styled('header')(({ theme }) => ({
+  background: '#D8BFD8',
   top: 0,
   left: 0,
   lineHeight: 0,

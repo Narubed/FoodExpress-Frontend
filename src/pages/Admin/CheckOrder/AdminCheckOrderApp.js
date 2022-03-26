@@ -211,21 +211,23 @@ function AdminCheckOrderApp() {
             <Typography variant="h4" gutterBottom>
               <div>เช็คออเดอร์</div>
             </Typography>
-            <Tooltip title="ปริ้นรายระเอียดออเดอร์">
-              <Link to="/admin/AdminCheckOrderApp/AdminPrintOrderApp">
-                <Button
-                  color="lightBlue"
-                  buttonType="link"
-                  size="regular"
-                  rounded
-                  block={false}
-                  iconOnly
-                  ripple="dark"
-                >
-                  <Icon icon="flat-color-icons:print" width={32} height={32} />
-                </Button>
-              </Link>
-            </Tooltip>
+            {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+              <Tooltip title="ปริ้นรายระเอียดออเดอร์">
+                <Link to="/admin/AdminCheckOrderApp/AdminPrintOrderApp">
+                  <Button
+                    color="lightBlue"
+                    buttonType="link"
+                    size="regular"
+                    rounded
+                    block={false}
+                    iconOnly
+                    ripple="dark"
+                  >
+                    <Icon icon="flat-color-icons:print" width={32} height={32} />
+                  </Button>
+                </Link>
+              </Tooltip>
+            ) : null}
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>

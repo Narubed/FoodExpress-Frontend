@@ -10,6 +10,7 @@ import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 import { Link as RouterLink } from 'react-router-dom';
+import { purple } from '@mui/material/colors';
 
 // material
 import { Box, Card, Link, Typography, Stack, TypeMap } from '@mui/material';
@@ -34,7 +35,13 @@ const ProductImgStyle = styled('img')({
   },
   position: 'absolute'
 });
-
+const ColorButton = styled(LoadingButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[200]
+  }
+}));
 // ----------------------------------------------------------------------
 
 ShopProductCard.propTypes = {
@@ -62,7 +69,6 @@ export default function ShopProductCard({ product, setCount, count }) {
     await value.forEach((item, index) => {
       const idx = filtereds.findIndex((value) => value.productid === item.productid);
       if (idx !== -1) {
-        console.log('ซ้ำ');
         // eslint-disable-next-line operator-assignment
         // filtereds[idx].value = item.productPrice;
         // filtereds[idx].amount = 1;
@@ -99,7 +105,8 @@ export default function ShopProductCard({ product, setCount, count }) {
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             {/* <ColorPreview colors={colors} /> */}
 
-            <LoadingButton
+            <ColorButton
+              size="small"
               // color="secondary"
               endIcon={<Icon icon="clarity:add-line" />}
               loading={loading}
@@ -107,9 +114,9 @@ export default function ShopProductCard({ product, setCount, count }) {
               variant="outlined"
               onClick={() => AddProduct()}
             >
-              เพิ่มในตะกร้า
-            </LoadingButton>
-            <Typography variant="subtitle1">
+              เพิ่มสินค้า
+            </ColorButton>
+            <Typography variant="subtitle2" sx={{ mt: -3 }}>
               <Typography
                 component="span"
                 variant="body1"
@@ -122,7 +129,7 @@ export default function ShopProductCard({ product, setCount, count }) {
               </Typography>
               &nbsp;
               {/* {fCurrency(price)} */}
-              <div className="row">{numeral(productPrice).format()}฿</div>
+              <div>{numeral(productPrice).format()}฿</div>
             </Typography>
           </Stack>
         </Stack>
@@ -142,7 +149,7 @@ export default function ShopProductCard({ product, setCount, count }) {
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
+          <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
             Close
           </Button>
         </ModalFooter>

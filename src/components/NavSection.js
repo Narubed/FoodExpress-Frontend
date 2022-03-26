@@ -7,7 +7,7 @@ import arrowIosDownwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
-
+import { purple } from '@mui/material/colors';
 // ----------------------------------------------------------------------
 
 const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(
@@ -29,7 +29,7 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
       position: 'absolute',
       borderTopLeftRadius: 4,
       borderBottomLeftRadius: 4,
-      backgroundColor: theme.palette.primary.main
+      backgroundColor: purple[500]
     }
   })
 );
@@ -60,9 +60,10 @@ function NavItem({ item, active }) {
   };
 
   const activeRootStyle = {
-    color: 'primary.main',
+    color: purple[500],
     fontWeight: 'fontWeightMedium',
-    bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+    bgcolor: alpha(purple[500], theme.palette.action.selectedOpacity),
+    // bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
     '&:before': { display: 'block' }
   };
 
