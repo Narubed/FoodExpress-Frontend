@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
@@ -12,6 +13,7 @@ import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
+import { Refresh } from '../Refresh';
 //
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
@@ -49,6 +51,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
   }
 }));
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+  const [count, setCount] = useState(0);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -66,7 +69,25 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     >
       <Box sx={{ px: 2.5, py: 3, mx: 'auto' }}>
         <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-          <Logo />
+          <Refresh onClick={() => setCount(count + 1)} />
+          <div className="example-container">
+            <motion.div
+              animate={{
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 720, 720, 0],
+                borderRadius: ['40%', '40%', '100%', '100%', '40%']
+              }}
+              transition={{
+                duration: 4,
+                ease: 'easeInOut',
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 1
+              }}
+            >
+              <Logo />
+            </motion.div>
+          </div>
         </Box>
       </Box>
       <Box sx={{ mb: 5, mx: 2.5 }}>
@@ -105,14 +126,16 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             src="/static/illustrations/icon 01-04.png"
             sx={{ width: 250, position: 'absolute', top: -60 }}
           />
-          <ColorButton
-            fullWidth
-            href="https://nbadigitalworlds.com/2021/"
-            target="_blank"
-            variant="contained"
-          >
-            <div>ติดต่อได้ที่ NBA Digital</div>
-          </ColorButton>
+          <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
+            <ColorButton
+              fullWidth
+              href="https://nbadigitalworlds.com/2021/"
+              target="_blank"
+              variant="contained"
+            >
+              <div>ติดต่อได้ที่ NBA Digital</div>
+            </ColorButton>
+          </motion.button>
         </Stack>
       </Box>
     </Scrollbar>

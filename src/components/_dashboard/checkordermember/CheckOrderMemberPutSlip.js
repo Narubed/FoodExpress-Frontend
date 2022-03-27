@@ -23,6 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { motion } from 'framer-motion';
 
 CheckOrderMemberPutSlip.propTypes = {
   order_id: PropTypes.number
@@ -49,7 +50,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
     });
   };
   const submit = async () => {
-    setShowModal(false)
+    setShowModal(false);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -137,15 +138,16 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
           <Button color="red" buttonType="link" onClick={(e) => setShowModal(false)} ripple="dark">
             Close
           </Button>
-
-          <LoadingButton
-            onClick={(e) => submit(e)}
-            loading={loading}
-            loadingIndicator="Loading..."
-            variant="outlined"
-          >
-            ยืนยันรายการสั่งซื้อ
-          </LoadingButton>
+          <motion.div whileHover={{ scale: 0.9 }} whileTap={{ scale: 0.8 }}>
+            <LoadingButton
+              onClick={(e) => submit(e)}
+              loading={loading}
+              loadingIndicator="Loading..."
+              variant="outlined"
+            >
+              ยืนยันรายการสั่งซื้อ
+            </LoadingButton>
+          </motion.div>
         </DialogActions>
       </Dialog>
     </div>

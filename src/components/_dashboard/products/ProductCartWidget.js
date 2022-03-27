@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import numeral from 'numeral';
+import { motion } from 'framer-motion';
 // material
 import { styled } from '@mui/material/styles';
 import {
@@ -246,14 +247,16 @@ export default function CartWidget({
           {/* <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
             ยืนยันรายการสั่งซื้อ
           </Button> */}
-          <ColorButton
-            onClick={(e) => onSubmit(e)}
-            loading={loading}
-            loadingIndicator="Loading..."
-            variant="outlined"
-          >
-            ยืนยันรายการสั่งซื้อ
-          </ColorButton>
+          <motion.div whileHover={{ scale: 0.9 }} whileTap={{ scale: 0.8 }}>
+            <ColorButton
+              onClick={(e) => onSubmit(e)}
+              loading={loading}
+              loadingIndicator="Loading..."
+              variant="outlined"
+            >
+              ยืนยันรายการสั่งซื้อ
+            </ColorButton>
+          </motion.div>
         </DialogActions>
       </Dialog>
     </>

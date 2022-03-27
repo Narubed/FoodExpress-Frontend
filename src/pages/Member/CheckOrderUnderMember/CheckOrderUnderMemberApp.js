@@ -138,6 +138,7 @@ function CheckOrderUnderMemberApp() {
             <div> ออเดอร์ที่รอจัดส่ง</div>
           </Typography>
           <Button
+            sx={{ color: 'purple' }}
             variant="outlined"
             component={RouterLink}
             to="/dashboard/CheckOrderUnderMemberApp/CheckOrderMemberCreatBarCodeApp"

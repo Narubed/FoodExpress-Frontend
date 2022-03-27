@@ -288,7 +288,9 @@ export default function AppCardCutArount(props) {
           <DialogTitle id="alert-dialog-title">
             อำเภอ: {props.props.order_product_district}
             <div className="flex justify-end ...">
-              <Button onClick={(e) => confirmAppCardCutArount(e)}>ตัดรอบออเดอร์ของอำเภอนี้</Button>
+              <Button color="purple" onClick={(e) => confirmAppCardCutArount(e)}>
+                ตัดรอบออเดอร์ของอำเภอนี้
+              </Button>
             </div>
           </DialogTitle>
 

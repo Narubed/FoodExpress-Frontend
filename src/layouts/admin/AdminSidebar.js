@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { motion } from 'framer-motion';
 // components
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
+import { Refresh } from '../Refresh';
 //
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
@@ -41,6 +43,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -56,9 +59,27 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         '& .simplebar-content': { height: '100%', display: 'flex', flexDirection: 'column' }
       }}
     >
-      <Box sx={{ px: 2.5, py: 3 }}>
+      <Box sx={{ px: 2.5, py: 3, mx: 'auto' }}>
         <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
-          <Logo />
+          <Refresh onClick={() => setCount(count + 1)} />
+          <div className="example-container">
+            <motion.div
+              animate={{
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 720, 720, 0],
+                borderRadius: ['40%', '40%', '100%', '100%', '40%']
+              }}
+              transition={{
+                duration: 4,
+                ease: 'easeInOut',
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 4
+              }}
+            >
+              <Logo />
+            </motion.div>
+          </div>
         </Box>
       </Box>
 

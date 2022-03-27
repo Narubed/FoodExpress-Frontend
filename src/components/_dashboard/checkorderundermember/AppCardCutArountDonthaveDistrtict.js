@@ -310,7 +310,9 @@ export default function AppCardCutArountDonthaveDistrtict(props) {
               >
                 ตัดรอบออเดอร์ของตำบลนี้
               </Button> */}
-              <Button onClick={(e) => confirmAppCardCutArount(e)}>ตัดรอบออเดอร์ของตำบลนี้</Button>
+              <Button color="purple" onClick={(e) => confirmAppCardCutArount(e)}>
+                ตัดรอบออเดอร์ของตำบลนี้
+              </Button>
             </div>
           </DialogTitle>
           <DialogContent>

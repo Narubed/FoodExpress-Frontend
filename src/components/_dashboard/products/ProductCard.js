@@ -11,6 +11,7 @@ import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import { purple } from '@mui/material/colors';
+import { motion } from 'framer-motion';
 
 // material
 import { Box, Card, Link, Typography, Stack, TypeMap } from '@mui/material';
@@ -104,18 +105,19 @@ export default function ShopProductCard({ product, setCount, count }) {
 
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             {/* <ColorPreview colors={colors} /> */}
-
-            <ColorButton
-              size="small"
-              // color="secondary"
-              endIcon={<Icon icon="clarity:add-line" />}
-              loading={loading}
-              loadingPosition="end"
-              variant="outlined"
-              onClick={() => AddProduct()}
-            >
-              เพิ่มสินค้า
-            </ColorButton>
+            <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
+              <ColorButton
+                size="small"
+                // color="secondary"
+                endIcon={<Icon icon="clarity:add-line" />}
+                loading={loading}
+                loadingPosition="end"
+                variant="outlined"
+                onClick={() => AddProduct()}
+              >
+                เพิ่มสินค้า{' '}
+              </ColorButton>
+            </motion.button>
             <Typography variant="subtitle2" sx={{ mt: -3 }}>
               <Typography
                 component="span"
