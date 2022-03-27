@@ -35,6 +35,7 @@ import DealerRider from '../../../components/_admin/takesorder/CreateOrderRider/
 import ConsigneeMember from '../../../components/_admin/takesorder/CreateOrderRider/ConsigneeMember';
 import ConsigneeCompany from '../../../components/_admin/takesorder/CreateOrderRider/ConsigneeCompany';
 import ConsigneeRider from '../../../components/_admin/takesorder/CreateOrderRider/ConsigneeRider';
+import postActionAdmin from '../../../utils/postActionAdmin';
 // ----------------------------------------------------------------------
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
@@ -129,6 +130,25 @@ export default function RegisterForm() {
       order_rider_date_cut_arount: ProductType[0].cut_arount_date,
       order_rider_province_cut_arount: ProductType[0].cut_arount_province
     };
+    const dataReport = `ชื่อสินค้า ${data.order_rider_product_name} จำนวน ${data.order_rider_amount}
+    ${data.order_rider_currency} ผู้นำจ่าย ${data.order_rider_consignee_type} ชื่อ${
+      data.order_rider_consignee_name
+    } ที่อยู่/note: ${data.order_rider_dealer_note}
+    ผู้รับสินค้า ${data.order_rider_consignee_type} ชื่อ ${
+      data.order_rider_consignee_name
+    } ที่อยู่/note: ${data.order_rider_consignee_note} 
+    ชื่อไรเดอร์ที่รับงาน${localStorage.getItem('rider_first_name')} ${localStorage.getItem(
+      'rider_last_name'
+    )}
+    `;
+    const postReportAdmin = {
+      id_report_action_admin: data.id_order_rider_id + sessionStorage.getItem('user'),
+      report_action_admin_id: sessionStorage.getItem('user'),
+      report_action_order_id: data.id_order_rider_id,
+      report_action_admin_value: dataReport,
+      report_action_admin_date: new Date()
+    };
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่!',
@@ -148,6 +168,7 @@ export default function RegisterForm() {
           showConfirmButton: false
         });
         dispatch({ type: 'OPEN' });
+        postActionAdmin(postReportAdmin);
         await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postRiderOrderExpress`, data);
 
         setTimeout(() => {

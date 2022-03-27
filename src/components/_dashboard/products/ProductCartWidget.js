@@ -18,6 +18,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { purple } from '@mui/material/colors';
+
 import ProductCartShopping from './ProductCartShopping';
 import ProductPercentDetail from './ProductPercentDetail';
 // ----------------------------------------------------------------------
@@ -41,6 +43,14 @@ const RootStyle = styled('div')(({ theme }) => ({
   borderBottomLeftRadius: theme.shape.borderRadiusMd,
   transition: theme.transitions.create('opacity'),
   '&:hover': { opacity: 0.72 }
+}));
+
+const ColorButton = styled(LoadingButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[500]
+  }
 }));
 
 // ----------------------------------------------------------------------
@@ -236,14 +246,14 @@ export default function CartWidget({
           {/* <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
             ยืนยันรายการสั่งซื้อ
           </Button> */}
-          <LoadingButton
+          <ColorButton
             onClick={(e) => onSubmit(e)}
             loading={loading}
             loadingIndicator="Loading..."
             variant="outlined"
           >
             ยืนยันรายการสั่งซื้อ
-          </LoadingButton>
+          </ColorButton>
         </DialogActions>
       </Dialog>
     </>

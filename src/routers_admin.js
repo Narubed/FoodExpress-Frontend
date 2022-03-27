@@ -34,6 +34,7 @@ import NBACompanyPerfitApp from './pages/Admin/NBACompanyPerfit/NBACompanyPerfit
 import AdminPrintOrderApp from './pages/Admin/CheckOrder/AdminPrintOrderApp';
 import AdminCutArountWalletApp from './pages/Admin/Wallet/AdminCutArountWalletApp';
 import CheckRemainingOrders from './pages/Admin/TakesOrder/CheckRemainingOrders';
+import ReportActionAdminApp from './pages/Admin/ReportActionAdmin/ReportActionAdminApp';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -73,8 +74,8 @@ export default function Router() {
         { path: 'ChangeAdminApp/CreateAdminApp', element: <CreateAdminApp /> },
         { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> },
         { path: 'NBACompanyPerfitApp', element: <NBACompanyPerfitApp /> },
-        { path: 'AdminCheckOrderApp/AdminPrintOrderApp', element: <AdminPrintOrderApp /> }
-
+        { path: 'AdminCheckOrderApp/AdminPrintOrderApp', element: <AdminPrintOrderApp /> },
+        { path: 'ReportActionAdminApp', element: <ReportActionAdminApp /> }
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]

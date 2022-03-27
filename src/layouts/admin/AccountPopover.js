@@ -112,6 +112,26 @@ export default function AccountPopover() {
             จัดการผู้ดูแลระบบ
           </MenuItem>
         ) : null}
+        {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+          <MenuItem
+            key={7}
+            to="/admin/ReportActionAdminApp"
+            component={RouterLink}
+            onClick={handleClose}
+            sx={{ typography: 'body2', py: 1, px: 2.5 }}
+          >
+            <Box
+              sx={{
+                mr: 2,
+                width: 24,
+                height: 24
+              }}
+            >
+              <Icon icon="emojione:ballot-box-with-ballot" width="24" height="24" />
+            </Box>
+            รายงานผู้ดูแลระบบ
+          </MenuItem>
+        ) : null}
         <MenuItem
           key={5}
           to="/admin/AdminCutArountAllApp"

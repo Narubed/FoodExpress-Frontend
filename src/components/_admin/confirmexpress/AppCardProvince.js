@@ -20,6 +20,7 @@ import {
   Slide
 } from '@mui/material';
 // utils
+import postActionAdmin from '../../../utils/postActionAdmin';
 
 // ----------------------------------------------------------------------
 
@@ -126,6 +127,15 @@ export default function AppCardProvince(props) {
       cut_arount_first_date: firstDateOrder,
       cut_arount_last_date: lastDateOrder === undefined ? firstDateOrder : lastDateOrder
     };
+    const data = `ตัดรอบของจังหวัด ${props.props.order_product_province} ออเดอร์ตั้งเเต่วันที่${dataCutAroundOrder.cut_arount_first_date} - วันที่ ${dataCutAroundOrder.cut_arount_last_date} `;
+    const postReportAdmin = {
+      id_report_action_admin: Date.now().toString() + data[0].order_id,
+      report_action_admin_id: sessionStorage.getItem('user'),
+      report_action_order_id: dataCutAroundOrder.cut_arount_id,
+      report_action_admin_value: data,
+      report_action_admin_date: new Date()
+    };
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการตัดรอบการส่งนี้หรือไหม ?!',
@@ -142,6 +152,7 @@ export default function AppCardProvince(props) {
           `${process.env.REACT_APP_WEB_BACKEND}/CreateCutArount`,
           dataCutAroundOrder
         );
+        postActionAdmin(postReportAdmin);
         // eslint-disable-next-line array-callback-return
         filterProvince.map(async (value) => {
           const dataPutOrderDetail = {

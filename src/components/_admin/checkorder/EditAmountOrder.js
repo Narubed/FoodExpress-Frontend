@@ -20,7 +20,8 @@ export default function EditAmountOrder({ person, confirmEditAmountOrderDetail }
       order_detail_id: person.order_detail_id,
       order_product_amoumt: valueAmount
     };
-    const dataReport = `ได้ทำการแก้ไขจำนวนสินค้าหมายเลขรายละเอียดออเดอร์ที่ ${person.order_detail_id}  จาก ${person.order_product_amoumt} เป็นจำนวน ${valueAmount}`;
+    console.log(person);
+    const dataReport = `ได้ทำการแก้ไขจำนวนสินค้าหมายเลขรายละเอียดออเดอร์ที่ ${person.order_detail_id}  ขื่อสินค้า ${person.order_product_name} จาก ${person.order_product_amoumt} เป็นจำนวน ${valueAmount} เป็นออเดอร์ของระดับ${person.order_product_level} ที่อยู่ ${person.order_product_address}`;
     const postReportAdmin = {
       id_report_action_admin: Date.now().toString() + person.order_id,
       report_action_admin_id: sessionStorage.getItem('user'),

@@ -52,7 +52,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
     const getAnnounceSlide = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getAnnounceSlide`
     );
-    console.log(getAnnounceSlide.data.data);
+
     setAnnounce(getAnnounceSlide.data.data[0].announce_slide_data);
   }, []);
   return (

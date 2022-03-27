@@ -4,6 +4,7 @@ import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import { purple } from '@mui/material/colors';
 // material
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
@@ -69,7 +70,7 @@ export default function AccountPopover() {
         open={open}
         onClose={handleClose}
         anchorEl={anchorRef.current}
-        sx={{ width: 220 }}
+        sx={{ width: 220, bgcolor: purple[500], color: 'white' }}
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
@@ -121,7 +122,13 @@ export default function AccountPopover() {
         </MenuItem>
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined" onClick={logout}>
+          <Button
+            fullWidth
+            color="inherit"
+            variant="outlined"
+            onClick={logout}
+            sx={{ bgcolor: 'red' }}
+          >
             <div>Logout</div>
           </Button>
         </Box>

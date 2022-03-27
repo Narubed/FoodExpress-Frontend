@@ -91,6 +91,7 @@ export default function TakesOrderInputBarCode({ orderList }) {
   return (
     <div>
       <Button
+        sx={{ color: 'purple' }}
         variant="outlined"
         startIcon={<Icon icon="iconoir:input-field" />}
         onClick={handleClickOpen}

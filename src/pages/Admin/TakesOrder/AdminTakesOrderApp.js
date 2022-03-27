@@ -31,11 +31,7 @@ import Page from '../../../components/Page';
 import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
-import {
-  TakesOrderListHead,
-  TakesOrderListToolbar,
-  TakesOrderMoreMenu
-} from '../../../components/_admin/takesorder';
+import { TakesOrderListHead, TakesOrderListToolbar } from '../../../components/_admin/takesorder';
 //
 
 // ----------------------------------------------------------------------
@@ -167,6 +163,11 @@ export default function AdminTakesOrderApp() {
 
   const isUserNotFound = filteredUsers.length === 0;
   dispatch({ type: 'TURNOFF' });
+  const setlocalstore = (row) => {
+    localStorage.setItem('rider_id', row.rider_id);
+    localStorage.setItem('rider_first_name', row.rider_first_name);
+    localStorage.setItem('rider_last_name', row.rider_last_name);
+  };
   return (
     <Page title="TakesOrder | FoodExpress">
       <Container>
@@ -256,7 +257,7 @@ export default function AdminTakesOrderApp() {
 
                           <TableCell align="">
                             <Button
-                              onClick={() => localStorage.setItem('rider_id', rider_id)}
+                              onClick={() => setlocalstore(row)}
                               ripple="dark"
                               component={RouterLink}
                               to="/admin/AdminTakesOrderApp/AdminTakesOrderDetail"

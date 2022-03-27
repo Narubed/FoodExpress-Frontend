@@ -116,7 +116,7 @@ export default function NotificationsPopover() {
       `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrderAndMember`
     );
     const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
-    console.log(filterStatusOrder);
+
     setTotal(filterStatusOrder);
     setNotifications(filterStatusOrder);
   }, []);
