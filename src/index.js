@@ -16,6 +16,8 @@ import reportWebVitals from './reportWebVitals';
 // ----------------------------------------------------------------------
 
 const store = createStore(rootReducer);
+// eslint-disable-next-line no-multi-assign
+if (process.env.NODE_ENV !== 'development') console.log = console.warn = console.error = () => {};
 
 ReactDOM.render(
   <HelmetProvider>
