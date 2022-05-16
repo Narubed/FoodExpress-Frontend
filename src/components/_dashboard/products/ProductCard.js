@@ -9,6 +9,13 @@ import ModalHeader from '@material-tailwind/react/ModalHeader';
 import ModalBody from '@material-tailwind/react/ModalBody';
 import ModalFooter from '@material-tailwind/react/ModalFooter';
 import Button from '@material-tailwind/react/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
 import { Link as RouterLink } from 'react-router-dom';
 import { purple } from '@mui/material/colors';
 import { motion } from 'framer-motion';
@@ -50,6 +57,7 @@ ShopProductCard.propTypes = {
   count: PropTypes.object,
   setCount: PropTypes.func.isRequired
 };
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function ShopProductCard({ product, setCount, count }) {
   const [showModal, setShowModal] = React.useState(false);
@@ -136,26 +144,34 @@ export default function ShopProductCard({ product, setCount, count }) {
           </Stack>
         </Stack>
       </Card>
-      <Modal size="regular" active={showModal} toggler={() => setShowModal(false)}>
-        <ModalHeader toggler={() => setShowModal(false)}>{productName}</ModalHeader>
-        <ModalBody>
-          <Image
-            src={
-              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
-              // eslint-disable-next-line global-require
-              // require(`../../../assets/img/${productImg}`).default
-            }
-            rounded={false}
-            raised
-            alt="Rounded Image"
-          />
-        </ModalBody>
-        <ModalFooter>
+      <Dialog
+        open={showModal}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setShowModal(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{productName}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            <Image
+              src={
+                `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
+                // eslint-disable-next-line global-require
+                // require(`../../../assets/img/${productImg}`).default
+              }
+              rounded={false}
+              raised
+              alt="Rounded Image"
+            />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button color="red" buttonType="link" onClick={() => setShowModal(false)} ripple="dark">
             Close
           </Button>
-        </ModalFooter>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

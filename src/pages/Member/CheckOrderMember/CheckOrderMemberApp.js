@@ -327,7 +327,7 @@ function CheckOrderMemberApp() {
                                   <CheckSlipImageMember images={order_slip} Name={order_id} />
                                 </StyledBadge>
                               ) : order_status === 'รอชำระเงิน' ? (
-                                <CheckOrderMemberPutSlip order_id={order_id} />
+                                <CheckOrderMemberPutSlip order_id={order_id} row={row} />
                               ) : null}
                             </TableCell>
                             <TableCell align="left">

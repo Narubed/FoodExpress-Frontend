@@ -17,6 +17,7 @@ class App extends Component {
   render() {
     const token = sessionStorage.getItem('accessToken');
     const role = sessionStorage.getItem('role');
+
     if (!token || token !== 'NBA') {
       return (
         <ThemeConfig>
@@ -27,6 +28,7 @@ class App extends Component {
         </ThemeConfig>
       );
     }
+
     if (role === 'Admin') {
       return (
         <>

@@ -26,13 +26,14 @@ import Slide from '@mui/material/Slide';
 import { motion } from 'framer-motion';
 
 CheckOrderMemberPutSlip.propTypes = {
-  order_id: PropTypes.number
+  order_id: PropTypes.number,
+  row: PropTypes.object
 };
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 // eslint-disable-next-line camelcase
-export default function CheckOrderMemberPutSlip({ order_id }) {
+export default function CheckOrderMemberPutSlip({ order_id, row }) {
   const imageQRCode = require(`../../../assets/img/qrcode.PNG`).default;
   const dispatch = useDispatch();
   dispatch({ type: 'OPEN' });
@@ -50,15 +51,31 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
     });
   };
   const submit = async () => {
+    const getUSER = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${row.order_member_id}`);
+    const USER = getUSER.data.data
+    let levelUSER = ""
+    if (USER.level === 'subdistrict') {
+      levelUSER = "ศูนย์ระดับตำบล"
+    } else if (USER.level === 'district') {
+      levelUSER = "ศูนย์ระดับอำเภอ"
+    } else {
+      levelUSER = "ศูนย์ระดับจังหวัด"
+    }
     setShowModal(false);
     setLoading(true);
+    const messages = {
+      token: '2VvNMnpRFjgeYY49HwvGEkt9SNG6CSOPUwU3ZoVqm6Z',
+      message: `จาก ${getUSER.data.data.firstname} ${getUSER.data.data.lastname} ${levelUSER} ที่อยู่: ต.${USER.subdistrict}อ.${USER.district}จ.${USER.province}
+      ยอดโอนรวม: ${row.order_product_total}
+      ตรวจสอบได้ที่ : ${process.env.REACT_APP_NAME_WEP} `
+    }
     setTimeout(() => {
       setLoading(false);
     }, 2500);
     if (userInfo.file.length === 0) {
       Swal.fire({
         position: '',
-        icon: 'eooro',
+        icon: 'error',
         title: 'คุณยังไม่ได้เพิ่มไฟล์สลิป ?',
         showConfirmButton: false,
         timer: 1500
@@ -81,6 +98,7 @@ export default function CheckOrderMemberPutSlip({ order_id }) {
         if (result.isConfirmed) {
           dispatch({ type: 'OPEN' });
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postLineNotify`, messages);
           Swal.fire({
             position: '',
             icon: 'success',

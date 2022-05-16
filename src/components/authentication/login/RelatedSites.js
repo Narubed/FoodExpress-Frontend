@@ -72,7 +72,7 @@ export default function RelatedSites() {
         <Tooltips placement="top" ref={buttonRef}>
           <TooltipsContent>E-Branch</TooltipsContent>
         </Tooltips>
-        <Grid item xs={2} ref={buttonRef}>
+        {/* <Grid item xs={2} ref={buttonRef}>
           <IconWrapperStyle
             onClick={() => window.open('https://e-transfer.nbadigitalworlds.com/', '_blank')}
           >
@@ -87,9 +87,8 @@ export default function RelatedSites() {
         </Grid>
         <Tooltips placement="top" ref={buttonRef}>
           <TooltipsContent>E-Transfer</TooltipsContent>
-        </Tooltips>
-        <Grid item xs={2} ref={buttonRef}>
-          {/* <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}> */}
+        </Tooltips> */}
+        {/* <Grid item xs={2} ref={buttonRef}>
           <IconWrapperStyle
             onClick={() => window.open('https://www.shipmileservice.com/', '_blank')}
           >
@@ -100,11 +99,10 @@ export default function RelatedSites() {
               alt="Image"
             />
           </IconWrapperStyle>
-          {/* </Paper> */}
         </Grid>
         <Tooltips placement="top" ref={buttonRef}>
           <TooltipsContent>ShipSmile Service</TooltipsContent>
-        </Tooltips>
+        </Tooltips> */}
       </Grid>
     </>
   );

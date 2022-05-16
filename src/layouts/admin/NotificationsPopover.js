@@ -115,7 +115,12 @@ export default function NotificationsPopover() {
     const getAllOrder = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrderAndMember`
     );
-    const filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
+    const filterStatusOrder = [];
+    if (!getAllOrder) {
+      console.log('dddd');
+    } else {
+      // filterStatusOrder = getAllOrder.data.data.filter((f) => f.order_status === 'รอตรวจสอบ');
+    }
 
     setTotal(filterStatusOrder);
     setNotifications(filterStatusOrder);

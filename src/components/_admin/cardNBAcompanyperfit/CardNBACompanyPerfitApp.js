@@ -119,7 +119,8 @@ export default function AppCardCutArountAll(props) {
           <CardMedia
             component="img"
             height="20"
-            image="https://scontent.fcnx2-1.fna.fbcdn.net/v/t1.6435-9/163343230_219431456596557_8035454299368555826_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Dfi7DUi_JFAAX9hnkd7&_nc_ht=scontent.fcnx2-1.fna&oh=00_AT9tRlnm2ltphO4Ofji9dZark9_smMI-HMOdGlDh8TAuEg&oe=624C004A"
+            // eslint-disable-next-line global-require
+            image={require('../../../assets/img/NBA1.jpg').default}
             alt="green iguana"
           />
           <CardContent>

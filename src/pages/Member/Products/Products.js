@@ -37,7 +37,8 @@ export default function EcommerceShop() {
     const filterStatusProduct = Products.data.data.filter(
       (f) => f.productStetus === 'สินค้าพร้อมจำหน่าย'
     );
-    setProductsType(filterStatusProduct);
+    const reverseProduct = filterStatusProduct.reverse();
+    setProductsType(reverseProduct);
     await checkStatusOrder();
   }, []);
   const onSubmitProduct = () => {

@@ -58,6 +58,7 @@ const ColorButton = styled(LoadingButton)(({ theme }) => ({
 }));
 const ColorLink = styled(Link)(({ theme }) => ({
   contrastText: theme.palette.getContrastText(purple[500]),
+  float: 'left',
   color: purple[500],
   '&:hover': {
     contrastText: purple[700]
@@ -207,7 +208,7 @@ export default function LoginForm() {
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
+          {/* <FormControlLabel
             control={
               <Checkbox
                 style={{
@@ -218,8 +219,8 @@ export default function LoginForm() {
               />
             }
             label="Remember me"
-          />
-
+          /> */}
+          {/* {'. '} */}
           <ColorLink component={RouterLink} variant="subtitle2" to="/ForgotPassword">
             Forgot password?
           </ColorLink>

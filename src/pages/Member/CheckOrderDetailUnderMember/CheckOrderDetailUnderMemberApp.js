@@ -104,6 +104,8 @@ function CheckOrderDetailUnderMemberApp() {
       `${process.env.REACT_APP_WEB_BACKEND}/getJoinOrderAndMember`
     );
     const getUser_id = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/member/${user}`);
+    console.log(getOrderAndMember.data);
+    // eslint-disable-next-line no-undef
     const reverseOrderAndMember = getOrderAndMember.data.data.reverse();
     const filterByStatus = reverseOrderAndMember.filter((e) => e.order_status === 'รอจัดส่ง');
     let filterData = [];

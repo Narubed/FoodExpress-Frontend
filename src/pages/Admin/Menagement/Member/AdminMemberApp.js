@@ -170,6 +170,7 @@ function AdminMemberApp() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
+    console.log(getMember);
     setMemberlist(getMember.data.data);
     localStorage.clear();
   }, []);

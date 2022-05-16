@@ -71,7 +71,7 @@ export default function MemberMoreMenu(props) {
     const getApitombon = await axios.get(
       'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
     );
-
+    console.log(getApitombon.data);
     const filterProvince = await getApi.data.filter(
       (e) => e.province_name === MemberlistID.province
       // e.province_name === MemberlistID.province
@@ -83,6 +83,8 @@ export default function MemberMoreMenu(props) {
     const filterSubdistrict = await getApitombon.data.filter(
       (e) => e.district_name === MemberlistID.subdistrict
     );
+    console.log(filterSubdistrict);
+
     localStorage.setItem('id', MemberlistID.id);
     localStorage.setItem('password', MemberlistID.password);
     localStorage.setItem('email', MemberlistID.email);
