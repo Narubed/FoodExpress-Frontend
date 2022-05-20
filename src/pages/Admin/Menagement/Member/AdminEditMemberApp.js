@@ -61,19 +61,15 @@ export default function AdminCreateMemberApp() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getApi = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
-    );
-    const getApiAmphure = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/amphures.json'
-    );
-    const getApitombon = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
-    );
-
-    setApiThai(getApi.data);
-    setgetApiThaiAmphure(getApiAmphure.data);
-    setApiThaiTombon(getApitombon.data);
+    const tokenKey = {
+      tokenKey: process.env.REACT_APP_TOKEN_KEY
+    };
+    const getApi = await axios.post(`${process.env.REACT_APP_WEB_GEO}/provinces`, tokenKey);
+    const getApiAmphure = await axios.post(`${process.env.REACT_APP_WEB_GEO}/amphures`, tokenKey);
+    const getApitombon = await axios.post(`${process.env.REACT_APP_WEB_GEO}/districts`, tokenKey);
+    setApiThai(getApi.data.data);
+    setgetApiThaiAmphure(getApiAmphure.data.data);
+    setApiThaiTombon(getApitombon.data.data);
     Swal.fire({
       icon: 'question',
       title: 'หากข้อมูลยังไม่ขึ้น กรุณากดปุ่มเรียกข้อมูล หรือ กด F5 ครับ',

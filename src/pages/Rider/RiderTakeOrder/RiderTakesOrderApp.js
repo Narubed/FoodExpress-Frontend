@@ -140,7 +140,7 @@ export default function AdminTakesOrderDetail() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="TakeOrder | FoodExpress">
+    <Page title="TakeOrder | NBA-FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

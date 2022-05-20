@@ -106,7 +106,7 @@ export default function EcommerceShop() {
     setNumber(3);
   };
   return (
-    <Page title="สินค้าทั้งหมด | NBA-Express">
+    <Page title="สินค้าทั้งหมด | NBA-FoodExpress">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           <div>สินค้าทั้งหมด</div>

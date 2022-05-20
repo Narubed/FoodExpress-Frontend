@@ -34,7 +34,7 @@ export default function BlogsReportOrderApp() {
   }, []);
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="Blog | NBA-Express">
+    <Page title="Blog | NBA-FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

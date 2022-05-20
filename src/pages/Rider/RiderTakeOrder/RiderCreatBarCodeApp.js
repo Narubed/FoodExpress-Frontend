@@ -56,7 +56,7 @@ function RiderCreatBarCodeApp() {
   }, []);
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="RiderCreatBarCodeApp | admin NBA-Express">
+    <Page title="RiderCreatBarCodeApp | NBA-FoodExpress">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">

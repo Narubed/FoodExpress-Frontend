@@ -11,7 +11,16 @@ import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { styled } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 // ----------------------------------------------------------------------
+const ColorButton = styled(LoadingButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[700]
+  }
+}));
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -150,7 +159,7 @@ export default function RegisterForm() {
             helperText={touched.newpassword && errors.newpassword}
           />
 
-          <LoadingButton
+          <ColorButton
             // color="secondary"
             fullWidth
             size="large"
@@ -159,7 +168,7 @@ export default function RegisterForm() {
             // loading={isSubmitting}
           >
             เปลี่ยนรหัสผ่าน
-          </LoadingButton>
+          </ColorButton>
         </Stack>
       </Form>
     </FormikProvider>

@@ -19,7 +19,7 @@ function DashboardApp() {
     setTotal(getAllOrder.data.data);
   }, []);
   return (
-    <Page title="หน้าหลัก | rider NBA-Express">
+    <Page title="หน้าหลัก | NBA-FoodExpress">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hi, Welcome back</Typography>

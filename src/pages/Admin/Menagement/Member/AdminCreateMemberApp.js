@@ -52,23 +52,20 @@ export default function AdminCreateMemberApp() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getApi = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
-    );
-    const getApiAmphure = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/amphures.json'
-    );
-    const getApitombon = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
-    );
+    const tokenKey = {
+      tokenKey: process.env.REACT_APP_TOKEN_KEY
+    };
+    const getApi = await axios.post(`${process.env.REACT_APP_WEB_GEO}/provinces`, tokenKey);
+    const getApiAmphure = await axios.post(`${process.env.REACT_APP_WEB_GEO}/amphures`, tokenKey);
+    const getApitombon = await axios.post(`${process.env.REACT_APP_WEB_GEO}/districts`, tokenKey);
     const getMember = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/members`);
     const USERID = [];
     getMember.data.data.map((value) => USERID.push(value.userId));
 
     setUSERID(USERID);
-    setApiThai(getApi.data);
-    setgetApiThaiAmphure(getApiAmphure.data);
-    setApiThaiTombon(getApitombon.data);
+    setApiThai(getApi.data.data);
+    setgetApiThaiAmphure(getApiAmphure.data.data);
+    setApiThaiTombon(getApitombon.data.data);
   }, []);
   const RegisterSchema = Yup.object().shape({
     // Typeid: Yup.number().required('product price is required'),

@@ -129,11 +129,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           <motion.button whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }}>
             <ColorButton
               fullWidth
-              href="https://nbadigitalworlds.com/2021/"
+              href="http://nbadigitalservice.com/"
               target="_blank"
               variant="contained"
             >
-              <div>ติดต่อได้ที่ NBA Digital</div>
+              <div className="text-xs">ติดต่อได้ที่ NBA Digital Service</div>
             </ColorButton>
           </motion.button>
         </Stack>

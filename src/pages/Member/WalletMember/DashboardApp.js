@@ -32,7 +32,7 @@ export default function DashboardApp() {
   }, []);
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="Wallet | NBA-Express">
+    <Page title="กระเป๋าเงินของคุณ | NBA-FoodExpress">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">

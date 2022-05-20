@@ -181,14 +181,14 @@ function AdminWalletApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="Commission | FoodExpress">
+      <Page title="Commission | NBA-FoodExpress">
         <Container>
           <Card>
             <CardHeader
               avatar={<Icon icon="emojione:money-with-wings" width="38" height="38" />}
               color="orange"
               contentPosition="left"
-              title="Commistion"
+              title="Commission"
             />
             <br />
             <LocalizationProvider dateAdapter={AdapterDateFns}>

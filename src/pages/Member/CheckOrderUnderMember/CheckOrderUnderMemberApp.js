@@ -131,7 +131,7 @@ function CheckOrderUnderMemberApp() {
   }, []);
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="ออเดอร์ที่รอจัดส่ง | NBA-Express">
+    <Page title="ออเดอร์ที่รอจัดส่ง | NBA-FoodExpress">
       <Container maxWidth="xl">
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

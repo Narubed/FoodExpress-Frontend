@@ -70,13 +70,13 @@ export default function LoginForm() {
 
   const LoginSchema = Yup.object().shape({
     username: Yup.string()
-      .min(8, 'เลขบัตรของท่านสั้นเกินไป!') // มาเปลี่ยนด้วย
+      .min(8, 'ชื่อผู้ใช้งานของท่านสั้นเกินไป!') // มาเปลี่ยนด้วย
       .max(50, 'Too Long!')
-      .required('id is reqired'),
+      .required('ชื่อผู้ใช้งานไม่ถูกต้อง'),
     password: Yup.string()
-      .min(8, 'รหัสของท่านสั้นเกินไป!')
+      .min(8, 'รหัสผ่านของท่านสั้นเกินไป!')
       .max(50, 'Too Long!')
-      .required('Password is required')
+      .required('รหัสผ่านไม่ถูกต้อง')
   });
   const handleSubmits = async (e) => {
     const setUserNames = e.username;
@@ -151,7 +151,7 @@ export default function LoginForm() {
             window.location.href = '/';
           });
         } else {
-          swal('ไม่สามารถเช้าสู่ระบบได้', 'ID หรือ Password ผิดพลาด', 'error'); // สำหรับ login Admin
+          swal('ไม่สามารถเช้าสู่ระบบได้', 'ชื่อผู้ใช้งาน หรือรหัสผ่าน ไม่ถูกต้อง', 'error'); // สำหรับ login Admin
         }
       }
     }
@@ -180,7 +180,7 @@ export default function LoginForm() {
             fullWidth
             autoComplete="username"
             type="text"
-            label="รหัสบัตรประจำตัวประชาชน"
+            label="ชื่อผู้ใช้งาน"
             {...getFieldProps('username')}
             error={Boolean(touched.username && errors.username)}
             helperText={touched.username && errors.username}
@@ -191,7 +191,7 @@ export default function LoginForm() {
             fullWidth
             autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
+            label="รหัสผ่าน"
             {...getFieldProps('password')}
             InputProps={{
               endAdornment: (
@@ -222,7 +222,7 @@ export default function LoginForm() {
           /> */}
           {/* {'. '} */}
           <ColorLink component={RouterLink} variant="subtitle2" to="/ForgotPassword">
-            Forgot password?
+            ลืมรหัสผ่าน
           </ColorLink>
         </Stack>
 

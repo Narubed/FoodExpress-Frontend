@@ -62,28 +62,24 @@ export default function MemberMoreMenu(props) {
   const setDataEditMember = async () => {
     const Member = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getMemberByid/${id}`);
     const MemberlistID = Member.data.data;
-    const getApi = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/provinces.json'
-    );
-    const getApiAmphure = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/amphures.json'
-    );
-    const getApitombon = await axios.get(
-      'https://codebee.co.th/labs/examples/autoprovince/json/districts.json'
-    );
+    const tokenKey = {
+      tokenKey: process.env.REACT_APP_TOKEN_KEY
+    };
+    const getApi = await axios.post(`${process.env.REACT_APP_WEB_GEO}/provinces`, tokenKey);
+    const getApiAmphure = await axios.post(`${process.env.REACT_APP_WEB_GEO}/amphures`, tokenKey);
+    const getApitombon = await axios.post(`${process.env.REACT_APP_WEB_GEO}/districts`, tokenKey);
     console.log(getApitombon.data);
-    const filterProvince = await getApi.data.filter(
+    const filterProvince = await getApi.data.data.filter(
       (e) => e.province_name === MemberlistID.province
       // e.province_name === MemberlistID.province
     );
-    const filterDistrict = await getApiAmphure.data.filter(
+    const filterDistrict = await getApiAmphure.data.data.filter(
       (e) => e.amphur_name === MemberlistID.district
     );
 
-    const filterSubdistrict = await getApitombon.data.filter(
+    const filterSubdistrict = await getApitombon.data.data.filter(
       (e) => e.district_name === MemberlistID.subdistrict
     );
-    console.log(filterSubdistrict);
 
     localStorage.setItem('id', MemberlistID.id);
     localStorage.setItem('password', MemberlistID.password);

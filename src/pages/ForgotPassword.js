@@ -41,7 +41,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function ForgotPassword() {
   return (
-    <RootStyle title="ลืมรหัสผ่าน | NBA-Express">
+    <RootStyle title="ลืมรหัสผ่าน | NBA-FoodExpress">
       <AuthLayout />
       <MHidden width="mdDown">
         <SectionStyle>

@@ -8,11 +8,20 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { styled } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
+const ColorButton = styled(LoadingButton)(({ theme }) => ({
+  color: theme.palette.getContrastText(purple[500]),
+  backgroundColor: purple[500],
+  '&:hover': {
+    backgroundColor: purple[700]
+  }
+}));
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
@@ -152,9 +161,9 @@ export default function ForgotPasswordForm() {
             helperText={touched.password && errors.password}
           />
 
-          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
+          <ColorButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
             เปลี่ยนรหัสผ่าน
-          </LoadingButton>
+          </ColorButton>
         </Stack>
       </Form>
     </FormikProvider>

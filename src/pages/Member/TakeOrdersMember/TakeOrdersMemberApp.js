@@ -141,7 +141,7 @@ export default function AdminTakesOrderDetail() {
   const isUserNotFound = filteredUsers.length === 0;
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="ออเดอร์ที่ต้องได้รับ | FoodExpress">
+    <Page title="ออเดอร์ที่ต้องได้รับ | NBA-FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2}>
           <Typography variant="h4" gutterBottom>

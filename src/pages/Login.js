@@ -40,7 +40,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function Login() {
   return (
-    <RootStyle title="Login | NBA-Express">
+    <RootStyle title="Login | NBA-FoodExpress">
       <AuthLayout>
         {/* Don’t have an account? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
@@ -60,10 +60,10 @@ export default function Login() {
         <ContentStyle>
           <Stack sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              <div>Sign in to NBA Food Express</div>
+              <div>NBA FOOD EXPRESS</div>
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>
-              <div>กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ.</div>
+              <div>ระบบบริหารจัดการ เอ็นบีเอ ฟู๊ด เอ็กเพรส</div>
             </Typography>
           </Stack>
           {/* <AuthSocial /> */}

@@ -28,7 +28,7 @@ export default function StockProductApp() {
   }, []);
   dispatch({ type: 'TURNOFF' });
   return (
-    <Page title="สต๊อกสินค้า | NBA-Express">
+    <Page title="สต๊อกสินค้า | NBA-FoodExpress">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

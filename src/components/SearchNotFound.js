@@ -12,11 +12,10 @@ export default function SearchNotFound({ searchQuery = '', ...other }) {
   return (
     <Paper {...other}>
       <Typography gutterBottom align="center" variant="subtitle1">
-        Not found
+        ตอนนี้ยังไม่มีข้อมูล
       </Typography>
       <Typography variant="body2" align="center">
-        No results found for &nbsp;
-        <strong>&quot;{searchQuery}&quot;</strong>. Try checking for typos or using complete words.
+        กรุณาทำรายการ &nbsp; หรือติดต่อผู้ดูแลระบบเพื่อเเก้ไขปัญหานี้.
       </Typography>
     </Paper>
   );

@@ -212,7 +212,7 @@ function AdminMemberApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="underMember | FoodExpress">
+      <Page title="ผู้ใช้งานใต้สังกัต | NBA-FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>

@@ -90,7 +90,7 @@ function CheckOrderMemberCreatBarCodeApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="RiderCreatBarCodeApp | admin NBA-Express">
+      <Page title="สร้างบาร์โค๊ตออเดอร์ที่ถูกตัดรอบแล้ว | NBA-FoodExpress">
         <Container maxWidth="xl">
           <Box sx={{ pb: 5 }}>
             <Typography variant="h4">

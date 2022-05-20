@@ -48,9 +48,7 @@ export default function AppTrafficBySite() {
             <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
               <Box sx={{ mb: 0.5 }}>
                 <IconWrapperStyle
-                  onClick={() =>
-                    window.open('https://nbadigitalworlds.com/2021/index.html', '_blank')
-                  }
+                  onClick={() => window.open('https://nbadigitalservice.com/', '_blank')}
                 >
                   <Image
                     // eslint-disable-next-line global-require
@@ -111,18 +109,19 @@ export default function AppTrafficBySite() {
           <Grid item xs={6}>
             <Paper variant="outlined" sx={{ py: 2.5, textAlign: 'center' }}>
               <IconWrapperStyle
-                onClick={() => window.open('https://www.shipmileservice.com/', '_blank')}
+                onClick={() => window.open('https://nba-express.nbadigitalworlds.com/', '_blank')}
               >
                 <Image
-                  src="https://www.shipsmileservices.com/wp-content/uploads/2021/08/logo-%E0%B8%8A%E0%B8%B4%E0%B8%9B%E0%B8%9B%E0%B9%8C%E0%B8%AA%E0%B9%84%E0%B8%A1%E0%B8%A5%E0%B9%8C-%E0%B9%80%E0%B8%8B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%A7%E0%B8%B4%E0%B8%AA-new-verion-Final-create-01.jpg"
+                  // eslint-disable-next-line global-require
+                  src={require('../../../assets/img/nbaexpress02.png').default}
                   rounded
                   raised={false}
                   alt="Image"
                 />
               </IconWrapperStyle>
-              <Typography variant="h5">ShipSmile</Typography>
+              <Typography variant="h5">NBA Express</Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                SERVICES
+                เว็บขนส่งของเรา
               </Typography>
             </Paper>
           </Grid>

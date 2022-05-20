@@ -37,9 +37,9 @@ import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'level', label: 'level', alignRight: false },
-  { id: 'order_id', label: 'ID', alignRight: false },
-  { id: 'order_status', label: 'Status', alignRight: false },
+  { id: 'level', label: 'ระดับ', alignRight: false },
+  { id: 'order_id', label: 'ไอดี', alignRight: false },
+  { id: 'order_status', label: 'สถานะ', alignRight: false },
   { id: 'order_product_total', label: 'ผลรวมของออเดอร์', alignRight: false },
   { id: 'order_product_date', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
@@ -170,7 +170,7 @@ function CheckOrderDetailUnderMemberApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="CheckOrder | FoodExpress">
+      <Page title="ออเดอร์ผู้ใช้ใต้สังกัต | NBA-FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>

@@ -43,9 +43,9 @@ import SearchNotFound from '../../../components/SearchNotFound';
 import checkStatusOrder from '../../../utils/checkStatusOrder';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'order_id', label: 'ID', alignRight: false },
-  { id: 'order_status', label: 'Status', alignRight: false },
-  { id: 'order_slip', label: 'Slip', alignRight: false },
+  { id: 'order_id', label: 'ไอดี', alignRight: false },
+  { id: 'order_status', label: 'สถานะ', alignRight: false },
+  { id: 'order_slip', label: 'ใบเสร็จ', alignRight: false },
   { id: 'order_product_total', label: 'ผลรวมของออเดอร์', alignRight: false },
   { id: 'order_product_date', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
@@ -212,7 +212,7 @@ function CheckOrderMemberApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="CheckOrder | FoodExpress">
+      <Page title="ออเดอร์ของท่าน | NBA-FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
