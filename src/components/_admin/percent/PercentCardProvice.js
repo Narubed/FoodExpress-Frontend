@@ -13,17 +13,17 @@ import Swal from 'sweetalert2';
 export default function PercentCardProvice() {
   const dispatch = useDispatch();
   const [province_province, setProvince_province] = useState([]);
-  const [province_nba, setProvince_nba] = useState([]);
+  // const [province_nba, setProvince_nba] = useState([]);
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const getAllPrecent = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllPrecent`);
     setProvince_province(getAllPrecent.data.data[2].percent_provice * 100);
-    setProvince_nba(getAllPrecent.data.data[2].percent_nba * 100);
+    // setProvince_nba(getAllPrecent.data.data[2].percent_nba * 100);
   }, []);
   dispatch({ type: 'TURNOFF' });
   const handleSubmits = (e) => {
-    if (parseFloat(province_province) + parseFloat(province_nba) !== 100) {
+    if (parseFloat(province_province) !== 100) {
       Swal.fire('กำหนดค่าไม่ถูกต้อง?', 'ค่าเปอร์เซ็นทั้งหมดรวมกันเเล้วไม่ถึง 100 %', 'question');
     } else {
       const data = {
@@ -31,8 +31,8 @@ export default function PercentCardProvice() {
         percent_name: 'province',
         percent_subdistrict: 0,
         percent_district: 0,
-        percent_provice: parseFloat(province_province) / 100,
-        percent_nba: parseFloat(province_nba) / 100
+        percent_provice: parseFloat(province_province) / 100
+        // percent_nba: parseFloat(province_nba) / 100
       };
       Swal.fire({
         text: 'คุณต้องการเเก้ไขข้อมูลจังหวัดหรือไม่ !',
@@ -87,14 +87,14 @@ export default function PercentCardProvice() {
             defaultValue={province_province}
           />{' '}
           <br />
-          <Input
+          {/* <Input
             type="number"
             color="purple"
             placeholder="NBA"
             min="0"
             onChange={(e) => setProvince_nba(e.target.value)}
             defaultValue={province_nba}
-          />
+          /> */}
         </CardBody>
         <CardFooter>
           {' '}

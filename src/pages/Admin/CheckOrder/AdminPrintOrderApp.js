@@ -48,13 +48,13 @@ const columns = [
       } `
   },
   {
-    field: 'order_product_level',
+    field: 'percent_level_name',
     headerName: 'ระดับ',
     width: 150,
     valueGetter: (params) =>
-      `${params.row.order_product_level === 'subdistrict' ? 'ระดับตำบล' : ''}
-      ${params.row.order_product_level === 'district' ? 'ระดับอำเภอ' : ''}${
-        params.row.order_product_level === 'province' ? 'ระดับจังหวัด' : ''
+      `${params.row.percent_level_name === 'subdistrict' ? 'ระดับตำบล' : ''}
+      ${params.row.percent_level_name === 'district' ? 'ระดับอำเภอ' : ''}${
+        params.row.percent_level_name === 'province' ? 'ระดับจังหวัด' : ''
       }`,
     editable: false
   },
@@ -79,81 +79,62 @@ const columns = [
       `${params.row.order_product_amoumt || ''} ${params.row.order_product_currency || ''}`
   },
   {
-    field: 'order_product_cost',
+    field: 'percent_older_cost_value',
     headerName: 'ต้นทุนรวม',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${params.row.order_product_cost * params.row.order_product_amoumt || ''}`
+    valueGetter: (params) => `${params.row.percent_older_cost_value || ''}`
   },
   {
     field: 'percent_value_detail',
     headerName: 'ราคาขายก่อนรวม Vat.',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${
-        (params.row.order_product_price * params.row.order_product_amoumt * (100 / 107)).toFixed(
-          3
-        ) || ''
-      }`
+    valueGetter: (params) => `${params.row.percent_value_takeoff_vat.toFixed(3) || ''}`
   },
   {
     field: '7_vat',
     headerName: 'vat.7%',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${
-        (
-          params.row.order_product_price * params.row.order_product_amoumt -
-          params.row.order_product_price * params.row.order_product_amoumt * (100 / 107)
-        ).toFixed(3) || ''
-      }`
+    valueGetter: (params) => `${params.row.percent_value_vat.toFixed(3) || ''}`
   },
   {
     field: 'order_product_price',
     headerName: 'ราคาขายรวม Vat.',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${params.row.order_product_price * params.row.order_product_amoumt || ''}`
+    valueGetter: (params) => `${params.row.percent_older_price_value || ''}`
   },
 
   {
     field: 'กำไร',
-    headerName: 'กำไรทั้งหมด',
+    headerName: 'กำไรทั้งหมด(PF-VAT)',
     width: 150,
     editable: true,
-    valueGetter: (params) => `${params.row.percent_value_detail.toFixed(3) || ''}`
+    valueGetter: (params) => `${params.row.percent_value_PF_VAT.toFixed(3) || ''}`
   },
   {
-    field: 'กำไรบริษัท',
-    headerName: 'กำไรบริษัท',
+    field: 'กำไรบริษัท(PF/HO)',
+    headerName: 'กำไรบริษัท(PF/HO)',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${params.row.percent_value_detail_nba || 0} ${
-        `(${params.row.percent_order_detail_nba * 100}%)` || ''
-      }`
+    valueGetter: (params) => `${params.row.percent_value_PF_HO.toFixed(3)}` || 0
   },
   {
-    field: 'กำไรก่อนจ่ายให้เเต่ละศูนย์',
-    headerName: 'กำไรก่อนจ่ายให้เเต่ละศูนย์',
+    field: 'ปันผลศูนย์',
+    headerName: 'ปันผลศูนย์',
     width: 250,
     editable: true,
     valueGetter: (params) =>
-      `${(params.row.percent_value_detail - params.row.percent_value_detail_nba).toFixed(3) || 0}`
+      `${(params.row.percent_value_PF_VAT - params.row.percent_value_PF_HO).toFixed(3) || 0}`
   },
   {
     field: 'กำไรจังหวัด',
     headerName: 'กำไรจังหวัด',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${
-        (params.row.percent_value_detail * params.row.percent_order_detail_provice).toFixed(3) || 0
-      }${`(${params.row.percent_order_detail_provice * 100}%)` || ''}`
+    valueGetter: (params) => `${params.row.percent_service_value_provice.toFixed(3) || 0}`
   },
   {
     field: 'หัก 3% จังหวัด',
@@ -161,28 +142,27 @@ const columns = [
     width: 150,
     editable: true,
     valueGetter: (params) =>
-      `${
-        (params.row.percent_value_detail * params.row.percent_order_detail_provice * 0.03).toFixed(
-          3
-        ) || 0
-      } ${`(${0.03 * 100}%)` || ''}`
+      `${((params.row.percent_service_value_provice * 3) / 103).toFixed(3) || 0}`
   },
   {
     field: 'กำไรสุทธิจังหวัด',
     headerName: 'กำไรสุทธิจังหวัด',
     width: 150,
     editable: true,
-    valueGetter: (params) => `${params.row.percent_value_detail_provice || 0} `
+    valueGetter: (params) =>
+      `${
+        (
+          params.row.percent_service_value_provice.toFixed(3) -
+          ((params.row.percent_service_value_provice * 3) / 103).toFixed(3)
+        ).toFixed(3) || 0
+      }`
   },
   {
     field: 'กำไรอำเภอ',
     headerName: 'กำไรอำเภอ',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${
-        (params.row.percent_value_detail * params.row.percent_order_detail_district).toFixed(3) || 0
-      }${`(${params.row.percent_order_detail_district * 100}%)` || ''}`
+    valueGetter: (params) => `${params.row.percent_service_value_district.toFixed(3) || 0}`
   },
   {
     field: 'หัก 3% อำเภอ',
@@ -190,30 +170,27 @@ const columns = [
     width: 150,
     editable: true,
     valueGetter: (params) =>
-      `${
-        (params.row.percent_value_detail * params.row.percent_order_detail_district * 0.03).toFixed(
-          3
-        ) || 0
-      } ${`(${0.03 * 100}%)` || ''}`
+      `${((params.row.percent_service_value_district * 3) / 103).toFixed(3) || 0}`
   },
   {
     field: 'กำไรสุทธิอำเภอ',
     headerName: 'กำไรสุทธิอำเภอ',
     width: 150,
     editable: true,
-    valueGetter: (params) => `${params.row.percent_value_detail_district || 0} `
+    valueGetter: (params) =>
+      `${
+        (
+          params.row.percent_service_value_district.toFixed(3) -
+          ((params.row.percent_service_value_district * 3) / 103).toFixed(3)
+        ).toFixed(3) || 0
+      }`
   },
   {
     field: 'กำไรตำบล',
     headerName: 'กำไรตำบล',
     width: 150,
     editable: true,
-    valueGetter: (params) =>
-      `${
-        (params.row.percent_value_detail * params.row.percent_order_detail_subdistrict).toFixed(
-          3
-        ) || 0
-      }${`(${params.row.percent_order_detail_subdistrict * 100}%)` || ''}`
+    valueGetter: (params) => `${params.row.percent_service_value_subdistrict.toFixed(3) || 0}`
   },
   {
     field: 'หัก 3% ตำบล',
@@ -221,20 +198,34 @@ const columns = [
     width: 150,
     editable: true,
     valueGetter: (params) =>
-      `${
-        (
-          params.row.percent_value_detail *
-          params.row.percent_order_detail_subdistrict *
-          0.03
-        ).toFixed(3) || 0
-      } ${`(${0.03 * 100}%)` || ''}`
+      `${((params.row.percent_service_value_subdistrict * 3) / 103).toFixed(3) || 0}`
   },
   {
     field: 'กำไรสุทธิตำบล',
     headerName: 'กำไรสุทธิตำบล',
     width: 150,
     editable: true,
-    valueGetter: (params) => `${params.row.percent_value_detail_subdistrict || 0} `
+    valueGetter: (params) =>
+      `${
+        (
+          params.row.percent_service_value_subdistrict.toFixed(3) -
+          ((params.row.percent_service_value_subdistrict * 3) / 103).toFixed(3)
+        ).toFixed(3) || 0
+      }`
+  },
+  {
+    field: 'เปอร์เซ็นเพิ่มเติ่ม',
+    headerName: 'เปอร์เซ็นเพิ่มเติ่ม',
+    width: 150,
+    editable: true,
+    valueGetter: (params) => `${params.row.percentage_increase.toFixed(3) || 0} %`
+  },
+  {
+    field: 'กำไรเพิ่มเติ่ม',
+    headerName: 'กำไรเพิ่มเติ่ม',
+    width: 150,
+    editable: true,
+    valueGetter: (params) => `${params.row.percentage_increase_income.toFixed(3) || 0} `
   },
 
   {
@@ -279,7 +270,7 @@ export default function DataGridDemo() {
     const getOrderDetail = await axios.get(
       `${process.env.REACT_APP_WEB_BACKEND}/getJoin_order_detail_member`
     );
-    console.log(getOrderDetail);
+    console.log(getOrderDetail.data.data);
     getOrderDetail.data.data.forEach((element) => {
       element.id = element.id_percent_order_detail;
     });
@@ -293,6 +284,7 @@ export default function DataGridDemo() {
             dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
         )
       : rowsOrder;
+  console.log(newRowOrders);
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -314,8 +306,9 @@ export default function DataGridDemo() {
         </Stack>
       </LocalizationProvider>
 
-      <div style={{ height: '80%', width: '100%' }}>
+      <div style={{ height: '100%', width: '100%' }}>
         <DataGrid
+          // sx={{ bgcolor: 'red' }}
           rows={newRowOrders}
           columns={columns}
           pageSize={50}
@@ -391,20 +384,28 @@ export default function DataGridDemo() {
                 </TableCell>
                 <TableCell>
                   {newRowOrders
-                    .reduce((sumPrice, product) => sumPrice + product.percent_value_detail, 0)
+                    .reduce((sumPrice, product) => sumPrice + product.percent_value_PF_VAT, 0)
                     .toFixed(3)}
                 </TableCell>
                 <TableCell>
                   {newRowOrders
-                    .reduce((sumPrice, product) => sumPrice + product.percent_value_detail_nba, 0)
+                    .reduce((sumPrice, product) => sumPrice + product.percent_value_PF_HO, 0)
                     .toFixed(3)}
                 </TableCell>
                 <TableCell>
                   {newRowOrders
                     .reduce(
                       (sumPrice, product) =>
-                        sumPrice +
-                        (product.percent_value_detail - product.percent_value_detail_nba),
+                        sumPrice + (product.percent_value_PF_VAT - product.percent_value_PF_HO),
+                      0
+                    )
+                    .toFixed(3)}
+                </TableCell>
+                <TableCell>
+                  {newRowOrders
+                    .reduce(
+                      (sumPrice, product) =>
+                        sumPrice + (product.percent_service_value_provice * 3) / 103,
                       0
                     )
                     .toFixed(3)}
@@ -414,15 +415,8 @@ export default function DataGridDemo() {
                     .reduce(
                       (sumPrice, product) =>
                         sumPrice +
-                        product.percent_value_detail * product.percent_order_detail_provice * 0.03,
-                      0
-                    )
-                    .toFixed(3)}
-                </TableCell>
-                <TableCell>
-                  {newRowOrders
-                    .reduce(
-                      (sumPrice, product) => sumPrice + product.percent_value_detail_provice,
+                        (product.percent_service_value_provice.toFixed(3) -
+                          ((product.percent_service_value_provice * 3) / 103).toFixed(3)),
                       0
                     )
                     .toFixed(3)}
@@ -432,16 +426,7 @@ export default function DataGridDemo() {
                   {newRowOrders
                     .reduce(
                       (sumPrice, product) =>
-                        sumPrice +
-                        product.percent_value_detail * product.percent_order_detail_district * 0.03,
-                      0
-                    )
-                    .toFixed(3)}
-                </TableCell>
-                <TableCell>
-                  {newRowOrders
-                    .reduce(
-                      (sumPrice, product) => sumPrice + product.percent_value_detail_district,
+                        sumPrice + (product.percent_service_value_district * 3) / 103,
                       0
                     )
                     .toFixed(3)}
@@ -451,9 +436,8 @@ export default function DataGridDemo() {
                     .reduce(
                       (sumPrice, product) =>
                         sumPrice +
-                        product.percent_value_detail *
-                          product.percent_order_detail_subdistrict *
-                          0.03,
+                        (product.percent_service_value_district.toFixed(3) -
+                          ((product.percent_service_value_district * 3) / 103).toFixed(3)),
                       0
                     )
                     .toFixed(3)}
@@ -461,7 +445,19 @@ export default function DataGridDemo() {
                 <TableCell>
                   {newRowOrders
                     .reduce(
-                      (sumPrice, product) => sumPrice + product.percent_value_detail_subdistrict,
+                      (sumPrice, product) =>
+                        sumPrice + (product.percent_service_value_subdistrict * 3) / 103,
+                      0
+                    )
+                    .toFixed(3)}
+                </TableCell>
+                <TableCell>
+                  {newRowOrders
+                    .reduce(
+                      (sumPrice, product) =>
+                        sumPrice +
+                        (product.percent_service_value_subdistrict.toFixed(3) -
+                          ((product.percent_service_value_subdistrict * 3) / 103).toFixed(3)),
                       0
                     )
                     .toFixed(3)}

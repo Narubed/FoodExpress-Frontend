@@ -287,12 +287,12 @@ function AdminWalletApp() {
                               {numeral(wallet_member_total).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
-                              {numeral(wallet_member_total * 0.03).format('0,0.000')}
+                              {numeral((wallet_member_total * 3) / 103).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
-                              {numeral(wallet_member_total - wallet_member_total * 0.03).format(
-                                '0,0.000'
-                              )}
+                              {numeral(
+                                wallet_member_total - (wallet_member_total * 3) / 103
+                              ).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">{subdistrict}</TableCell>
                             <TableCell align="left">{district}</TableCell>

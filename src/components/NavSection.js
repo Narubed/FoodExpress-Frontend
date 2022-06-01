@@ -68,10 +68,12 @@ function NavItem({ item, active }) {
   };
 
   const activeSubStyle = {
-    color: 'text.primary',
-    fontWeight: 'fontWeightMedium'
+    color: purple[500],
+    fontWeight: 'fontWeightMedium',
+    bgcolor: alpha(purple[500], theme.palette.action.selectedOpacity),
+    // bgcolor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+    '&:before': { display: 'block' }
   };
-
   if (children) {
     return (
       <>
@@ -116,11 +118,11 @@ function NavItem({ item, active }) {
                         borderRadius: '50%',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        bgcolor: 'text.disabled',
+                        bgcolor: purple[500],
                         transition: (theme) => theme.transitions.create('transform'),
                         ...(isActiveSub && {
                           transform: 'scale(2)',
-                          bgcolor: 'primary.main'
+                          bgcolor: purple[500]
                         })
                       }}
                     />

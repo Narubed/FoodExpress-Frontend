@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -26,9 +27,12 @@ ProductMoreMenu.propTypes = {
   productStetus: PropTypes.string,
   unitkg: PropTypes.number,
   currency: PropTypes.string,
-  nameproducttype: PropTypes.string
+  nameproducttype: PropTypes.string,
+  percent_service: PropTypes.number,
+  percent_NBA: PropTypes.number
 };
 export default function ProductMoreMenu(props) {
+  console.log(props);
   const dispatch = useDispatch();
   // eslint-disable-next-line camelcase
   const {
@@ -41,7 +45,9 @@ export default function ProductMoreMenu(props) {
     productStetus,
     unitkg,
     currency,
-    nameproducttype
+    nameproducttype,
+    percent_service,
+    percent_NBA
   } = props;
 
   const ref = useRef(null);
@@ -85,6 +91,8 @@ export default function ProductMoreMenu(props) {
     localStorage.setItem('unitkg', unitkg);
     localStorage.setItem('currency', currency);
     localStorage.setItem('nameproducttype', nameproducttype);
+    localStorage.setItem('percent_service', percent_service);
+    localStorage.setItem('percent_NBA', percent_NBA);
   };
 
   return (

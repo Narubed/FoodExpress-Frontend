@@ -20,8 +20,22 @@ const sidebarConfig = [
   {
     title: 'checkorder',
     titleth: 'ตรวจสอบออเดอร์',
-    path: '/admin/AdminCheckOrderApp',
-    icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
+    // path: '/admin/AdminCheckOrderApp',
+    icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />,
+    children: [
+      {
+        title: 'checkorder',
+        titleth: 'ออเดอร์ศูนย์ภายในจังหวัด',
+        path: '/admin/AdminCheckOrderApp'
+        // icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
+      },
+      {
+        title: 'checkorder',
+        titleth: 'ออเดอร์ศูนย์(เขต/ภาค)',
+        path: '/admin/AdminCheckOrderPartnerApp'
+        // icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
+      }
+    ]
   },
   {
     title: 'percent',
@@ -56,28 +70,35 @@ const sidebarConfig = [
   },
 
   {
-    title: 'rider',
-    titleth: 'จัดการข้อมูลไรเดอร์',
-    path: '/admin/AdminRiderApp',
-    icon: <Icon icon="noto:person-biking-light-skin-tone" width={22} height={22} />
-  },
-  {
-    title: 'company',
-    titleth: 'จัดการข้อมูลบริษัท',
-    path: '/admin/AdminCompanyApp',
-    icon: <Icon icon="emojione:office-building" width={22} height={22} />
-  },
-  {
-    title: 'product',
-    titleth: 'จัดการข้อมูลสินค้า',
-    path: '/admin/AdminProductApp',
-    icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
-  },
-  {
-    title: 'member',
-    titleth: 'จัดการข้อมูลผู้ใช้',
-    path: '/admin/AdminMemberApp',
-    icon: <Icon icon="emojione:person-walking-medium-skin-tone" width={22} height={22} />
+    title: 'จัดการข้อมูลในระบบ',
+    titleth: 'จัดการข้อมูลในระบบ',
+    icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />,
+    children: [
+      {
+        title: 'rider',
+        titleth: 'จัดการข้อมูลไรเดอร์',
+        path: '/admin/AdminRiderApp',
+        icon: <Icon icon="noto:person-biking-light-skin-tone" width={22} height={22} />
+      },
+      {
+        title: 'company',
+        titleth: 'จัดการข้อมูลบริษัท',
+        path: '/admin/AdminCompanyApp',
+        icon: <Icon icon="emojione:office-building" width={22} height={22} />
+      },
+      {
+        title: 'product',
+        titleth: 'จัดการข้อมูลสินค้า',
+        path: '/admin/AdminProductApp',
+        icon: <Icon icon="emojione-v1:shopping-bags" width={22} height={22} />
+      },
+      {
+        title: 'member',
+        titleth: 'จัดการข้อมูลผู้ใช้',
+        path: '/admin/AdminMemberApp',
+        icon: <Icon icon="emojione:person-walking-medium-skin-tone" width={22} height={22} />
+      }
+    ]
   }
   // {
   //   title: 'rider',

@@ -26,6 +26,15 @@ import {
 WalletCutArount.propTypes = {
   wallet_id: PropTypes.string
 };
+// {
+//   numeral(wallet_member_total).format('0,0.000');
+// }
+// {
+//   numeral((row.row.wallet_member_total * 3) / 103).format('0,0.000');
+// }
+// {
+//   numeral(wallet_member_total - (wallet_member_total * 3) / 103).format('0,0.000');
+// }
 
 // eslint-disable-next-line camelcase
 export default function WalletCutArount(row) {
@@ -38,8 +47,9 @@ export default function WalletCutArount(row) {
     const dataPostReport = {
       report_wallet_member_id: row.row.wallet_member_id_express,
       report_wallet_member_older_total: row.row.wallet_member_total,
-      report_wallet_member_3: row.row.wallet_member_total * 0.03,
-      report_wallet_member_total: row.row.wallet_member_total - row.row.wallet_member_total * 0.03,
+      report_wallet_member_3: (row.row.wallet_member_total * 3) / 103,
+      report_wallet_member_total:
+        row.row.wallet_member_total - (row.row.wallet_member_total * 3) / 103,
       report_wallet_member_status: 'รอรับค่าคอมมิชชั่น'
     };
     Swal.fire({

@@ -20,6 +20,7 @@ import CheckOrderUnderMemberApp from './pages/Member/CheckOrderUnderMember/Check
 import CheckOrderMemberCreatBarCodeApp from './pages/Member/CheckOrderUnderMember/CheckOrderMemberCreatBarCodeApp';
 import TakeOrdersInProvinceApp from './pages/Member/TakeOrdersInProvince/TakeOrdersInProvinceApp';
 import ChangePasswordApp from './pages/Member/ChangePassword/ChangePasswordApp';
+import ConfirmSlip from './pages/Member/CheckOrderMember/Confirm-slip';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'CheckOrderMemberApp', element: <CheckOrderMemberApp /> },
+        { path: 'CheckOrderMemberApp/ConfirmSlip', element: <ConfirmSlip /> },
         { path: 'UnderMemberApp', element: <UnderMemberApp /> },
         { path: 'CheckOrderDetailUnderMemberApp', element: <CheckOrderDetailUnderMemberApp /> },
         { path: 'TakeOrdersMemberApp', element: <TakeOrdersMemberApp /> },

@@ -1,16 +1,15 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
 import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
 import numeral from 'numeral';
 import dayjs from 'dayjs';
-import { Icon } from '@iconify/react';
-
 import 'dayjs/locale/th';
-// import { Link as RouterLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
+import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
 // material
 import {
@@ -25,30 +24,29 @@ import {
   TableContainer,
   TablePagination,
   Badge,
-  IconButton,
   TextField,
-  Box
+  Box,
+  Tooltip
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
 import { styled } from '@mui/material/styles';
 import {
-  CheckOrderMemberListHead,
-  CheckOrderMemberListToolbar,
-  CheckOrderMemberMoreMenu,
-  CheckSlipImageMember
-} from '../../../components/_dashboard/checkordermember';
-import Page from '../../../components/Page';
+  CheckOrderListHead,
+  CheckOrderListToolbar,
+  CheckOrderMoreMenu,
+  CheckSlipImage
+} from '../../../../components/_admin/checkorder';
+import Page from '../../../../components/Page';
 // import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
-import checkStatusOrder from '../../../utils/checkStatusOrder';
+import Scrollbar from '../../../../components/Scrollbar';
+import SearchNotFound from '../../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'order_id', label: 'ไอดี', alignRight: false },
-  { id: 'order_status', label: 'สถานะ', alignRight: false },
-  { id: 'order_slip', label: 'ใบเสร็จ', alignRight: false },
+  { id: 'order_id', label: 'ID', alignRight: false },
+  { id: 'order_status', label: 'Status', alignRight: false },
+  { id: 'order_slip', label: 'Slip', alignRight: false },
   { id: 'order_product_total', label: 'ผลรวมของออเดอร์', alignRight: false },
   { id: 'order_product_date', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
@@ -120,7 +118,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   }
 }));
 
-function CheckOrderMemberApp() {
+function AdminCheckOrderApp() {
   const dispatch = useDispatch();
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
@@ -138,18 +136,11 @@ function CheckOrderMemberApp() {
   const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    checkStatusOrder();
     const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
-    const filterMemberId = getOrdder.data.data.filter(
-      (f) => f.order_member_id === sessionStorage.getItem('user')
-    );
-    const reverseData = filterMemberId.reverse();
-    const sortData = reverseData.sort(
-      (a, b) => dayjs(a.order_product_date).format - dayjs(b.order_product_date).format
-    );
-    setOrderlist(sortData);
+    const reverseData = getOrdder.data.data.reverse();
+    setOrderlist(reverseData);
   }, []);
-
+  dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -164,10 +155,10 @@ function CheckOrderMemberApp() {
       // setSelected_id(newSelectedsid);
       return;
     }
-
     setSelected([]);
     setSelected_id([]);
   };
+
   const onChangeStatus = (e) => {
     const filterStatus = Orderlist.filter((value) => value.order_status === e);
     if (filterStatus.length !== 0) {
@@ -190,7 +181,7 @@ function CheckOrderMemberApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  dispatch({ type: 'OPEN' });
   const newOrderlist =
     OrderlistFilter !== null && valueDate[0] !== null && valueDate[1] !== null
       ? OrderlistFilter.filter(
@@ -208,19 +199,35 @@ function CheckOrderMemberApp() {
       ? OrderlistFilter
       : Orderlist;
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - newOrderlist.length) : 0;
-
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="ออเดอร์ของท่าน | NBA-FoodExpress">
+      <Page title="เช็คออเดอร์ศูนย์ (เขต/ภาค) | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              <div> ออเดอร์ของท่าน</div>
+              <div>เช็คออเดอร์ศูนย์ (เขต/ภาค)</div>
             </Typography>
+            {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+              <Tooltip title="ปริ้นรายระเอียดออเดอร์">
+                <Link to="/admin/AdminCheckOrderApp/AdminPrintOrderApp">
+                  <Button
+                    color="lightBlue"
+                    buttonType="link"
+                    size="regular"
+                    rounded
+                    block={false}
+                    iconOnly
+                    ripple="dark"
+                  >
+                    <Icon icon="flat-color-icons:print" width={32} height={32} />
+                  </Button>
+                </Link>
+              </Tooltip>
+            ) : null}
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
@@ -240,9 +247,9 @@ function CheckOrderMemberApp() {
               />
             </Stack>
           </LocalizationProvider>
-          <br />
+
           <Card>
-            <CheckOrderMemberListToolbar
+            <CheckOrderListToolbar
               numSelected={selected.length}
               filterName={filterName}
               onFilterName={handleFilterByName}
@@ -256,7 +263,7 @@ function CheckOrderMemberApp() {
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800 }}>
                 <Table>
-                  <CheckOrderMemberListHead
+                  <CheckOrderListHead
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
@@ -301,9 +308,9 @@ function CheckOrderMemberApp() {
                                 </Typography>{' '}
                               </Stack>
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="left">
                               {order_status === 'รอชำระเงิน' ? (
-                                <Label color="brown">{order_status}</Label>
+                                <Label color="yellow">{order_status}</Label>
                               ) : null}
                               {order_status === 'รอตรวจสอบ' ? (
                                 <Label color="lightBlue">{order_status}</Label>
@@ -321,55 +328,30 @@ function CheckOrderMemberApp() {
                                 <Label color="pink">{order_status}</Label>
                               ) : null}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="left">
                               {order_slip !== '' ? (
                                 <StyledBadge
                                   overlap="circular"
                                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                   variant="dot"
                                 >
-                                  <CheckSlipImageMember images={order_slip} Name={order_id} />
+                                  <CheckSlipImage images={order_slip} Name={order_id} />
                                 </StyledBadge>
-                              ) : order_status === 'รอชำระเงิน' ? (
-                                <Link
-                                  state={row}
-                                  to={{
-                                    pathname: '/dashboard/CheckOrderMemberApp/ConfirmSlip'
-                                  }}
-                                >
-                                  <IconButton
-                                    sx={{ color: 'purple' }}
-                                    // color="primary"
-                                    aria-label="upload picture"
-                                    component="span"
-                                    onClick={() => localStorage.setItem('row', JSON.stringify(row))}
-                                  >
-                                    <Icon
-                                      icon="fluent:image-search-24-regular"
-                                      width="32"
-                                      height="32"
-                                    />
-                                  </IconButton>
-                                </Link>
                               ) : null}
-                              {/* <CheckOrderMemberPutSlip order_id={order_id} row={row} /> */}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="left">
                               {numeral(order_product_total).format()}
                             </TableCell>
-                            <TableCell align="right">
+                            <TableCell align="left">
                               <Label color="lightGreen">
                                 {order_product_date
-                                  ? dayjs(order_product_date)
-                                      .locale('th')
-                                      .add(543, 'year')
-                                      .format('DD MMMM YYYY')
+                                  ? dayjs(order_product_date).locale('th').format('DD MMMM YYYY')
                                   : null}
                               </Label>{' '}
                             </TableCell>
 
                             <TableCell align="right">
-                              <CheckOrderMemberMoreMenu
+                              <CheckOrderMoreMenu
                                 order_id={order_id}
                                 Orderlist={Orderlist}
                                 row={row}
@@ -415,4 +397,4 @@ function CheckOrderMemberApp() {
     </>
   );
 }
-export default CheckOrderMemberApp;
+export default AdminCheckOrderApp;

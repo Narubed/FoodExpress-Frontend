@@ -15,7 +15,7 @@ export default function PercentCardSubdistrict() {
   const [subdistrict_subdistrict, setSubdistrict_subdistrict] = useState([]);
   const [subdistrict_district, setSubdistrict_district] = useState([]);
   const [subdistrict_province, setSubdistrict_province] = useState([]);
-  const [subdistrict_nba, setSubdistrict_nba] = useState([]);
+  // const [subdistrict_nba, setSubdistrict_nba] = useState([]);
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -23,15 +23,14 @@ export default function PercentCardSubdistrict() {
     setSubdistrict_subdistrict(getAllPrecent.data.data[0].percent_subdistrict * 100);
     setSubdistrict_district(getAllPrecent.data.data[0].percent_district * 100);
     setSubdistrict_province(getAllPrecent.data.data[0].percent_provice * 100);
-    setSubdistrict_nba(getAllPrecent.data.data[0].percent_nba * 100);
+    // setSubdistrict_nba(getAllPrecent.data.data[0].percent_nba * 100);
   }, []);
   dispatch({ type: 'TURNOFF' });
   const handleSubmits = () => {
     if (
       parseFloat(subdistrict_subdistrict) +
         parseFloat(subdistrict_district) +
-        parseFloat(subdistrict_province) +
-        parseFloat(subdistrict_nba) !==
+        parseFloat(subdistrict_province) !==
       100
     ) {
       Swal.fire('กำหนดค่าไม่ถูกต้อง?', 'ค่าเปอร์เซ็นทั้งหมดรวมกันเเล้วไม่ถึง 100 %', 'question');
@@ -41,8 +40,8 @@ export default function PercentCardSubdistrict() {
         percent_name: 'subdistrict',
         percent_subdistrict: parseFloat(subdistrict_subdistrict) / 100,
         percent_district: parseFloat(subdistrict_district) / 100,
-        percent_provice: parseFloat(subdistrict_province) / 100,
-        percent_nba: parseFloat(subdistrict_nba) / 100
+        percent_provice: parseFloat(subdistrict_province) / 100
+        // percent_nba: parseFloat(subdistrict_nba) / 100
       };
       Swal.fire({
         text: 'คุณต้องการเเก้ไขข้อมูลตำบลนี้หรือไม่ !',
@@ -117,14 +116,14 @@ export default function PercentCardSubdistrict() {
             defaultValue={subdistrict_province}
           />{' '}
           <br />
-          <Input
+          {/* <Input
             type="number"
             color="yellow"
             placeholder="NBA"
             min="0"
             onChange={(e) => setSubdistrict_nba(e.target.value)}
             defaultValue={subdistrict_nba}
-          />
+          /> */}
         </CardBody>
         <CardFooter>
           <div className="h-56 grid grid-cols-3 gap-4 content-between">

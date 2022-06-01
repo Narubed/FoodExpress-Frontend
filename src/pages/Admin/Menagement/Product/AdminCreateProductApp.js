@@ -16,6 +16,9 @@ export default function AdminCreateProductApp() {
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [ProductType, setProductType] = useState([]);
+  const [onProductPrice, setonProductPrice] = useState([]);
+  const [onProductCost, setonProductCost] = useState([]);
+
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -29,70 +32,89 @@ export default function AdminCreateProductApp() {
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('product name required'),
-    productPrice: Yup.number().required('product price is required'),
+    // productPrice: Yup.number().required('product price is required'),
     currency: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('product name required'),
     unitkg: Yup.number().required('product price is required'),
-    productCost: Yup.number().required('product price is required'),
+    // productCost: Yup.number().required('product price is required'),
     productStetus: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('product name required')
+      .required('product name required'),
+    percentNBA: Yup.number().required('กำหนดเปอร์เซ็นใหม่ด้วย')
   });
+
   const handleSubmits = async (e) => {
-    const formdata = new FormData();
-    formdata.append('avatar', file);
-    formdata.append('productName', e.productName);
-    formdata.append('productPrice', e.productPrice);
-    formdata.append('productCost', e.productCost);
-    formdata.append('productStetus', e.productStetus);
-    formdata.append('typeid', e.Typeid);
-    formdata.append('unitkg', e.unitkg);
-    formdata.append('currency', e.currency);
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'คุณต้องการเพิ่มสินค้าหรือไม่ !',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'ยืนยัน!',
-      cancelButtonText: 'ยกเลิก!'
-    }).then(async (result) => {
-      if (file.length === 0) {
-        Swal.fire(
-          'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
-          'ลองเช็คที่ไฟล์รูปภาพของคุณอีกครั้ง?',
-          'question'
-        );
-      } else if (result.isConfirmed) {
-        dispatch({ type: 'OPEN' });
-        await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
-        Swal.fire({
-          icon: 'success',
-          title: 'คุณได้เพิ่มสินค้ารียบร้อยเเล้ว',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          dispatch({ type: 'TURNOFF' });
-        }, 1500);
-      }
-    });
+    console.log(e);
+    if ((e.productPrice * 100) / 107 - e.productCost - e.percentNBA <= 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'กรุณาตรวจสอบเปอร์เซ็นอีกครั้ง',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    } else {
+      // console.log((e.productPrice * 100) / 107 - e.productCost - e.percentNBA);
+      const formdata = new FormData();
+      formdata.append('avatar', file);
+      formdata.append('productName', e.productName);
+      formdata.append('productPrice', onProductPrice);
+      formdata.append('productCost', onProductCost);
+      formdata.append('productStetus', e.productStetus);
+      formdata.append('typeid', e.Typeid);
+      formdata.append('unitkg', e.unitkg);
+      formdata.append('currency', e.currency);
+      formdata.append(
+        'percent_service',
+        ((onProductPrice * 100) / 107 - onProductCost - e.percentNBA).toFixed(3)
+      );
+      formdata.append('percent_NBA', e.percentNBA);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'คุณต้องการเพิ่มสินค้าหรือไม่ !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ยืนยัน!',
+        cancelButtonText: 'ยกเลิก!'
+      }).then(async (result) => {
+        if (file.length === 0) {
+          Swal.fire(
+            'เราคิดว่าคุณกรอกข้อมูลไม่ครบ?',
+            'ลองเช็คที่ไฟล์รูปภาพของคุณอีกครั้ง?',
+            'question'
+          );
+        } else if (result.isConfirmed) {
+          dispatch({ type: 'OPEN' });
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
+          Swal.fire({
+            icon: 'success',
+            title: 'คุณได้เพิ่มสินค้าเรียบร้อยเเล้ว',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout(() => {
+            dispatch({ type: 'TURNOFF' });
+          }, 1500);
+        }
+      });
+    }
   };
   const formik = useFormik({
     initialValues: {
       productName: '',
-      productPrice: '',
-      productCost: '',
+      // productPrice: '',
+      // productCost: '',
       productStetus: null,
       productImg: '',
       productTypes: [],
       Typeid: null,
       unitkg: '',
-      currency: ''
+      currency: '',
+      percentNBA: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: (e) => handleSubmits(e)
@@ -130,23 +152,13 @@ export default function AdminCreateProductApp() {
                   </MenuItem>
                 ))}
               </TextField>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField
-                  fullWidth
-                  label="ชื่อสินค้า"
-                  {...getFieldProps('productName')}
-                  error={Boolean(touched.productName && errors.productName)}
-                  helperText={touched.productName && errors.productName}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="productPrice"
-                  label="ราคาสินค้า"
-                  {...getFieldProps('productPrice')}
-                  error={Boolean(touched.productPrice && errors.productPrice)}
-                  helperText={touched.productPrice && errors.productPrice}
-                />
-              </Stack>
+              <TextField
+                fullWidth
+                label="ชื่อสินค้า"
+                {...getFieldProps('productName')}
+                error={Boolean(touched.productName && errors.productName)}
+                helperText={touched.productName && errors.productName}
+              />
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   fullWidth
@@ -164,13 +176,49 @@ export default function AdminCreateProductApp() {
                   helperText={touched.unitkg && errors.unitkg}
                 />
               </Stack>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <TextField
+                  fullWidth
+                  autoComplete="productPrice"
+                  label="ราคาสินค้า(ราคาขาย)"
+                  onChange={(e) => setonProductPrice(e.target.value)}
+                  // {...getFieldProps('productPrice')}
+                />
+                <TextField
+                  fullWidth
+                  autoComplete="productCost"
+                  label="ราคาต้นทุนของสินค้า"
+                  onChange={(e) => setonProductCost(e.target.value)}
+                />
+              </Stack>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
+                <TextField
+                  disabled
+                  fullWidth
+                  label="VAT"
+                  value={((onProductPrice * 7) / 107).toFixed(3)}
+                />
+                <TextField
+                  disabled
+                  fullWidth
+                  label="ราคาถอด VAT"
+                  value={((onProductPrice * 100) / 107).toFixed(3)}
+                />
+                <TextField
+                  disabled
+                  fullWidth
+                  autoComplete="book_number"
+                  label="กำไรทั้งหมด (PF-VAT)"
+                  value={((onProductPrice * 100) / 107 - onProductCost).toFixed(3)}
+                />
+              </Stack>
               <TextField
                 fullWidth
-                autoComplete="productCost"
-                label="ราคาต้นทุนของสินค้า"
-                {...getFieldProps('productCost')}
-                error={Boolean(touched.productCost && errors.productCost)}
-                helperText={touched.productCost && errors.productCost}
+                type="number"
+                label="จำนวนเงินที่บริษัทจะรับ (เปอร์เซ็นของบริษัท)"
+                {...getFieldProps('percentNBA')}
+                error={Boolean(touched.percentNBA && errors.percentNBA)}
+                helperText={touched.percentNBA && errors.percentNBA}
               />
               <TextField
                 id="outlined-select-currency"

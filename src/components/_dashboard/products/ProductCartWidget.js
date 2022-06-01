@@ -132,25 +132,31 @@ export default function CartWidget({
         cancelButtonText: 'ยกเลิก!'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrder`, OrderFoodExpress);
+          let resOrder;
+          await axios
+            .post(`${process.env.REACT_APP_WEB_BACKEND}/postOrder`, OrderFoodExpress)
+            .then((res) => (resOrder = res.data.results))
+            .catch((error) => console.log(error));
           await ProductPercentDetail({ count, OrderFoodExpress });
           Order_Detail_FoodExpress.map(
-            async (e) =>
+            async (value) =>
               // eslint-disable-next-line no-return-await
               await axios.post(
-                await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrderDetail`, e)
+                await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postOrderDetail`, value)
               )
           );
-
           Swal.fire({
-            position: '',
             icon: 'success',
             title: 'คุณได้เพิ่มรายการสินค้าเรียบร้อยเเล้ว',
             showConfirmButton: false,
             timer: 1500
           });
           setTimeout(() => {
-            navigate('/dashboard/CheckOrderMemberApp', { replace: true });
+            navigate(
+              '/dashboard/CheckOrderMemberApp/ConfirmSlip',
+              { state: resOrder },
+              { replace: true }
+            );
           }, 1500);
         }
       });
@@ -244,9 +250,6 @@ export default function CartWidget({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          {/* <Button color="green" onClick={(e) => onSubmit(e)} ripple="light">
-            ยืนยันรายการสั่งซื้อ
-          </Button> */}
           <motion.div whileHover={{ scale: 0.9 }} whileTap={{ scale: 0.8 }}>
             <ColorButton
               onClick={(e) => onSubmit(e)}

@@ -24,7 +24,7 @@ export default function CheckOrderMemberListHead({ order, orderBy, headLabel, on
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.alignRight ? 'right' : 'left'}
+            align={headCell.alignRight ? 'right' : 'center'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel

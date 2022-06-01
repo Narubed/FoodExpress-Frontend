@@ -17,6 +17,9 @@ export default function AdminEditProductApp() {
   const [file, setfile] = useState([]);
   const [filepreview, setfilepreview] = useState(null);
   const [ProductType, setProductType] = useState([]);
+  const [onProductPrice, setonProductPrice] = useState(localStorage.getItem('productPrice'));
+  const [onProductCost, setonProductCost] = useState(localStorage.getItem('productCost'));
+
   dispatch({ type: 'OPEN' });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -30,39 +33,49 @@ export default function AdminEditProductApp() {
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('product name required'),
-    productPrice: Yup.number().required('product price is required'),
+    // productPrice: Yup.number().required('product price is required'),
     currency: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('product name required'),
     unitkg: Yup.number().required('product price is required'),
-    productCost: Yup.number().required('product price is required'),
+    // productCost: Yup.number().required('product price is required'),
     productStetus: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('product name required')
+      .required('product name required'),
+    percent_NBA: Yup.number().required('กำหนดเปอร์เซ็นใหม่ด้วย')
   });
   const handleSubmits = async (e) => {
     const data = {
       productid: parseInt(e.productid, 10),
       productName: e.productName,
-      productPrice: parseInt(e.productPrice, 10),
-      productCost: parseInt(e.productCost, 10),
+      productPrice: onProductPrice,
+      productCost: onProductCost,
       productStetus: e.productStetus,
       typeid: parseInt(e.Typeid, 10),
-      unitkg: parseInt(e.unitkg, 10),
-      currency: e.currency
+      unitkg: e.unitkg,
+      currency: e.currency,
+      percent_service: ((onProductPrice * 100) / 107 - onProductCost - e.percent_NBA).toFixed(3),
+      percent_NBA: e.percent_NBA
     };
 
     const formdata = new FormData();
     formdata.append('avatar', file);
+    formdata.append('productid', parseInt(e.productid, 10));
     formdata.append('productName', e.productName);
-    formdata.append('productPrice', e.productPrice);
-    formdata.append('productCost', e.productCost);
+    formdata.append('productPrice', onProductPrice);
+    formdata.append('productCost', onProductCost);
     formdata.append('productStetus', e.productStetus);
     formdata.append('typeid', e.Typeid);
     formdata.append('unitkg', e.unitkg);
     formdata.append('currency', e.currency);
+    formdata.append(
+      'percent_service',
+      ((onProductPrice * 100) / 107 - onProductCost - e.percent_NBA).toFixed(3)
+    );
+    formdata.append('percent_NBA', e.percent_NBA);
+
     Swal.fire({
       title: 'Are you sure?',
       text: 'คุณต้องการแก้ไขสินค้าหรือไม่ !',
@@ -76,15 +89,7 @@ export default function AdminEditProductApp() {
       if (result.isConfirmed) {
         if (file.length === 0) {
           dispatch({ type: 'OPEN' });
-          await axios
-            .put(`${process.env.REACT_APP_WEB_BACKEND}/product`, data)
-            .then((response) => {
-              console.log('response: ', response);
-              // do something about response
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/product`, data);
           dispatch({ type: 'TURNOFF' });
           Swal.fire({
             icon: 'success',
@@ -98,13 +103,14 @@ export default function AdminEditProductApp() {
           }, 1500);
         } else {
           dispatch({ type: 'OPEN' });
-          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
+          await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putImageProduct`, formdata);
+          // await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/imageupload`, formdata);
           await axios.delete(
             `${process.env.REACT_APP_WEB_BACKEND}/deleteimage/${localStorage.getItem('productImg')}`
           );
-          await axios.delete(
-            `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
-          );
+          // await axios.delete(
+          //   `${process.env.REACT_APP_WEB_BACKEND}/product/${localStorage.getItem('productid')}`
+          // );
           dispatch({ type: 'TURNOFF' });
           Swal.fire({
             icon: 'success',
@@ -131,7 +137,8 @@ export default function AdminEditProductApp() {
       productTypes: [],
       Typeid: localStorage.getItem('id'),
       unitkg: localStorage.getItem('unitkg'),
-      currency: localStorage.getItem('currency')
+      currency: localStorage.getItem('currency'),
+      percent_NBA: localStorage.getItem('percent_NBA')
     },
     validationSchema: RegisterSchema,
     onSubmit: (e) => handleSubmits(e)
@@ -158,7 +165,6 @@ export default function AdminEditProductApp() {
                 id="outlined-select-currency"
                 select
                 label="ประเภทของสินค้า"
-                // defaultValue="cdcd"
                 // onChange={handleChange}
                 {...getFieldProps('Typeid')}
                 error={Boolean(touched.Typeid && errors.Typeid)}
@@ -170,23 +176,13 @@ export default function AdminEditProductApp() {
                   </MenuItem>
                 ))}
               </TextField>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                <TextField
-                  fullWidth
-                  label="ชื่อสินค้า"
-                  {...getFieldProps('productName')}
-                  error={Boolean(touched.productName && errors.productName)}
-                  helperText={touched.productName && errors.productName}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="productPrice"
-                  label="ราคาสินค้า"
-                  {...getFieldProps('productPrice')}
-                  error={Boolean(touched.productPrice && errors.productPrice)}
-                  helperText={touched.productPrice && errors.productPrice}
-                />
-              </Stack>
+              <TextField
+                fullWidth
+                label="ชื่อสินค้า"
+                {...getFieldProps('productName')}
+                error={Boolean(touched.productName && errors.productName)}
+                helperText={touched.productName && errors.productName}
+              />
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   fullWidth
@@ -204,13 +200,50 @@ export default function AdminEditProductApp() {
                   helperText={touched.unitkg && errors.unitkg}
                 />
               </Stack>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                <TextField
+                  fullWidth
+                  autoComplete="productPrice"
+                  label="ราคาสินค้า(ราคาขาย)"
+                  value={onProductPrice}
+                  onChange={(e) => setonProductPrice(e.target.value)}
+                  // {...getFieldProps('productPrice')}
+                />
+                <TextField
+                  fullWidth
+                  autoComplete="productCost"
+                  label="ราคาต้นทุนของสินค้า"
+                  value={onProductCost}
+                  onChange={(e) => setonProductCost(e.target.value)}
+                />
+              </Stack>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
+                <TextField
+                  disabled
+                  fullWidth
+                  label="VAT"
+                  value={((onProductPrice * 7) / 107).toFixed(3)}
+                />
+                <TextField
+                  disabled
+                  fullWidth
+                  label="ราคาถอด VAT"
+                  value={((onProductPrice * 100) / 107).toFixed(3)}
+                />
+                <TextField
+                  disabled
+                  fullWidth
+                  label="กำไรทั้งหมด (PF-VAT)"
+                  value={((onProductPrice * 100) / 107 - onProductCost).toFixed(3)}
+                />
+              </Stack>
               <TextField
                 fullWidth
-                autoComplete="productCost"
-                label="ราคาต้นทุนของสินค้า"
-                {...getFieldProps('productCost')}
-                error={Boolean(touched.productCost && errors.productCost)}
-                helperText={touched.productCost && errors.productCost}
+                type="number"
+                label="จำนวนเงินที่บริษัทจะรับ (เปอร์เซ็นของบริษัท)"
+                {...getFieldProps('percent_NBA')}
+                error={Boolean(touched.percent_NBA && errors.percent_NBA)}
+                helperText={touched.percent_NBA && errors.percent_NBA}
               />
               <TextField
                 id="outlined-select-currency"
@@ -232,14 +265,6 @@ export default function AdminEditProductApp() {
                   สินค้ามีไม่พอจำหน่าย
                 </MenuItem>
               </TextField>
-              {/*  <TextField
-                fullWidth
-                autoComplete="company_address"
-                label="ที่อยู่"
-                {...getFieldProps('company_address')}
-                error={Boolean(touched.company_address && errors.company_address)}
-                helperText={touched.company_address && errors.company_address}
-              /> */}
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                 <TextField
                   type="file"
@@ -265,13 +290,9 @@ export default function AdminEditProductApp() {
               ) : (
                 <img
                   className="previewimg"
-                  src={
-                    `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
-                      'productImg'
-                    )}`
-                    // eslint-disable-next-line global-require
-                    // require(`../../../../assets/img/${localStorage.getItem('productImg')}`).default
-                  }
+                  src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${localStorage.getItem(
+                    'productImg'
+                  )}`}
                   alt="UploadImage"
                 />
               )}

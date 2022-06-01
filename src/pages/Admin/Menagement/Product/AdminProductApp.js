@@ -42,6 +42,8 @@ const TABLE_HEAD = [
   { id: 'productName', label: 'ชื่อสินค้า', alignRight: false },
   { id: 'productPrice', label: 'ราคาสินค้า', alignRight: false },
   { id: 'productCost', label: 'ราคาต้นทุนสินค้า', alignRight: false },
+  { id: 'percent_service', label: 'เปอร์เซ็นศูนย์', alignRight: false },
+  { id: 'percent_NBA', label: 'เปอร์เซ็นบริษัท', alignRight: false },
   { id: 'productStetus', label: 'สถานะสินค้า', alignRight: false },
   { id: 'nameproducttype', label: 'ประเภทสินค้า', alignRight: false },
   { id: '' }
@@ -261,7 +263,9 @@ function AdminCompanyApp() {
                           productStetus,
                           unitkg,
                           currency,
-                          nameproducttype
+                          nameproducttype,
+                          percent_service,
+                          percent_NBA
                         } = row;
                         const isItemSelected = selected.indexOf(productName) !== -1;
 
@@ -304,6 +308,9 @@ function AdminCompanyApp() {
 
                             <TableCell align="left">{numeral(productPrice).format()}</TableCell>
                             <TableCell align="left">{numeral(productCost).format()}</TableCell>
+                            <TableCell align="left">{percent_service}</TableCell>
+                            <TableCell align="left">{percent_NBA}</TableCell>
+
                             <TableCell align="left">{productStetus}</TableCell>
                             <TableCell align="left">{nameproducttype}</TableCell>
 
@@ -318,6 +325,8 @@ function AdminCompanyApp() {
                                 unitkg={unitkg}
                                 currency={currency}
                                 nameproducttype={nameproducttype}
+                                percent_service={percent_service}
+                                percent_NBA={percent_NBA}
                                 id={id}
                               />
                             </TableCell>

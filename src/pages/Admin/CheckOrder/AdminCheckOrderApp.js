@@ -205,11 +205,11 @@ function AdminCheckOrderApp() {
   dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="เช็คออเดอร์ | FoodExpress">
+      <Page title="เช็คออเดอร์ศูนย์ภายในจังหวัด | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              <div>เช็คออเดอร์</div>
+              <div>เช็คออเดอร์ศูนย์ภายในจังหวัด</div>
             </Typography>
             {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
               <Tooltip title="ปริ้นรายระเอียดออเดอร์">
