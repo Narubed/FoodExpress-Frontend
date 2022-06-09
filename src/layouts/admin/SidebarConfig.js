@@ -20,20 +20,17 @@ const sidebarConfig = [
   {
     title: 'checkorder',
     titleth: 'ตรวจสอบออเดอร์',
-    // path: '/admin/AdminCheckOrderApp',
     icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />,
     children: [
       {
         title: 'checkorder',
         titleth: 'ออเดอร์ศูนย์ภายในจังหวัด',
         path: '/admin/AdminCheckOrderApp'
-        // icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
       },
       {
         title: 'checkorder',
         titleth: 'ออเดอร์ศูนย์(เขต/ภาค)',
         path: '/admin/AdminCheckOrderPartnerApp'
-        // icon: <Icon icon="twemoji:card-index" width={22} height={22} color="blue" />
       }
     ]
   },
@@ -46,22 +43,66 @@ const sidebarConfig = [
   {
     title: 'wallet',
     titleth: 'ค่าคอมมิสชั่น',
-    path: '/admin/AdminWalletApp',
-    icon: <Icon icon="emojione:money-bag" width={22} height={22} />
+    icon: <Icon icon="emojione:money-bag" width={22} height={22} />,
+    children: [
+      {
+        title: 'wallet',
+        titleth: 'ศูนย์ภายในจังหวัด',
+        path: '/admin/AdminWalletApp'
+      },
+      {
+        title: 'wallet-partner',
+        titleth: 'ศูนย์ (เขต/ภาค)',
+        path: '/admin/AdminWalletPartner'
+      }
+    ]
   },
 
   {
-    title: 'confrim',
+    title: 'รวมยอดรายการสินค้า',
     titleth: 'รวมยอดรายการสินค้า',
-    path: '/admin/AdminConfirmExpressApp',
-    icon: <Icon icon="flat-color-icons:todo-list" width={22} height={22} />
+    icon: <Icon icon="flat-color-icons:todo-list" width={22} height={22} />,
+    children: [
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ภายในจังหวัด',
+        path: '/admin/AdminConfirmExpressApp'
+      },
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ เขต / ภาค',
+        path: '/admin/AdminConfirmPartnerExpressApp'
+      }
+    ]
   },
   {
     title: 'cutarount',
     titleth: 'รายการตัดรอบเเล้ว',
-    path: '/admin/AdminCutArountApp',
-    icon: <Icon icon="icon-park:order" width={22} height={22} />
+    icon: <Icon icon="icon-park:order" width={22} height={22} />,
+    children: [
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ภายในจังหวัด',
+        path: '/admin/AdminCutArountApp'
+      },
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ เขต / ภาค',
+        path: '/admin/AdminCutArountPartnerApp'
+      },
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ภายในจังหวัด (ย้อนหลัง)',
+        path: '/admin/AdminCutArountAllApp'
+      },
+      {
+        title: 'confrim',
+        titleth: 'ศูนย์ เขต / ภาค (ย้อนหลัง)',
+        path: '/admin/AdminCutArountPartnerAllApp'
+      }
+    ]
   },
+
   {
     title: 'takesorder',
     titleth: 'Takes Order',

@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 //
 import AdminNavbar from './AdminNavbar';
 import AdminSidebar from './AdminSidebar';
+
+import PageLoader from './PageLoader';
 
 // ----------------------------------------------------------------------
 
@@ -34,14 +37,13 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+  const counter = useSelector((state) => state);
 
   return (
     <RootStyle>
       <AdminNavbar onOpenSidebar={() => setOpen(true)} />
       <AdminSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle>
-        <Outlet />
-      </MainStyle>
+      <MainStyle>{counter.reducer === true ? <PageLoader /> : <Outlet />}</MainStyle>
     </RootStyle>
   );
 }

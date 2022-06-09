@@ -8,9 +8,8 @@ import 'dayjs/locale/th';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
 import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Link } from 'react-router-dom';
 import Label from '@material-tailwind/react/Label';
-import { Tag } from 'antd';
 import axios from 'axios';
 // material
 import {
@@ -25,36 +24,31 @@ import {
   TableContainer,
   TablePagination,
   Badge,
-  TextField,
+  IconButton,
   Button
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { styled } from '@mui/material/styles';
-import {
-  WalletListHead,
-  WalletListToolbar,
-  WalletImage,
-  WalletPutSlip,
-  WalletCutArount
-} from '../../../components/_admin/wallet';
-import Page from '../../../components/Page';
+import { WalletListHead, WalletListToolbar } from '../../../../components/_admin/wallet';
+
+import ShowSlipWallet from './ShowSlipWallet';
+// import WalletCutArount from './WalletPartnerCutArount';
+import Page from '../../../../components/Page';
 // import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
+import Scrollbar from '../../../../components/Scrollbar';
+import SearchNotFound from '../../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'level', label: 'ระดับ', alignRight: false },
-  { id: 'firstname', label: 'ชื่อ', alignRight: false },
+  { id: 'wallet_name_level', label: 'ระดับ', alignRight: false },
+  { id: 'partner_name', label: 'ชื่อ', alignRight: false },
   // { id: 'wallet_slip', label: 'Slip', alignRight: false },
   // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
-  { id: 'wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'wallet_partner_total', label: 'ผลรวม', alignRight: false },
   { id: 'หัก3%', label: 'หัก3%', alignRight: false },
   { id: 'ยอดสุทธิ', label: 'ยอดสุทธิ', alignRight: false },
-  { id: 'subdistrict', label: 'ตำบล', alignRight: false },
-  { id: 'district', label: 'อำเภอ', alignRight: false },
-  { id: 'province', label: 'จังหวัด', alignRight: false },
+  { id: 'partner_address', label: 'ที่อยู่', alignRight: false },
   { id: 'cutarount', label: 'ตัดรอบการจ่ายเงิน', alignRight: false },
   // { id: 'wallet_date', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
@@ -88,12 +82,10 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       (_user) =>
-        _user.level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.wallet_name_level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.partner_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         // _user.wallet_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.partner_address.toLowerCase().indexOf(query.toLowerCase()) !== -1
       // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
       // _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
@@ -132,7 +124,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 function AdminWalletApp() {
   const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [WalletMemberlist, setWalletMemberlist] = useState([]);
   const [page, setPage] = useState(0);
@@ -144,14 +135,50 @@ function AdminWalletApp() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [value, setValue] = React.useState(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const WalletMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getWalletJoinMembers`
+      `${process.env.REACT_APP_PARTNER_API}/wallet_partner/wallet_partner_report`
     );
-    const reverseData = WalletMember.data.data.reverse();
-    setWalletMemberlist(reverseData);
+    console.log(WalletMember.data.data);
+    const getAllPartner = await axios.get(`${process.env.REACT_APP_API_OFFICE}/partner`);
+    const getGEO = await axios.post(`${process.env.REACT_APP_API_GEO}/nba-geo`, {
+      tokenKey: '*NBADigital9111*'
+    });
+    const getZone = await axios.post(`${process.env.REACT_APP_API_GEO}/zone`, {
+      tokenKey: '*NBADigital9111*'
+    });
+    const partnerDetail = [];
+    WalletMember.data.data.forEach(async (element) => {
+      const idx = getAllPartner.data.data.find((item) => item._id === element.wpr_partner_id);
+      if (idx.partner_level === 'ระดับภาค') {
+        const GEONBA = getGEO.data.data.find(
+          (item) => item.nba_geo_id === parseInt(idx.partner_sublevel, 10)
+        );
+        partnerDetail.push({
+          ...idx,
+          wallet_partner_total: element.wpr_partner_total,
+          wallet_id: element._id,
+          wallet_name_level: GEONBA.nba_geo_name,
+          wpr_status: element.wpr_status,
+          wpr_slip: element.wpr_slip
+        });
+      } else {
+        const ZoneNBA = getZone.data.data.find(
+          (item) => item.nba_zone === parseInt(idx.partner_sublevel, 10)
+        );
+        partnerDetail.push({
+          ...idx,
+          wallet_partner_total: element.wpr_partner_total,
+          wallet_id: element._id,
+          wallet_name_level: ZoneNBA.zone_name,
+          wpr_status: element.wpr_status,
+          wpr_slip: element.wpr_slip
+        });
+      }
+    });
+    console.log(partnerDetail);
+    setWalletMemberlist(partnerDetail);
   }, []);
   dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
@@ -182,7 +209,6 @@ function AdminWalletApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  dispatch({ type: 'OPEN' });
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - WalletMemberlist.length) : 0;
 
@@ -193,23 +219,14 @@ function AdminWalletApp() {
   );
 
   const isUserNotFound = filteredWallet.length === 0;
-  dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="ค่าคอมมิสชั่นศูนย์จังหวัด | FoodExpress">
+      <Page title="ค่าคอมมิสชั่นศูนย์(เขต/ภาค) | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              ค่าคอมมิสชั่นศูนย์จังหวัด
+              ค่าคอมมิสชั่นศูนย์(เขต/ภาค)
             </Typography>
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to="/admin/AdminWalletApp/AdminCutArountWalletApp"
-              endIcon={<Icon icon="bi:send-check" />}
-            >
-              รายการที่ตัดรอบแล้ว
-            </Button>
           </Stack>
 
           <Card>
@@ -239,72 +256,100 @@ function AdminWalletApp() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          id_wallet_member_express,
-                          level,
-                          firstname,
-                          wallet_slip,
-                          wallet_member_total,
-                          subdistrict,
-                          district,
-                          province
+                          wallet_id,
+                          partner_level,
+                          partner_name,
+                          wallet_name_level,
+                          wallet_partner_total,
+                          partner_address,
+                          wpr_status,
+                          wpr_slip
                         } = row;
-                        const isItemSelected = selected.indexOf(id_wallet_member_express) !== -1;
+                        const isItemSelected = selected.indexOf(wallet_id) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={id_wallet_member_express}
+                            key={wallet_id}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
                             aria-checked={isItemSelected}
                           >
-                            <TableCell padding="checkbox">
-                              {/* <Checkbox
-                                checked={isItemSelected}
-                                onChange={(event) => handleClick(event, company_name, company_id)}
-                              /> */}
-                            </TableCell>
+                            <TableCell padding="checkbox" />
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
                                 <Typography variant="subtitle2" noWrap>
-                                  {level === 'province' ? (
-                                    <Label color="pink"> ระดับจังหวัด</Label>
-                                  ) : null}
-                                  {level === 'district' ? (
-                                    <Label color="lightBlue"> ระดับอำเภอ</Label>
-                                  ) : null}
-                                  {level === 'subdistrict' ? (
-                                    <Label color="amber"> ระดับตำบล</Label>
-                                  ) : null}
-                                  {/* <Label color="blueGray"> {level}</Label> */}
+                                  {partner_level === 'ระดับเขต' ? (
+                                    <Label color="pink">
+                                      {' '}
+                                      {partner_level} {wallet_name_level}
+                                    </Label>
+                                  ) : (
+                                    <Label color="lightBlue">
+                                      {' '}
+                                      {partner_level} {wallet_name_level}
+                                    </Label>
+                                  )}
                                 </Typography>
                               </Stack>
                             </TableCell>
-                            <TableCell align="left">{firstname}</TableCell>
+                            <TableCell align="left">{partner_name}</TableCell>
 
                             <TableCell align="left">
-                              {numeral(wallet_member_total).format('0,0.000')}
+                              {numeral(wallet_partner_total).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
-                              {numeral((wallet_member_total * 3) / 103).format('0,0.000')}
+                              {numeral((wallet_partner_total * 3) / 103).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
                               {numeral(
-                                wallet_member_total - (wallet_member_total * 3) / 103
+                                wallet_partner_total - (wallet_partner_total * 3) / 103
                               ).format('0,0.000')}
                             </TableCell>
-                            <TableCell align="left">{subdistrict}</TableCell>
-                            <TableCell align="left">{district}</TableCell>
-                            <TableCell align="left">{province}</TableCell>
-
-                            <TableCell align="left">
+                            <TableCell align="left">{partner_address}</TableCell>
+                            <TableCell align="center">
                               <StyledBadge
                                 overlap="circular"
                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 variant="dot"
                               >
-                                <WalletCutArount row={row} />
+                                {wpr_status === 'รอรับค่าคอมมิชชั่น' ? (
+                                  <StyledBadge
+                                    overlap="circular"
+                                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                    variant="dot"
+                                  >
+                                    <Link
+                                      state={row}
+                                      to={{
+                                        pathname:
+                                          '/admin/AdminWalletPartner/AdminCutArountWalletPartner/AdminWalletPutSlip'
+                                      }}
+                                    >
+                                      รอรับค่าคอมมิชชั่น
+                                      <br />
+                                      <IconButton
+                                        sx={{ color: 'purple' }}
+                                        // color="primary"
+                                        aria-label="upload picture"
+                                        component="span"
+                                        onClick={() =>
+                                          localStorage.setItem('row', JSON.stringify(row))
+                                        }
+                                      >
+                                        <Icon
+                                          icon="fluent:image-search-24-regular"
+                                          width="32"
+                                          height="32"
+                                        />
+                                      </IconButton>
+                                    </Link>
+                                    {/* <WalletPutSlip row={row} /> */}
+                                  </StyledBadge>
+                                ) : (
+                                  <ShowSlipWallet images={wpr_slip} />
+                                )}
                               </StyledBadge>
                             </TableCell>
                           </TableRow>

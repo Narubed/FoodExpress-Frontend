@@ -116,9 +116,7 @@ export default function RiderMoreMenu(props) {
           showConfirmButton: false,
           timer: 1500
         });
-        setTimeout(() => {
-          dispatch({ type: 'TURNOFF' });
-        }, 2000);
+        dispatch({ type: 'TURNOFF' });
       }
     });
   };

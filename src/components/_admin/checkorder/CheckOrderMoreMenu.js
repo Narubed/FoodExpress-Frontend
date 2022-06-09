@@ -224,6 +224,20 @@ export default function CheckOrderMoreMenu(props) {
               </MenuItem>
             </>
           ) : null}
+          {order_status === 'รอชำระเงิน' ? (
+            <>
+              <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
+                <ListItemIcon>
+                  <Icon icon="flat-color-icons:delete-database" width={24} height={24} />
+                </ListItemIcon>
+                <ListItemText
+                  primary="ยกเลิกรายการนี้"
+                  primaryTypographyProps={{ variant: 'body2' }}
+                  onClick={() => deleteOrderByAdmin()}
+                />
+              </MenuItem>
+            </>
+          ) : null}
         </Menu>
 
         <Dialog

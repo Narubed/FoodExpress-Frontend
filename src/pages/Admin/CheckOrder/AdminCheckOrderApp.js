@@ -247,7 +247,7 @@ function AdminCheckOrderApp() {
               />
             </Stack>
           </LocalizationProvider>
-
+          <br />
           <Card>
             <CheckOrderListToolbar
               numSelected={selected.length}
@@ -345,7 +345,10 @@ function AdminCheckOrderApp() {
                             <TableCell align="left">
                               <Label color="lightGreen">
                                 {order_product_date
-                                  ? dayjs(order_product_date).locale('th').format('DD MMMM YYYY')
+                                  ? dayjs(order_product_date)
+                                      .add(543, 'year')
+                                      .locale('th')
+                                      .format('DD MMMM YYYY')
                                   : null}
                               </Label>{' '}
                             </TableCell>

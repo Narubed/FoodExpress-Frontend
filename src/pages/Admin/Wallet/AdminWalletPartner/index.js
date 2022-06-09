@@ -32,29 +32,23 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import { styled } from '@mui/material/styles';
-import {
-  WalletListHead,
-  WalletListToolbar,
-  WalletImage,
-  WalletPutSlip,
-  WalletCutArount
-} from '../../../components/_admin/wallet';
-import Page from '../../../components/Page';
+import { WalletListHead, WalletListToolbar } from '../../../../components/_admin/wallet';
+
+import WalletCutArount from './WalletPartnerCutArount';
+import Page from '../../../../components/Page';
 // import Label from '../../../components/Label';
-import Scrollbar from '../../../components/Scrollbar';
-import SearchNotFound from '../../../components/SearchNotFound';
+import Scrollbar from '../../../../components/Scrollbar';
+import SearchNotFound from '../../../../components/SearchNotFound';
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'level', label: 'ระดับ', alignRight: false },
-  { id: 'firstname', label: 'ชื่อ', alignRight: false },
+  { id: 'wallet_name_level', label: 'ระดับ', alignRight: false },
+  { id: 'partner_name', label: 'ชื่อ', alignRight: false },
   // { id: 'wallet_slip', label: 'Slip', alignRight: false },
   // { id: 'wallet_total', label: 'สถานะ', alignRight: false },
-  { id: 'wallet_member_total', label: 'ผลรวม', alignRight: false },
+  { id: 'wallet_partner_total', label: 'ผลรวม', alignRight: false },
   { id: 'หัก3%', label: 'หัก3%', alignRight: false },
   { id: 'ยอดสุทธิ', label: 'ยอดสุทธิ', alignRight: false },
-  { id: 'subdistrict', label: 'ตำบล', alignRight: false },
-  { id: 'district', label: 'อำเภอ', alignRight: false },
-  { id: 'province', label: 'จังหวัด', alignRight: false },
+  { id: 'partner_address', label: 'ที่อยู่', alignRight: false },
   { id: 'cutarount', label: 'ตัดรอบการจ่ายเงิน', alignRight: false },
   // { id: 'wallet_date', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
@@ -88,12 +82,10 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       (_user) =>
-        _user.level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.firstname.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.wallet_name_level.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.partner_name.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         // _user.wallet_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.subdistrict.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.district.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.province.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.partner_address.toLowerCase().indexOf(query.toLowerCase()) !== -1
       // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
       // _user.wallet_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
@@ -147,11 +139,40 @@ function AdminWalletApp() {
   const [value, setValue] = React.useState(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const WalletMember = await axios.get(
-      `${process.env.REACT_APP_WEB_BACKEND}/getWalletJoinMembers`
-    );
-    const reverseData = WalletMember.data.data.reverse();
-    setWalletMemberlist(reverseData);
+    const WalletMember = await axios.get(`${process.env.REACT_APP_PARTNER_API}/wallet_partner`);
+    const getAllPartner = await axios.get(`${process.env.REACT_APP_API_OFFICE}/partner`);
+    const getGEO = await axios.post(`${process.env.REACT_APP_API_GEO}/nba-geo`, {
+      tokenKey: '*NBADigital9111*'
+    });
+    const getZone = await axios.post(`${process.env.REACT_APP_API_GEO}/zone`, {
+      tokenKey: '*NBADigital9111*'
+    });
+    const partnerDetail = [];
+    WalletMember.data.data.forEach(async (element) => {
+      const idx = getAllPartner.data.data.find((item) => item._id === element.wallet_partner_id);
+      if (idx.partner_level === 'ระดับภาค') {
+        const GEONBA = getGEO.data.data.find(
+          (item) => item.nba_geo_id === parseInt(idx.partner_sublevel, 10)
+        );
+        partnerDetail.push({
+          ...idx,
+          wallet_partner_total: element.wallet_partner_total,
+          wallet_id: element._id,
+          wallet_name_level: GEONBA.nba_geo_name
+        });
+      } else {
+        const ZoneNBA = getZone.data.data.find(
+          (item) => item.nba_zone === parseInt(idx.partner_sublevel, 10)
+        );
+        partnerDetail.push({
+          ...idx,
+          wallet_partner_total: element.wallet_partner_total,
+          wallet_id: element._id,
+          wallet_name_level: ZoneNBA.zone_name
+        });
+      }
+    });
+    setWalletMemberlist(partnerDetail);
   }, []);
   dispatch({ type: 'TURNOFF' });
   const handleRequestSort = (event, property) => {
@@ -162,7 +183,7 @@ function AdminWalletApp() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = WalletMemberlist.map((n) => n.wallet_id);
+      const newSelecteds = WalletMemberlist.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
@@ -182,7 +203,6 @@ function AdminWalletApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  dispatch({ type: 'OPEN' });
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - WalletMemberlist.length) : 0;
 
@@ -193,19 +213,19 @@ function AdminWalletApp() {
   );
 
   const isUserNotFound = filteredWallet.length === 0;
-  dispatch({ type: 'TURNOFF' });
   return (
     <>
-      <Page title="ค่าคอมมิสชั่นศูนย์จังหวัด | FoodExpress">
+      <Page title="ค่าคอมมิสชั่นศูนย์(เขต/ภาค) | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
             <Typography variant="h4" gutterBottom>
-              ค่าคอมมิสชั่นศูนย์จังหวัด
+              ค่าคอมมิสชั่นศูนย์(เขต/ภาค)
             </Typography>
             <Button
+              sx={{ bgcolor: 'purple' }}
               variant="contained"
               component={RouterLink}
-              to="/admin/AdminWalletApp/AdminCutArountWalletApp"
+              to="/admin/AdminWalletPartner/AdminCutArountWalletPartner"
               endIcon={<Icon icon="bi:send-check" />}
             >
               รายการที่ตัดรอบแล้ว
@@ -239,21 +259,19 @@ function AdminWalletApp() {
                       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                       .map((row) => {
                         const {
-                          id_wallet_member_express,
-                          level,
-                          firstname,
-                          wallet_slip,
-                          wallet_member_total,
-                          subdistrict,
-                          district,
-                          province
+                          _id,
+                          partner_level,
+                          partner_name,
+                          wallet_name_level,
+                          wallet_partner_total,
+                          partner_address
                         } = row;
-                        const isItemSelected = selected.indexOf(id_wallet_member_express) !== -1;
+                        const isItemSelected = selected.indexOf(_id) !== -1;
 
                         return (
                           <TableRow
                             hover
-                            key={id_wallet_member_express}
+                            key={_id}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}
@@ -268,35 +286,41 @@ function AdminWalletApp() {
                             <TableCell component="th" scope="row" padding="none">
                               <Stack direction="row" alignItems="center" spacing={2}>
                                 <Typography variant="subtitle2" noWrap>
-                                  {level === 'province' ? (
-                                    <Label color="pink"> ระดับจังหวัด</Label>
-                                  ) : null}
-                                  {level === 'district' ? (
+                                  {partner_level === 'ระดับเขต' ? (
+                                    <Label color="pink">
+                                      {' '}
+                                      {partner_level} {wallet_name_level}
+                                    </Label>
+                                  ) : (
+                                    <Label color="lightBlue">
+                                      {' '}
+                                      {partner_level} {wallet_name_level}
+                                    </Label>
+                                  )}
+                                  {/* {level === 'district' ? (
                                     <Label color="lightBlue"> ระดับอำเภอ</Label>
                                   ) : null}
                                   {level === 'subdistrict' ? (
                                     <Label color="amber"> ระดับตำบล</Label>
-                                  ) : null}
+                                  ) : null} */}
                                   {/* <Label color="blueGray"> {level}</Label> */}
                                 </Typography>
                               </Stack>
                             </TableCell>
-                            <TableCell align="left">{firstname}</TableCell>
+                            <TableCell align="left">{partner_name}</TableCell>
 
                             <TableCell align="left">
-                              {numeral(wallet_member_total).format('0,0.000')}
+                              {numeral(wallet_partner_total).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
-                              {numeral((wallet_member_total * 3) / 103).format('0,0.000')}
+                              {numeral((wallet_partner_total * 3) / 103).format('0,0.000')}
                             </TableCell>
                             <TableCell align="left">
                               {numeral(
-                                wallet_member_total - (wallet_member_total * 3) / 103
+                                wallet_partner_total - (wallet_partner_total * 3) / 103
                               ).format('0,0.000')}
                             </TableCell>
-                            <TableCell align="left">{subdistrict}</TableCell>
-                            <TableCell align="left">{district}</TableCell>
-                            <TableCell align="left">{province}</TableCell>
+                            <TableCell align="left">{partner_address}</TableCell>
 
                             <TableCell align="left">
                               <StyledBadge

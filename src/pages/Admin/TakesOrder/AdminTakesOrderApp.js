@@ -32,6 +32,7 @@ import Label from '../../../components/Label';
 import Scrollbar from '../../../components/Scrollbar';
 import SearchNotFound from '../../../components/SearchNotFound';
 import { TakesOrderListHead, TakesOrderListToolbar } from '../../../components/_admin/takesorder';
+
 //
 
 // ----------------------------------------------------------------------
@@ -40,10 +41,8 @@ const TABLE_HEAD = [
   { id: 'rider_first_name', label: 'ชื่อ', alignRight: false },
   { id: 'rider_last_name', label: 'นามสกุล', alignRight: false },
   { id: 'rider_id_login', label: 'Login ID', alignRight: false },
-  { id: 'rider_pw_login', label: 'Login Password', alignRight: false },
   { id: 'rider_tel', label: 'เบอร์โทรศัพท์', alignRight: false },
-  { id: '', label: 'เพิ่มงาน', alignRight: false },
-  { id: '' }
+  { id: '', label: 'เพิ่มงาน', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -252,7 +251,6 @@ export default function AdminTakesOrderApp() {
                           </TableCell>
                           <TableCell align="left">{rider_last_name}</TableCell>
                           <TableCell align="left">{rider_id_login}</TableCell>
-                          <TableCell align="left">{rider_pw_login}</TableCell>
                           <TableCell align="left">{rider_tel}</TableCell>
 
                           <TableCell align="">

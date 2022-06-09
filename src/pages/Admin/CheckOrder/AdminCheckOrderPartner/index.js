@@ -1,16 +1,15 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useDispatch } from 'react-redux';
 import { filter } from 'lodash';
-import numeral from 'numeral';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
-import { Link } from 'react-router-dom';
-import Label from '@material-tailwind/react/Label';
-import Button from '@material-tailwind/react/Button';
 import axios from 'axios';
+import { styled } from '@mui/material/styles';
+
 // material
 import {
   Card,
@@ -26,31 +25,35 @@ import {
   Badge,
   TextField,
   Box,
+  Button,
+  IconButton,
+  Chip,
   Tooltip
 } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
-import { styled } from '@mui/material/styles';
+
 import {
   CheckOrderListHead,
   CheckOrderListToolbar,
   CheckOrderMoreMenu,
-  CheckSlipImage
-} from '../../../../components/_admin/checkorder';
-import Page from '../../../../components/Page';
-// import Label from '../../../components/Label';
+  WatchingImage
+} from '../../../../components/_admin/_partner/checkorder-partner';
+
 import Scrollbar from '../../../../components/Scrollbar';
 import SearchNotFound from '../../../../components/SearchNotFound';
+
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
-  { id: 'order_id', label: 'ID', alignRight: false },
-  { id: 'order_status', label: 'Status', alignRight: false },
-  { id: 'order_slip', label: 'Slip', alignRight: false },
-  { id: 'order_product_total', label: 'ผลรวมของออเดอร์', alignRight: false },
-  { id: 'order_product_date', label: 'วัน-เดือน-ปี', alignRight: false },
+  { id: '_id', label: 'ไอดีออเดอร์', alignRight: false },
+  { id: 'order_partner_status', label: 'สถานะ', alignRight: false },
+  { id: 'order_partner_image', label: 'หลักฐานการโอน', alignRight: false },
+  { id: 'order_partner_total', label: 'ผลรวมของออเดอร์', alignRight: false },
+  { id: 'order_partner_timestamp', label: 'วัน-เดือน-ปี', alignRight: false },
   { id: '' }
 ];
+
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -60,6 +63,7 @@ function descendingComparator(a, b, orderBy) {
   if (b[orderBy] > a[orderBy]) {
     return 1;
   }
+
   return 0;
 }
 
@@ -74,18 +78,19 @@ function applySortFilter(array, comparator, query) {
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
+
     return a[1] - b[1];
   });
   if (query) {
     return filter(
       array,
       (_user) =>
-        _user.order_status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.order_id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        // _user.order_product_total.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-        _user.order_product_date.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user._id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.order_partner_status.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        _user.order_partner_total.toLocaleString().toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
+
   return stabilizedThis.map((el) => el[0]);
 }
 
@@ -119,8 +124,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 function AdminCheckOrderApp() {
-  const dispatch = useDispatch();
-  dispatch({ type: 'OPEN' });
   // eslint-disable-next-line no-undef
   const [Orderlist, setOrderlist] = useState([]);
   const [OrderlistFilter, setOrderlistFilter] = useState(null);
@@ -136,11 +139,13 @@ function AdminCheckOrderApp() {
   const [valueDate, setValueDate] = useState([null, null]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const getOrdder = await axios.get(`${process.env.REACT_APP_WEB_BACKEND}/getAllOrder`);
+    const getOrdder = await axios.get(`${process.env.REACT_APP_PARTNER_API}/order`);
+    console.log(getOrdder.data.data);
     const reverseData = getOrdder.data.data.reverse();
+    console.log(reverseData);
     setOrderlist(reverseData);
   }, []);
-  dispatch({ type: 'TURNOFF' });
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -149,9 +154,11 @@ function AdminCheckOrderApp() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = Orderlist.map((n) => n.order_id);
+      const newSelecteds = Orderlist.map((n) => n._id);
+
       // const newSelectedsid = Orderlist.map((n) => n.order_id);
       setSelected(newSelecteds);
+
       // setSelected_id(newSelectedsid);
       return;
     }
@@ -160,11 +167,12 @@ function AdminCheckOrderApp() {
   };
 
   const onChangeStatus = (e) => {
-    const filterStatus = Orderlist.filter((value) => value.order_status === e);
+    const filterStatus = Orderlist.filter((value) => value.order_partner_status === e);
     if (filterStatus.length !== 0) {
       setOrderlistFilter(filterStatus);
     }
   };
+
   const onResetFilter = () => {
     setOrderlistFilter(null);
   };
@@ -181,19 +189,19 @@ function AdminCheckOrderApp() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  dispatch({ type: 'OPEN' });
+
   const newOrderlist =
     OrderlistFilter !== null && valueDate[0] !== null && valueDate[1] !== null
       ? OrderlistFilter.filter(
           (f) =>
-            dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
-            dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
+            dayjs(f.order_partner_timestamp).format() >= dayjs(valueDate[0]).format() &&
+            dayjs(f.order_partner_timestamp).format() <= dayjs(valueDate[1]).format()
         )
       : OrderlistFilter === null && valueDate[0] !== null && valueDate[1] !== null
       ? Orderlist.filter(
           (f) =>
-            dayjs(f.order_product_date).format() >= dayjs(valueDate[0]).format() &&
-            dayjs(f.order_product_date).format() <= dayjs(valueDate[1]).format()
+            dayjs(f.order_partner_timestamp).format() >= dayjs(valueDate[0]).format() &&
+            dayjs(f.order_partner_timestamp).format() <= dayjs(valueDate[1]).format()
         )
       : OrderlistFilter !== null && valueDate[0] === null && valueDate[1] === null
       ? OrderlistFilter
@@ -202,199 +210,185 @@ function AdminCheckOrderApp() {
   const filteredOrder = applySortFilter(newOrderlist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredOrder.length === 0;
-  dispatch({ type: 'TURNOFF' });
+
+  const statusObj = {
+    รอจัดส่ง: { color: 'info' },
+    รอชำระเงิน: { color: 'warning' },
+    รอตรวจสอบ: { color: 'primary' },
+    จัดส่งสำเร็จ: { color: 'success' },
+    ผู้ใช้ยกเลิก: { color: 'error' },
+    ผู้ดูแลระบบยกเลิก: { color: 'error' }
+  };
+
   return (
     <>
-      <Page title="เช็คออเดอร์ศูนย์ (เขต/ภาค) | FoodExpress">
-        <Container>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-            <Typography variant="h4" gutterBottom>
-              <div>เช็คออเดอร์ศูนย์ (เขต/ภาค)</div>
-            </Typography>
-            {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
-              <Tooltip title="ปริ้นรายระเอียดออเดอร์">
-                <Link to="/admin/AdminCheckOrderApp/AdminPrintOrderApp">
-                  <Button
-                    color="lightBlue"
-                    buttonType="link"
-                    size="regular"
-                    rounded
-                    block={false}
-                    iconOnly
-                    ripple="dark"
-                  >
-                    <Icon icon="flat-color-icons:print" width={32} height={32} />
-                  </Button>
-                </Link>
-              </Tooltip>
-            ) : null}
-          </Stack>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <MobileDateRangePicker
-                startText="start"
-                value={valueDate}
-                onChange={(newValue) => {
-                  setValueDate(newValue);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField size="small" {...startProps} />
-                    <Box sx={{ mx: 2 }}> to </Box>
-                    <TextField size="small" {...endProps} />
-                  </>
-                )}
-              />
-            </Stack>
-          </LocalizationProvider>
-
-          <Card>
-            <CheckOrderListToolbar
-              numSelected={selected.length}
-              filterName={filterName}
-              onFilterName={handleFilterByName}
-              selected={selected}
-              onChangeStatus={onChangeStatus}
-              onResetFilter={onResetFilter}
-              // eslint-disable-next-line camelcase
-              selected_id={selected_id}
+      <Container>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
+            <div>เช็คออเดอร์</div>
+          </Typography>
+          {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
+            <Tooltip title="ปริ้นรายระเอียดออเดอร์">
+              <Link to="/admin/AdminCheckOrderPartnerApp/AdminPrintOrderPartner">
+                <Button sx={{ color: 'purple' }}>
+                  <Icon icon="flat-color-icons:print" width={32} height={32} />
+                </Button>
+              </Link>
+            </Tooltip>
+          ) : null}
+        </Stack>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Stack spacing={3}>
+            <MobileDateRangePicker
+              startText="start"
+              value={valueDate}
+              onChange={(newValue) => {
+                setValueDate(newValue);
+              }}
+              renderInput={(startProps, endProps) => (
+                <>
+                  <TextField size="small" {...startProps} />
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField size="small" {...endProps} />
+                </>
+              )}
             />
+          </Stack>
+        </LocalizationProvider>
+        <br />
 
-            <Scrollbar>
-              <TableContainer sx={{ minWidth: 800 }}>
-                <Table>
-                  <CheckOrderListHead
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={Orderlist.length}
-                    numSelected={selected.length}
-                    onRequestSort={handleRequestSort}
-                    onSelectAllClick={handleSelectAllClick}
-                  />
-                  <TableBody>
-                    {filteredOrder
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row) => {
-                        const {
-                          order_id,
-                          order_member_id,
-                          order_status,
-                          order_slip,
-                          order_product_total,
-                          order_product_date
-                        } = row;
-                        const isItemSelected = selected.indexOf(order_id) !== -1;
+        <Card>
+          <CheckOrderListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            selected={selected}
+            onChangeStatus={onChangeStatus}
+            onResetFilter={onResetFilter}
+            // eslint-disable-next-line camelcase
+            selected_id={selected_id}
+          />
 
-                        return (
-                          <TableRow
-                            hover
-                            key={order_id}
-                            tabIndex={-1}
-                            role="checkbox"
-                            selected={isItemSelected}
-                            aria-checked={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              {/* <Checkbox
+          <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <CheckOrderListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={Orderlist.length}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredOrder
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      const {
+                        _id,
+                        order_partner_id,
+                        order_partner_image,
+                        order_partner_status,
+                        order_partner_total,
+                        order_partner_timestamp
+                      } = row;
+                      const isItemSelected = selected.indexOf(_id) !== -1;
+
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            {/* <Checkbox
                                 checked={isItemSelected}
                                 onChange={(event) => handleClick(event, company_name, company_id)}
                               /> */}
-                            </TableCell>
-                            <TableCell component="th" scope="row" padding="none">
-                              <Stack direction="row" alignItems="center" spacing={2}>
-                                <Typography variant="subtitle2" noWrap>
-                                  <Label color="blueGray"> {order_id}</Label>
-                                </Typography>{' '}
-                              </Stack>
-                            </TableCell>
-                            <TableCell align="left">
-                              {order_status === 'รอชำระเงิน' ? (
-                                <Label color="yellow">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'รอตรวจสอบ' ? (
-                                <Label color="lightBlue">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'รอจัดส่ง' ? (
-                                <Label color="amber">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'จัดส่งสำเร็จ' ? (
-                                <Label color="green">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'ผู้ใช้ยกเลิก' ? (
-                                <Label color="red">{order_status}</Label>
-                              ) : null}
-                              {order_status === 'ผู้ดูแลระบบยกเลิก' ? (
-                                <Label color="pink">{order_status}</Label>
-                              ) : null}
-                            </TableCell>
-                            <TableCell align="left">
-                              {order_slip !== '' ? (
-                                <StyledBadge
-                                  overlap="circular"
-                                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                  variant="dot"
-                                >
-                                  <CheckSlipImage images={order_slip} Name={order_id} />
-                                </StyledBadge>
-                              ) : null}
-                            </TableCell>
-                            <TableCell align="left">
-                              {numeral(order_product_total).format()}
-                            </TableCell>
-                            <TableCell align="left">
-                              <Label color="lightGreen">
-                                {order_product_date
-                                  ? dayjs(order_product_date).locale('th').format('DD MMMM YYYY')
-                                  : null}
-                              </Label>{' '}
-                            </TableCell>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                {_id}
+                              </Typography>{' '}
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Chip
+                              label={row.order_partner_status}
+                              color={statusObj[row.order_partner_status].color}
+                              sx={{
+                                height: 24,
+                                fontSize: '0.75rem',
+                                textTransform: 'capitalize',
+                                '& .MuiChip-label': { fontWeight: 500 }
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            {order_partner_image ? (
+                              <WatchingImage image={order_partner_image} />
+                            ) : null}
+                          </TableCell>
+                          <TableCell align="left">{order_partner_total.toLocaleString()}</TableCell>
+                          <TableCell align="left">
+                            {order_partner_timestamp
+                              ? dayjs(order_partner_timestamp)
+                                  .add(543, 'year')
+                                  .locale('th')
+                                  .format('DD MMMM YYYY')
+                              : null}
+                          </TableCell>
 
-                            <TableCell align="right">
-                              <CheckOrderMoreMenu
-                                order_id={order_id}
-                                Orderlist={Orderlist}
-                                row={row}
-                                order_product_total={order_product_total}
-                                order_status={order_status}
-                                order_member_id={order_member_id}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                  {isUserNotFound && (
-                    <TableBody>
-                      <TableRow>
-                        <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={filterName} />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
+                          <TableCell align="right">
+                            <CheckOrderMoreMenu
+                              id={_id}
+                              Orderlist={Orderlist}
+                              row={row}
+                              order_partner_total={order_partner_total}
+                              order_partner_status={order_partner_status}
+                              order_partner_id={order_partner_id}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
                   )}
-                </Table>
-              </TableContainer>
-            </Scrollbar>
+                </TableBody>
+                {isUserNotFound && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={filterName} />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
+              </Table>
+            </TableContainer>
+          </Scrollbar>
 
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={newOrderlist.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Page>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={newOrderlist.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+      </Container>
     </>
   );
 }
+
 export default AdminCheckOrderApp;

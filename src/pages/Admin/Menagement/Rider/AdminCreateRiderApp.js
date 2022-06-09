@@ -137,7 +137,6 @@ export default function RegisterForm() {
               <TextField
                 fullWidth
                 autoComplete="tel"
-                type="number"
                 label="เบอร์โทรศัพท์"
                 {...getFieldProps('tel')}
                 error={Boolean(touched.tel && errors.tel)}

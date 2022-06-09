@@ -23,10 +23,19 @@ import AdminCheckOrderPartnerApp from './pages/Admin/CheckOrder/AdminCheckOrderP
 
 import AdminConfirmExpressApp from './pages/Admin/ConfirmExpress/AdminConfirmExpressApp';
 import AdminWalletApp from './pages/Admin/Wallet/AdminWalletApp';
+import AdminCutArountWalletPartner from './pages/Admin/Wallet/AdminCutArountWalletPartner';
+import AdminWalletPartner from './pages/Admin/Wallet/AdminWalletPartner';
+import AdminWalletPutSlip from './pages/Admin/Wallet/AdminCutArountWalletPartner/AdminWalletPutSlip';
+import AdminPrintOrderPartner from './pages/Admin/CheckOrder/AdminCheckOrderPartner/AdminPrintOrderPartner';
+import AdminConfirmPartnerExpressApp from './pages/Admin/ConfirmExpress/ConfirmPartnerExpress/ConfirmPartnerExpressApp';
+import AdminCutArountPartnerApp from './pages/Admin/CutArount/AdminCutArountPartnerApp';
+import AdminCutArountPartnerAllApp from './pages/Admin/CutArountAll/AdminCutArountPartnerAllApp';
+import AdminCreateOrderRiderApp from './pages/Admin/TakesOrder/CreateOrderRiderApp';
+
 import AdminCutArountApp from './pages/Admin/CutArount/AdminCutArountApp';
 import AdminTakesOrderApp from './pages/Admin/TakesOrder/AdminTakesOrderApp';
 import AdminTakesOrderDetail from './pages/Admin/TakesOrder/AdminTakesOrderDetail';
-import AdminCreateOrderRiderApp from './pages/Admin/TakesOrder/AdminCreateOrderRiderApp';
+import AdminCreateOrderRiderAppOld from './pages/Admin/TakesOrder/AdminCreateOrderRiderApp';
 import AnnounceSlide from './pages/Admin/Announce/AnnounceSlide';
 import AnnounceAdvert from './pages/Admin/Announce/AnnounceAdvert';
 import ChangeAdminApp from './pages/Admin/ChangeAdmin/ChangeAdminApp';
@@ -60,13 +69,31 @@ export default function Router() {
         { path: 'AdminPercentApp', element: <AdminPercentApp /> },
         { path: 'AdminCheckOrderApp', element: <AdminCheckOrderApp /> },
         { path: 'AdminCheckOrderPartnerApp', element: <AdminCheckOrderPartnerApp /> },
+        {
+          path: 'AdminCheckOrderPartnerApp/AdminPrintOrderPartner',
+          element: <AdminPrintOrderPartner />
+        },
         { path: 'AdminConfirmExpressApp', element: <AdminConfirmExpressApp /> },
         { path: 'AdminWalletApp', element: <AdminWalletApp /> },
+        { path: 'AdminWalletPartner', element: <AdminWalletPartner /> },
         { path: 'AdminWalletApp/AdminCutArountWalletApp', element: <AdminCutArountWalletApp /> },
+        {
+          path: 'AdminWalletPartner/AdminCutArountWalletPartner',
+          element: <AdminCutArountWalletPartner />
+        },
+        {
+          path: 'AdminWalletPartner/AdminCutArountWalletPartner/AdminWalletPutSlip',
+          element: <AdminWalletPutSlip />
+        },
+
         { path: 'AdminCutArountApp', element: <AdminCutArountApp /> },
         { path: 'AdminTakesOrderApp', element: <AdminTakesOrderApp /> },
         { path: 'AdminTakesOrderApp/AdminTakesOrderDetail', element: <AdminTakesOrderDetail /> },
         { path: 'AdminTakesOrderApp/CheckRemainingOrders', element: <CheckRemainingOrders /> },
+        {
+          path: 'AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderAppOld',
+          element: <AdminCreateOrderRiderAppOld />
+        },
         {
           path: 'AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp',
           element: <AdminCreateOrderRiderApp />
@@ -78,7 +105,11 @@ export default function Router() {
         { path: 'AdminCutArountAllApp', element: <AdminCutArountAllApp /> },
         { path: 'NBACompanyPerfitApp', element: <NBACompanyPerfitApp /> },
         { path: 'AdminCheckOrderApp/AdminPrintOrderApp', element: <AdminPrintOrderApp /> },
-        { path: 'ReportActionAdminApp', element: <ReportActionAdminApp /> }
+        { path: 'ReportActionAdminApp', element: <ReportActionAdminApp /> },
+        { path: 'AdminConfirmPartnerExpressApp', element: <AdminConfirmPartnerExpressApp /> },
+        { path: 'AdminCutArountPartnerApp', element: <AdminCutArountPartnerApp /> },
+        { path: 'AdminCutArountPartnerAllApp', element: <AdminCutArountPartnerAllApp /> }
+
         // { path: 'products', element: <Products /> },
         // { path: 'blog', element: <Blog /> }
       ]

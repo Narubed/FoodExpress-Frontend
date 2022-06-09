@@ -38,7 +38,7 @@ import {
   TakesOrderDetail
 } from '../../../components/_admin/takesorder';
 //
-
+import SelecteCutArount from './SelecteCutArount';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -152,15 +152,7 @@ export default function AdminTakesOrderDetail() {
           <Typography variant="h4" gutterBottom>
             รายงานที่ไรเดอร์คนนี้ได้รับ
           </Typography>
-          <Button
-            color="secondary"
-            variant="outlined"
-            component={RouterLink}
-            to="/admin/AdminTakesOrderApp/AdminTakesOrderDetail/AdminCreateOrderRiderApp"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            เพิ่มงานให้ไรเดอร์
-          </Button>
+          <SelecteCutArount />
         </Stack>
 
         <Card>

@@ -57,7 +57,6 @@ export default function RegisterForm() {
 
   const [open, setOpen] = useState(true);
   const [IDCutArount, setIDCutArount] = useState();
-  const [dataPostExpress, setPostExpress] = useState();
 
   const [RadioDealer, setRadioDealer] = useState([]);
   const [RadioConsignee, setRadioConsignee] = useState([]);
@@ -274,6 +273,31 @@ export default function RegisterForm() {
 
   return (
     <>
+      <Dialog open={open} TransitionComponent={Transition}>
+        <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            หากคุณต้องการเพิ่มงาน กรุณากรอกรหัสการตัดรอบเพื่อเก็บไว้ในรายการ
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="ID CutArount"
+            type="number"
+            fullWidth
+            variant="standard"
+            color="secondary"
+            onChange={(e) => setIDCutArount(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          {/* <Button color="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button> */}
+          <Button onClick={() => getProductByIDCutArount()}>ยืนยัน</Button>
+        </DialogActions>
+      </Dialog>
       <Page title="เพิ่มงานให้ไรเดอร์ | FoodExpress">
         <Container>
           <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -341,12 +365,8 @@ export default function RegisterForm() {
                   />
                 </Stack>
                 <FormControl onChange={(e) => setRadioDealer(e.target.value)}>
-                  <FormLabel id="demo-row-radio-buttons-group-label">ผู้นำจ่ายสินค้า</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
+                  <FormLabel>ผู้นำจ่ายสินค้า</FormLabel>
+                  <RadioGroup row>
                     <FormControlLabel value="company" control={<Radio />} label="บริษัท" />
                     <FormControlLabel value="rider" control={<Radio />} label="ไรเดอร์" />
                     <FormControlLabel
@@ -375,12 +395,8 @@ export default function RegisterForm() {
                 )}
 
                 <FormControl onChange={(e) => setRadioConsignee(e.target.value)}>
-                  <FormLabel id="demo-row-radio-buttons-group-label">ผู้รับสินค้า</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
+                  <FormLabel>ผู้รับสินค้า</FormLabel>
+                  <RadioGroup row>
                     <FormControlLabel value="member" control={<Radio />} label="ผู้ใช้" />
                     <FormControlLabel value="rider" control={<Radio />} label="ไรเดอร์" />
                     <FormControlLabel value="company" control={<Radio />} label="บริษัท" />
@@ -418,46 +434,20 @@ export default function RegisterForm() {
 
                 {/* -------------------------------------------------------------------------------------------------------------------------- */}
 
-                <LoadingButton
+                <Button
                   fullWidth
                   size="large"
                   type="submit"
                   variant="contained"
-                  loading={isSubmitting}
+                  // loading={isSubmitting}
                 >
                   ยืนยันการเพิ่มงาน
-                </LoadingButton>
+                </Button>
               </Stack>
             </Form>
           </FormikProvider>
         </Container>
       </Page>
-
-      <Dialog open={open} TransitionComponent={Transition}>
-        <DialogTitle>คุณต้องการเพิ่มงานให้ไรเดอร์หรือไม่</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            หากคุณต้องการเพิ่มงาน กรุณากรอกรหัสการตัดรอบเพื่อเก็บไว้ในรายการ
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="ID CutArount"
-            type="number"
-            fullWidth
-            variant="standard"
-            color="secondary"
-            onChange={(e) => setIDCutArount(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          {/* <Button color="secondary" onClick={() => setOpen(false)}>
-            Cancel
-          </Button> */}
-          <Button onClick={() => getProductByIDCutArount()}>ยืนยัน</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

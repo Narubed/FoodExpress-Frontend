@@ -10,10 +10,6 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 // components
 import axios from 'axios';
 import MenuPopover from '../../components/MenuPopover';
-//
-
-// ----------------------------------------------------------------------
-
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -132,24 +128,7 @@ export default function AccountPopover() {
             รายงานผู้ดูแลระบบ
           </MenuItem>
         ) : null}
-        <MenuItem
-          key={5}
-          to="/admin/AdminCutArountAllApp"
-          component={RouterLink}
-          onClick={handleClose}
-          sx={{ typography: 'body2', py: 1, px: 2.5 }}
-        >
-          <Box
-            sx={{
-              mr: 2,
-              width: 24,
-              height: 24
-            }}
-          >
-            <Icon icon="noto:card-file-box" width="24" height="24" />
-          </Box>
-          รายการที่ถูกตัดรอบไปเเล้ว
-        </MenuItem>
+
         {sessionStorage.getItem('level') === 'ManagerAdmin' ? (
           <MenuItem
             key={6}
