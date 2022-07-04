@@ -190,14 +190,12 @@ function AdminCompanyApp() {
     setFilterName(event.target.value);
   };
 
-  dispatch({ type: 'OPEN' });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Companylist.length) : 0;
 
   // eslint-disable-next-line no-undef
   const filteredCompany = applySortFilter(Companylist, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredCompany.length === 0;
-  dispatch({ type: 'TURNOFF' });
   return (
     <>
       <Page title="บริษัท | FoodExpress">

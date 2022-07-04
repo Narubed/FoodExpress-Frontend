@@ -1,19 +1,11 @@
 /* eslint-disable global-require */
 /* eslint-disable camelcase */
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import eyeFill from '@iconify/icons-eva/eye-fill';
 import { Link as RouterLink } from 'react-router-dom';
-import shareFill from '@iconify/icons-eva/share-fill';
-import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
-import dayjs from 'dayjs';
-import 'dayjs/locale/th';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
-import Label from '@material-tailwind/react/Label';
 // utils
-import { fDate } from '../../../utils/formatTime';
 import { fNumber } from '../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../SvgIconStyle';

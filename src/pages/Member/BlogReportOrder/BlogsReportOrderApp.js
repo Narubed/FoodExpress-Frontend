@@ -9,10 +9,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 // components
 import Page from '../../../components/Page';
-import {
-  BlogPostCard,
-  BlogPostsSearch
-} from '../../../components/_dashboard/blogreportordermember';
+import { BlogPostCard } from '../../../components/_dashboard/blogreportordermember';
 
 // ----------------------------------------------------------------------
 

@@ -97,6 +97,18 @@ const TabAccount = (props) => {
         timer: 1500
       });
     } else {
+      const getUSER = await axios.get(
+        `${process.env.REACT_APP_WEB_BACKEND}/member/${sessionStorage.getItem('user')}`
+      );
+      const USER = getUSER.data.data;
+      let levelUSER = '';
+      if (USER.level === 'subdistrict') {
+        levelUSER = 'ศูนย์ระดับตำบล';
+      } else if (USER.level === 'district') {
+        levelUSER = 'ศูนย์ระดับอำเภอ';
+      } else {
+        levelUSER = 'ศูนย์ระดับจังหวัด';
+      }
       Swal.fire({
         title: 'ยืนยันข้อมูล !',
         text: 'คุณต้องการยืนยันการทำรายการหรือไม่ ?',
@@ -113,8 +125,15 @@ const TabAccount = (props) => {
           formdata.append('avatar', file);
           formdata.append('order_id', orderID);
           formdata.append('order_status', 'รอตรวจสอบ');
+          const messages = {
+            token: '2VvNMnpRFjgeYY49HwvGEkt9SNG6CSOPUwU3ZoVqm6Z',
+            message: `จาก ${getUSER.data.data.firstname} ${getUSER.data.data.lastname} ${levelUSER} ที่อยู่: ต.${USER.subdistrict}อ.${USER.district}จ.${USER.province}
+            ยอดโอนรวม: ${data.order_product_total}
+            ตรวจสอบได้ที่ : ${process.env.REACT_APP_NAME_WEP} `
+          };
 
           await axios.put(`${process.env.REACT_APP_WEB_BACKEND}/putSlip`, formdata);
+          await axios.post(`${process.env.REACT_APP_WEB_BACKEND}/postLineNotify`, messages);
           dispatch({ type: 'TURNOFF' });
 
           Swal.fire({

@@ -1,11 +1,7 @@
 /* eslint-disable global-require */
 /* eslint-disable camelcase */
 import PropTypes from 'prop-types';
-import { Icon } from '@iconify/react';
-import eyeFill from '@iconify/icons-eva/eye-fill';
 import { Link as RouterLink } from 'react-router-dom';
-import shareFill from '@iconify/icons-eva/share-fill';
-import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import dayjs from 'dayjs';
 import 'dayjs/locale/th';
 // material
@@ -13,7 +9,6 @@ import { alpha, styled } from '@mui/material/styles';
 import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
 import Label from '@material-tailwind/react/Label';
 // utils
-import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import SvgIconStyle from '../../SvgIconStyle';
@@ -80,12 +75,6 @@ export default function BlogPostCard({ post, index, report }) {
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
 
-  // const POST_INFO = [
-  //   { number: comment, icon: messageCircleFill },
-  //   { number: view, icon: eyeFill },
-  //   { number: share, icon: shareFill }
-  // ];
-
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
       <Card sx={{ position: 'relative' }}>
@@ -140,11 +129,7 @@ export default function BlogPostCard({ post, index, report }) {
 
           <CoverImgStyle
             alt={report_order_product_name}
-            src={
-              `${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`
-              // eslint-disable-next-line import/no-dynamic-require
-              // require(`../../../assets/img/${productImg}`).default
-            }
+            src={`${process.env.REACT_APP_DRIVE_SELECT_IMAGE}${productImg}`}
           />
         </CardMediaStyle>
 
@@ -194,7 +179,6 @@ export default function BlogPostCard({ post, index, report }) {
                 })
               }}
             >
-              {/* <Box component={Icon} icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} /> */}
               <Typography variant="caption">
                 {report_order_status === 'รับเข้า' ? (
                   <Label color="green">
