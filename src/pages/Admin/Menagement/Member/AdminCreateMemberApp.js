@@ -74,7 +74,7 @@ export default function AdminCreateMemberApp() {
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('password is required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    email: Yup.string().required('Email is required'),
     firstname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
